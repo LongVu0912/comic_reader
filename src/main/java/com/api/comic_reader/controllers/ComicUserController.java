@@ -1,20 +1,19 @@
 package com.api.comic_reader.controllers;
 
-import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.entities.ComicUserEntity;
-import com.api.comic_reader.repositories.ComicUserRepository;
+import com.api.comic_reader.responses.LoginResponse;
 import com.api.comic_reader.responses.ResponseObject;
-import com.api.comic_reader.services.ComicUser.ComicUserService;
+import com.api.comic_reader.services.ComicUserService;
+import com.api.comic_reader.dtos.LoginDTO;
+import com.api.comic_reader.dtos.RegisterDTO;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.List;
 
 @RestController
@@ -28,48 +27,75 @@ public class ComicUserController {
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAllUsers() {
-        List<ComicUserEntity> comicUserEntities = comicUserService.getAllUsers();
+        List<ComicUserEntity> comicUsers = comicUserService.getAllUsers();
 
         return ResponseEntity.ok().body(
                 ResponseObject
                         .builder()
-                        .status(HttpStatus.OK)
-                        .message("Get all user successfully")                       
-                        .data(comicUserEntities)
-                        .build()
-        );
+                        .message("Get all user successfully")
+                        .data(comicUsers)
+                        .build());
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseObject> register(@RequestBody ComicUserEntity comicUser){
-        comicUserService.register(comicUser);
-
+    public ResponseEntity<ResponseObject> register(@RequestBody RegisterDTO newComicUser) throws Exception {
+        ComicUserEntity newComicUserResponse = null;
+        try {
+            newComicUserResponse = comicUserService.register(newComicUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject
+                            .builder()
+                            .message(e.getMessage())
+                            .data("")
+                            .build());
+        }
         return ResponseEntity.ok().body(
                 ResponseObject
                         .builder()
-                        .status(HttpStatus.OK)
-                        .message("Insert a new user successfully")
-                        .build()
-        );
+                        .message("Register successfully")
+                        .data(newComicUserResponse)
+                        .build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseObject> login(@RequestBody LoginDTO loginDTO) throws Exception {
+        LoginResponse loginResponse = null;
+        try {
+            loginResponse = comicUserService.login(loginDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject
+                            .builder()
+                            .message(e.getMessage())
+                            .data("")
+                            .build());
+        }
+        
+        return ResponseEntity.ok().body(ResponseObject.builder()
+                .message("Login successfully")
+                .data(loginResponse)
+                .build());
     }
 
     // @GetMapping("/{id}")
-    // public ResponseEntity<ResponseObject> findComicUserById(@PathVariable Long id) {
-    //     Optional<ComicUserEntity> comicUserEntity = comicUserRepository.findById(id);
+    // public ResponseEntity<ResponseObject> findComicUserById(@PathVariable Long
+    // id) {
+    // Optional<ComicUserEntity> comicUserEntity = comicUserRepository.findById(id);
 
-    //     return comicUserEntity.isPresent() ?
-    //             ResponseEntity.ok().body(
-    //                     ResponseObject.builder()
-    //                             .status(HttpStatus.OK)
-    //                             .message("Find comic user successfully")
-    //                             .data(comicUserEntity)
-    //                             .build()) :
-    //             ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-    //                     ResponseObject
-    //                             .builder()
-    //                             .status(HttpStatus.NOT_FOUND)
-    //                             .message("Comic user not found...")
-    //                             .data("")
-    //                             .build());
+    // return comicUserEntity.isPresent() ?
+    // ResponseEntity.ok().body(
+    // ResponseObject.builder()
+    // .status(HttpStatus.OK)
+    // .message("Find comic user successfully")
+    // .data(comicUserEntity)
+    // .build()) :
+    // ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+    // ResponseObject
+    // .builder()
+    // .status(HttpStatus.NOT_FOUND)
+    // .message("Comic user not found...")
+    // .data("")
+    // .build());
     // }
 }

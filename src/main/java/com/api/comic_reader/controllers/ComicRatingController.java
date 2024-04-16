@@ -38,7 +38,6 @@ public class ComicRatingController {
         if(!comicRating.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ResponseObject.builder()
-                            .status(HttpStatus.NOT_FOUND)
                             .message("Comic rating not found...")
                             .data("")
                             .build());
@@ -50,7 +49,6 @@ public class ComicRatingController {
 
         return ResponseEntity.ok().body(
                 ResponseObject.builder()
-                        .status(HttpStatus.OK)
                         .message("Find comic rating successfully")
                         .data(comicRating)
                         .build());

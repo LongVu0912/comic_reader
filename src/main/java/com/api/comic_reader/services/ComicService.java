@@ -1,24 +1,22 @@
-package com.api.comic_reader.services.Comic;
+package com.api.comic_reader.services;
 
 import com.api.comic_reader.dtos.ComicDTO;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.repositories.ComicRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ComicService implements iComicService{
+public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
 
-    @Override
     public List<ComicDTO> findAllComics() throws Exception{
         List<ComicEntity> comics = comicRepository.findAll();
 
@@ -42,7 +40,6 @@ public class ComicService implements iComicService{
         return comicDTOList;
     }
 
-    @Override
     public ComicEntity findComicById(Long comicId) throws Exception {
         Optional<ComicEntity> comic = comicRepository.findById(comicId);
 
@@ -52,14 +49,12 @@ public class ComicService implements iComicService{
         return comic.get();
     }
 
-    @Override
     public ComicEntity insertComic(ComicEntity comic) throws Exception {
         ComicEntity result = comicRepository.save(comic);
 
         return result;
     }
 
-    @Override
     public ComicEntity updateComic(ComicEntity comic, Long comicId) throws Exception {
         Optional<ComicEntity> optionalComicEntity = comicRepository.findById(comicId);
 
@@ -79,7 +74,6 @@ public class ComicService implements iComicService{
         throw new Exception("Cannot find the comic with id = " + comicId);
     }
 
-    @Override
     public void deleteComic(Long comicId) throws Exception {
         Boolean exist = comicRepository.existsById(comicId);
 

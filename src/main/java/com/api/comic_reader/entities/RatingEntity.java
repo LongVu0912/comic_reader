@@ -19,10 +19,12 @@ public class RatingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "comic_user_id")
     private ComicUserEntity comicUser;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "comic_id")
     private ComicEntity comic;

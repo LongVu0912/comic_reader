@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Getter
 @Setter
 @Entity
@@ -31,9 +33,11 @@ public class ChapterEntity {
     @JoinColumn(name = "comic_id", nullable = false)
     private ComicEntity comic;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BookmarkEntity> bookmarked_by;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 }

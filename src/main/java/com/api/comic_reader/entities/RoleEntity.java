@@ -2,9 +2,10 @@ package com.api.comic_reader.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.List;
+import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Getter
@@ -15,13 +16,13 @@ import java.util.List;
 @Table(name = "role")
 public class RoleEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ComicUserEntity> comicUsers;
+    @JsonBackReference
+    @ManyToMany(mappedBy = "roles")
+    private Collection<ComicUserEntity> comicUsers;
 
 }

@@ -46,9 +46,7 @@ public class ComicEntity {
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ComicGenreEntity> comicGenres;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RatingEntity> ratings;
-
-
-
 }

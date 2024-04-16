@@ -9,11 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 @Configuration
 public class DataFaker {
@@ -36,8 +32,18 @@ public class DataFaker {
     @Autowired
     private RoleRepository roleRepository;
 
-
     @Bean
+    public String createRoles() {
+        if (roleRepository.findByName("ADMIN") == null) {
+            roleRepository.save(RoleEntity.builder().name("ADMIN").build());
+        }
+        if (roleRepository.findByName("USER") == null) {
+            roleRepository.save(RoleEntity.builder().name("USER").build());
+        }
+        return "Initialize roles successfully";
+    }
+
+    // @Bean
     public String createFakeData() {
 
         Faker faker = new Faker();
@@ -47,28 +53,25 @@ public class DataFaker {
         Integer number_of_chapter = 10;
         Integer number_of_chapter_comment = 10;
 
-
         // Create roles and save them
         roleRepository.save(RoleEntity.builder().name("admin").build());
         roleRepository.save(RoleEntity.builder().name("user").build());
 
-
-        //create comic user fake db
+        // create comic user fake db
         for (int i = 1; i <= number_of_users; i++) {
             comicUserRepository.save(
                     ComicUserEntity.builder()
-                            .username("username" + i)
                             .password("123456")
                             .isBanned(false)
                             .isMale(faker.bool().bool())
                             .fullName(faker.name().fullName())
+                            .email(faker.internet().emailAddress())
                             .dateOfBirth(faker.date().birthday())
-                            .role(roleRepository.findByName("user"))
-                            .build()
-            );
+                            // .role(roleRepository.findByName("user"))
+                            .build());
         }
 
-        //create comic fake db
+        // create comic fake db
         for (int i = 1; i <= number_of_comics; i++) {
             comicRepository.save(
                     ComicEntity.builder()
@@ -79,21 +82,19 @@ public class DataFaker {
                             .isFinished(faker.bool().bool())
                             .name(faker.book().title())
                             .view(Long.valueOf(faker.random().nextInt(0, 10000)))
-                            .build()
-            );
+                            .build());
         }
 
-        //create genre fake db
+        // create genre fake db
         for (int i = 1; i <= number_of_genres; i++) {
             genreRepository.save(
                     GenreEntity.builder()
                             .name(faker.book().genre())
                             .genreDescription("Description of " + faker.book().genre())
-                            .build()
-            );
+                            .build());
         }
 
-        //create chapter fake db
+        // create chapter fake db
         for (int i = 1; i <= number_of_comics; i++) {
             for (int j = 1; j <= number_of_chapter; j++) {
                 chapterRepository.save(
@@ -102,12 +103,11 @@ public class DataFaker {
                                 .pageQuantity(Long.valueOf(100))
                                 .title(faker.book().title())
                                 .comic(comicRepository.findById(Long.valueOf(i)).get())
-                                .build()
-                );
+                                .build());
             }
         }
 
-        //create chapter comments fake db
+        // create chapter comments fake db
 
         // Create a LocalDate object representing the first day of the year 2020
         Calendar calendar = Calendar.getInstance();
@@ -122,29 +122,30 @@ public class DataFaker {
                                 .content(faker.lorem().sentence(15))
                                 .createAt(faker.date().between(calendar.getTime(), Calendar.getInstance().getTime()))
                                 .chapter(chapterRepository.findById(Long.valueOf(i)).get())
-                                .comicUser(comicUserRepository.findById(Long.valueOf(faker.random().nextInt(1, number_of_users))).get())
-                                .build()
-                );
+                                .comicUser(comicUserRepository
+                                        .findById(Long.valueOf(faker.random().nextInt(1, number_of_users))).get())
+                                .build());
             }
         }
 
-        //create ratings fake db
+        // create ratings fake db
         for (int i = 1; i <= number_of_comics; i++) {
             for (int j = 1; j <= number_of_users - 10; j++) {
 
                 ratingRepository.save(
                         RatingEntity.builder()
-                                .score(faker.random().nextInt(1,5))
+                                .score(faker.random().nextInt(1, 5))
                                 .comic(comicRepository.findById(Long.valueOf(i)).get())
-                                .comicUser(comicUserRepository.findById(Long.valueOf(faker.random().nextInt(1,number_of_users))).get())
-                                .build()
-                );
+                                .comicUser(comicUserRepository
+                                        .findById(Long.valueOf(faker.random().nextInt(1, number_of_users))).get())
+                                .build());
             }
         }
 
-        //create bookmarks fake db
+        // create bookmarks fake db
         for (int i = 1; i <= number_of_users; i++) {
-            ChapterEntity chapter = chapterRepository.findById(Long.valueOf(faker.random().nextInt(1, number_of_chapter*number_of_comics))).get();
+            ChapterEntity chapter = chapterRepository
+                    .findById(Long.valueOf(faker.random().nextInt(1, number_of_chapter * number_of_comics))).get();
             ComicUserEntity comicUser = comicUserRepository.findById(Long.valueOf(i)).get();
 
             bookmarkRepository.save(
@@ -154,17 +155,16 @@ public class DataFaker {
                             .id(BookmarkKey.builder()
                                     .chapterId(chapter.getId())
                                     .comicUserId(comicUser.getId())
-                                    .build()
-                            )
-                            .build()
-            );
+                                    .build())
+                            .build());
         }
 
-        //create comic_genre fake db
+        // create comic_genre fake db
         for (int i = 1; i <= number_of_comics; i++) {
             for (int j = 1; j <= 5; j++) {
                 ComicEntity comic = comicRepository.findById(Long.valueOf(i)).get();
-                GenreEntity genre = genreRepository.findById(Long.valueOf(faker.random().nextInt(1,number_of_genres))).get();
+                GenreEntity genre = genreRepository.findById(Long.valueOf(faker.random().nextInt(1, number_of_genres)))
+                        .get();
 
                 comicGenreRepository.save(
                         ComicGenreEntity.builder()
@@ -173,10 +173,8 @@ public class DataFaker {
                                 .id(ComicGenreKey.builder()
                                         .comicId(comic.getId())
                                         .genreId(genre.getId())
-                                        .build()
-                                )
-                                .build()
-                );
+                                        .build())
+                                .build());
             }
         }
 

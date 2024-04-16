@@ -9,12 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ResponseObject {
+public class LoginResponse {
 
-    @JsonProperty("message")
-    private String message;
+    @JsonProperty("username")
+    private String username;
 
-    @JsonProperty("data")
-    private Object data;
+    @JsonProperty("jwt")
+    private String jwt;
 
 }

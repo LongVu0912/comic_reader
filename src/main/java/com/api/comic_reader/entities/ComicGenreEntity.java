@@ -5,9 +5,6 @@ import com.api.comic_reader.entities.composite_keys.ComicGenreKey;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
-import java.util.List;
-
 @Getter
 @Setter
 @Entity
