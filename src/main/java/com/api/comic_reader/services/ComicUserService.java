@@ -63,14 +63,17 @@ public class ComicUserService {
         LoginResponse loginResponse = null;
         try {
             ComicUserEntity comicUser = comicUserRepository.findByEmail(loginDTO.getEmail());
-            if (comicUser != null && !passwordEncoder.matches(loginDTO.getPassword(), comicUser.getPassword())) {
+            if (comicUser != null && passwordEncoder.matches(loginDTO.getPassword(), comicUser.getPassword())) {
                 loginResponse = LoginResponse.builder()
+                        .id(comicUser.getId())
                         .username(comicUser.getEmail())
+                        .jwt("jwt")
                         .build();
             }
             
         } catch (Exception e) {
-            throw new Exception("Can not login, please try again!");
+            // throw new Exception("Can not login, please try again!");
+            throw new Exception(e.getMessage());
         }
         if (loginResponse == null) {
             throw new Exception("Email or password is incorrect, please try again!");        

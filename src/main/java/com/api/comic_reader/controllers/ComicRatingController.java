@@ -65,7 +65,6 @@ public class ComicRatingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ResponseObject
                             .builder()
-                            .status(HttpStatus.NOT_FOUND)
                             .message("Comic or user not found...")
                             .data("")
                             .build()
@@ -84,7 +83,6 @@ public class ComicRatingController {
         return ResponseEntity.ok().body(
                 ResponseObject
                         .builder()
-                        .status(HttpStatus.OK)
                         .message("Insert a new comic rating successfully")
                         .data(result)
                         .build()

@@ -34,7 +34,6 @@ public class ComicController {
 
             return ResponseEntity.ok().body(
                     ResponseObject.builder()
-                            .status(HttpStatus.OK)
                             .message("Insert a new comic successfully")
                             .data("")
                             .build()
@@ -42,7 +41,6 @@ public class ComicController {
         } catch (Exception e) {
             return ResponseEntity.ok().body(
                     ResponseObject.builder()
-                            .status(HttpStatus.OK)
                             .message(e.getMessage())
                             .data("")
                             .build()
@@ -54,7 +52,6 @@ public class ComicController {
     public ResponseEntity<ResponseObject> getComicById(@PathVariable Long id) throws Exception {
         return ResponseEntity.ok().body(
                 ResponseObject.builder()
-                        .status(HttpStatus.OK)
                         .message("Find comic successfully")
                         .data(comicService.findComicById(id))
                         .build()

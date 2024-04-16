@@ -11,6 +11,9 @@ import lombok.*;
 @NoArgsConstructor
 public class LoginResponse {
 
+    @JsonProperty("id")
+    private Long id;
+    
     @JsonProperty("username")
     private String username;
 
