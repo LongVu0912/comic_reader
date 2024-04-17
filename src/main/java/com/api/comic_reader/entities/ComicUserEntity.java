@@ -1,10 +1,10 @@
 package com.api.comic_reader.entities;
 
+import com.api.comic_reader.enums.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "comic_user")
 public class ComicUserEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -39,9 +38,9 @@ public class ComicUserEntity {
     @Column(name = "is_banned", nullable = false, columnDefinition = "boolean default false")
     private Boolean isBanned;
 
-    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<RoleEntity> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "comicUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

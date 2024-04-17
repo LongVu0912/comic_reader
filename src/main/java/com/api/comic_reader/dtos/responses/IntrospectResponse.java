@@ -5,10 +5,8 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
-public class ResponseObject {
-    private String message;
-
-    private Object data;
+@Builder
+public class IntrospectResponse {
+    private boolean isValid;
 }

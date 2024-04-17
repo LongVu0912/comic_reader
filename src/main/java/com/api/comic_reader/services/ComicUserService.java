@@ -1,17 +1,14 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.dtos.LoginDTO;
-import com.api.comic_reader.dtos.RegisterDTO;
+import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.entities.ComicUserEntity;
-import com.api.comic_reader.entities.RoleEntity;
+import com.api.comic_reader.enums.Role;
 import com.api.comic_reader.repositories.ComicUserRepository;
-import com.api.comic_reader.repositories.RoleRepository;
-import com.api.comic_reader.responses.LoginResponse;
 import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
 
-import java.util.Collections;
+import java.util.Optional;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class ComicUserService {
     @Autowired
     private ComicUserRepository comicUserRepository;
-    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public List<ComicUserEntity> getAllUsers() {
@@ -36,10 +32,10 @@ public class ComicUserService {
         return comicUsers;
     }
 
-    public ComicUserEntity register(RegisterDTO newComicUser) throws Exception {
+    public ComicUserEntity register(RegisterRequest newComicUser) throws Exception {
         ComicUserEntity comicUser = null;
-        RoleEntity role = roleRepository.findByName("USER");
-        if (comicUserRepository.findByEmail(newComicUser.getEmail()) != null) {
+        Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findByEmail(newComicUser.getEmail());
+        if (comicUserOptional.isPresent()) {
             throw new Exception("Email is already taken, please use another email!");
         }
         try {
@@ -50,7 +46,7 @@ public class ComicUserService {
                     .dateOfBirth(DateUtil.convertStringToDate(newComicUser.getDateOfBirth()))
                     .isMale(newComicUser.getIsMale())
                     .isBanned(false)
-                    .roles(Collections.singleton(role))
+                    .role(Role.USER)
                     .build();
             comicUserRepository.save(comicUser);
         } catch (Exception e) {
@@ -59,25 +55,12 @@ public class ComicUserService {
         return comicUser;
     }
 
-    public LoginResponse login(LoginDTO loginDTO) throws Exception {
-        LoginResponse loginResponse = null;
-        try {
-            ComicUserEntity comicUser = comicUserRepository.findByEmail(loginDTO.getEmail());
-            if (comicUser != null && passwordEncoder.matches(loginDTO.getPassword(), comicUser.getPassword())) {
-                loginResponse = LoginResponse.builder()
-                        .id(comicUser.getId())
-                        .username(comicUser.getEmail())
-                        .jwt("jwt")
-                        .build();
-            }
-            
-        } catch (Exception e) {
-            // throw new Exception("Can not login, please try again!");
-            throw new Exception(e.getMessage());
+    public ComicUserEntity getUserInformationById(Long id) {
+        Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findById(id);
+        if (comicUserOptional.isEmpty()) {
+            return null;
         }
-        if (loginResponse == null) {
-            throw new Exception("Email or password is incorrect, please try again!");        
-        }
-        return loginResponse;
+        ComicUserEntity comicUser = comicUserOptional.get();
+        return comicUser;
     }
 }

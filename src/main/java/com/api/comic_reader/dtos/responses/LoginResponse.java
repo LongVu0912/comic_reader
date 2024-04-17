@@ -1,7 +1,5 @@
-package com.api.comic_reader.responses;
+package com.api.comic_reader.dtos.responses;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -10,14 +8,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class LoginResponse {
-
-    @JsonProperty("id")
     private Long id;
-    
-    @JsonProperty("username")
-    private String username;
 
-    @JsonProperty("jwt")
-    private String jwt;
+    private String token;
 
+    private boolean authenticated;
 }

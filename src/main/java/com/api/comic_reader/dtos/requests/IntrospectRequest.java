@@ -7,8 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequest {
-    private String email;
-
-    private String password;
+public class IntrospectRequest {
+    private String token;
 }
