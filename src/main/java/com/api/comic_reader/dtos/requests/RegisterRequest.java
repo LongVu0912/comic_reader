@@ -1,4 +1,4 @@
-package com.api.comic_reader.dtos;
+package com.api.comic_reader.dtos.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
