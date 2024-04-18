@@ -3,9 +3,11 @@ package com.api.comic_reader.services;
 import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
-import com.api.comic_reader.dtos.responses.LoginResponse;
+import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.entities.ComicUserEntity;
 import com.api.comic_reader.entities.InvalidatedTokenEntity;
+import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.ComicUserRepository;
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 
@@ -25,8 +27,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
-    public LoginResponse login(LoginRequest loginRequest) throws Exception {
-        LoginResponse loginResponse = null;
+    public AuthResponse login(LoginRequest loginRequest) throws AppException, Exception {
+        AuthResponse loginResponse = null;
         try {
             Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findByEmail(loginRequest.getEmail());
             if (comicUserOptional.isPresent()) {
@@ -34,7 +36,7 @@ public class AuthenticationService {
                 if (passwordEncoder.matches(loginRequest.getPassword(), comicUser.getPassword())) {
                     String jwtToken = "";
                     jwtToken = jwtService.generateToken(comicUser);
-                    loginResponse = LoginResponse.builder()
+                    loginResponse = AuthResponse.builder()
                             .id(comicUser.getId())
                             .token(jwtToken)
                             .authenticated(true)
@@ -42,10 +44,10 @@ public class AuthenticationService {
                 }
             }
         } catch (Exception e) {
-            throw new Exception("Can not login, please try again!");
+            throw new Exception(e);
         }
         if (loginResponse == null) {
-            throw new Exception("Email or password is incorrect, please try again!");
+            throw new AppException(ErrorCode.WRONG_EMAIL_OR_PASSWORD);
         }
         return loginResponse;
     }
@@ -62,41 +64,49 @@ public class AuthenticationService {
                 .expirationTime(expirationTime)
                 .build();
 
-        invalidatedTokenRepository.save(invalidatedToken);
+        try {
+            invalidatedTokenRepository.save(invalidatedToken);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
-    public LoginResponse refreshToken(String token) throws Exception {
-        var signedToken = jwtService.verifyToken(token);
+    public AuthResponse refreshToken(String token) throws Exception, AppException {
+        try {
+            var signedToken = jwtService.verifyToken(token);
 
-        var jit = signedToken.getJWTClaimsSet().getJWTID();
+            var jit = signedToken.getJWTClaimsSet().getJWTID();
 
-        Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
+            Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
 
-        InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
-                .id(jit)
-                .expirationTime(expirationTime)
-                .build();
+            InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
+                    .id(jit)
+                    .expirationTime(expirationTime)
+                    .build();
 
-        invalidatedTokenRepository.save(invalidatedToken);
+            invalidatedTokenRepository.save(invalidatedToken);
 
-        var email = signedToken.getJWTClaimsSet().getSubject();
+            var email = signedToken.getJWTClaimsSet().getSubject();
 
-        ComicUserEntity comicUser = comicUserRepository.findByEmail(email).get();
+            ComicUserEntity comicUser = comicUserRepository.findByEmail(email).get();
 
-        var newToken = jwtService.generateToken(comicUser);
+            var newToken = jwtService.generateToken(comicUser);
 
-        return LoginResponse.builder()
-                .id(comicUser.getId())
-                .token(newToken)
-                .authenticated(true)
-                .build();
+            return AuthResponse.builder()
+                    .id(comicUser.getId())
+                    .token(newToken)
+                    .authenticated(true)
+                    .build();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.TOKEN_INVALID);
+        }
     }
 
-    public IntrospectResponse introspect(IntrospectRequest request) throws Exception {
+    public IntrospectResponse introspect(IntrospectRequest request) throws AppException {
         var token = request.getToken();
 
         if (token == null) {
-            throw new Exception("Token is required");
+            throw new AppException(ErrorCode.TOKEN_IS_REQUIRED);
         }
 
         return jwtService.introspect(token);

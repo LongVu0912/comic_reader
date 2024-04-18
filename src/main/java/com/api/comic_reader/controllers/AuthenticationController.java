@@ -5,8 +5,8 @@ import com.api.comic_reader.dtos.requests.LoginRequest;
 import com.api.comic_reader.dtos.requests.LogoutRequest;
 import com.api.comic_reader.dtos.requests.RefreshRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
-import com.api.comic_reader.dtos.responses.LoginResponse;
-import com.api.comic_reader.dtos.responses.ResponseObject;
+import com.api.comic_reader.dtos.responses.AuthResponse;
+import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.services.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,72 +24,43 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObject> login(@RequestBody LoginRequest loginRequest) throws Exception {
-        LoginResponse loginResponse = null;
-        try {
-            loginResponse = authenticationService.login(loginRequest);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    ResponseObject
-                            .builder()
-                            .message(e.getMessage())
-                            .data("")
-                            .build());
-        }
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
+        AuthResponse loginResponse = authenticationService.login(loginRequest);
 
-        return ResponseEntity.ok().body(ResponseObject.builder()
+        return ResponseEntity.ok().body(ApiResponse.builder()
                 .message("Login successfully")
-                .data(loginResponse)
+                .result(loginResponse)
                 .build());
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResponseObject> logout(@RequestBody LogoutRequest logoutRequest) throws Exception {
+    public ResponseEntity<ApiResponse> logout(@RequestBody LogoutRequest logoutRequest) throws Exception {
         authenticationService.logout(logoutRequest.getToken());
 
-        return ResponseEntity.ok().body(ResponseObject.builder()
+        return ResponseEntity.ok().body(ApiResponse.builder()
                 .message("Logout successfully")
                 .build());
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseObject> refreshToken(@RequestBody RefreshRequest refreshRequest) throws Exception {
-        LoginResponse authenticationResponse = null;
+    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshRequest refreshRequest) throws Exception {
+        AuthResponse authenticationResponse = authenticationService.refreshToken(refreshRequest.getToken());
 
-        try {
-            authenticationResponse = authenticationService.refreshToken(refreshRequest.getToken());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    ResponseObject
-                            .builder()
-                            .message("Can not refresh token, please try again!")
-                            .data("")
-                            .build());
-        }
-
-        return ResponseEntity.ok().body(ResponseObject.builder()
+        return ResponseEntity.ok().body(ApiResponse.builder()
                 .message("Refresh token successfully")
-                .data(authenticationResponse)
+                .result(authenticationResponse)
                 .build());
     }
 
     @PostMapping("/introspect")
-    public ResponseEntity<ResponseObject> introspect(@RequestBody IntrospectRequest introspectRequest) {
+    public ResponseEntity<ApiResponse> introspect(@RequestBody IntrospectRequest introspectRequest) throws Exception {
         IntrospectResponse introspectResponse = null;
-        try {
-            introspectResponse = authenticationService.introspect(introspectRequest);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    ResponseObject
-                            .builder()
-                            .message(e.getMessage())
-                            .data("")
-                            .build());
-        }
 
-        return ResponseEntity.ok().body(ResponseObject.builder()
+        introspectResponse = authenticationService.introspect(introspectRequest);
+
+        return ResponseEntity.ok().body(ApiResponse.builder()
                 .message("Introspect successfully")
-                .data(introspectResponse)
+                .result(introspectResponse)
                 .build());
     }
 }

@@ -2,6 +2,7 @@ package com.api.comic_reader.services;
 
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -51,17 +52,17 @@ public class JwtService {
         }
     }
 
-    public IntrospectResponse introspect(String token) throws Exception {
+    public IntrospectResponse introspect(String token) throws AppException {
         boolean isValid = true;
 
         try {
             verifyToken(token);
         } catch (Exception e) {
-           isValid = false;
+            isValid = false;
         }
 
         return IntrospectResponse.builder()
-                .isValid(isValid)
+                .valid(isValid)
                 .build();
     }
 
@@ -75,12 +76,12 @@ public class JwtService {
         var verified = signedJWT.verify(verifier);
 
         if (!(verified && expirationTime.after(new Date())))
-            throw new Exception("Invalid token");
+            throw new Exception();
 
         String jit = signedJWT.getJWTClaimsSet().getJWTID();
 
         if (invalidatedTokenRepository.existsById(jit))
-            throw new Exception("Invalid token");
+            throw new Exception();
 
         return signedJWT;
     }

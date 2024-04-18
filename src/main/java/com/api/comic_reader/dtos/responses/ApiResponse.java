@@ -7,8 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ResponseObject {
+public class ApiResponse {
+    @Builder.Default
+    private int code = 200;
+    
     private String message;
 
-    private Object data;
+    private Object result;
 }
