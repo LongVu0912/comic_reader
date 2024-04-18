@@ -40,8 +40,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Restrict access based on roles
         http.authorizeHttpRequests(request -> request
-                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers("/api/user/getUserInformationById/**").hasAuthority("SCOPE_" + Role.ADMIN.name()));
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll());
+                // .requestMatchers("/api/user/getUserInformationById/**").hasAuthority("SCOPE_" + Role.ADMIN.name()));
 
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 

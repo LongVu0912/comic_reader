@@ -7,16 +7,22 @@ import com.api.comic_reader.repositories.ComicUserRepository;
 import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
+@EnableMethodSecurity(prePostEnabled = true)
 public class ComicUserService {
     @Autowired
     private ComicUserRepository comicUserRepository;
@@ -55,7 +61,10 @@ public class ComicUserService {
         return comicUser;
     }
 
+    @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.email == authentication.name")
     public ComicUserEntity getUserInformationById(Long id) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("authentication: {}", authentication.getName());
         Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findById(id);
         if (comicUserOptional.isEmpty()) {
             return null;
