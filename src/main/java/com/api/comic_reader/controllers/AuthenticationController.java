@@ -2,6 +2,7 @@ package com.api.comic_reader.controllers;
 
 import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
+import com.api.comic_reader.dtos.requests.LogoutRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.dtos.responses.LoginResponse;
 import com.api.comic_reader.dtos.responses.ResponseObject;
@@ -37,6 +38,15 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(ResponseObject.builder()
                 .message("Login successfully")
                 .data(loginResponse)
+                .build());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseObject> logout(@RequestBody LogoutRequest logoutRequest) throws Exception {
+        authenticationService.logout(logoutRequest.getToken());
+
+        return ResponseEntity.ok().body(ResponseObject.builder()
+                .message("Logout successfully")
                 .build());
     }
 
