@@ -36,7 +36,7 @@ public class JwtService {
                 .subject(comicUser.getEmail())
                 .issueTime(new Date())
                 .claim("scope", comicUser.getRole().name())
-                .expirationTime(new Date(new Date().getTime() + 60 * 1000))
+                .expirationTime(new Date(new Date().getTime() + 5 * 60 * 1000))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

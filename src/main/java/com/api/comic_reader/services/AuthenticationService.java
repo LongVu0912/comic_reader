@@ -65,6 +65,33 @@ public class AuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
+    public LoginResponse refreshToken(String token) throws Exception {
+        var signedToken = jwtService.verifyToken(token);
+
+        var jit = signedToken.getJWTClaimsSet().getJWTID();
+
+        Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
+                .id(jit)
+                .expirationTime(expirationTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+
+        var email = signedToken.getJWTClaimsSet().getSubject();
+
+        ComicUserEntity comicUser = comicUserRepository.findByEmail(email).get();
+
+        var newToken = jwtService.generateToken(comicUser);
+
+        return LoginResponse.builder()
+                .id(comicUser.getId())
+                .token(newToken)
+                .authenticated(true)
+                .build();
+    }
+
     public IntrospectResponse introspect(IntrospectRequest request) throws Exception {
         var token = request.getToken();
 
