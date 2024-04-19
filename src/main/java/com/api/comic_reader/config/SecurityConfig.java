@@ -24,6 +24,7 @@ public class SecurityConfig {
             "/api/public/**",
             "/api/auth/**",
             "/api/comic/**",
+            "/resource/comic/**",
     };
 
     @Bean

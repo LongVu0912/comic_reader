@@ -4,11 +4,11 @@ import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.dtos.responses.AuthResponse;
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.entities.InvalidatedTokenEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
-import com.api.comic_reader.repositories.ComicUserRepository;
+import com.api.comic_reader.repositories.UserRepository;
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
-    private final ComicUserRepository comicUserRepository;
+    private final UserRepository comicUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
@@ -30,9 +30,9 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest loginRequest) throws AppException, Exception {
         AuthResponse loginResponse = null;
         try {
-            Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findByEmail(loginRequest.getEmail());
+            Optional<UserEntity> comicUserOptional = comicUserRepository.findByEmail(loginRequest.getEmail());
             if (comicUserOptional.isPresent()) {
-                ComicUserEntity comicUser = comicUserOptional.get();
+                UserEntity comicUser = comicUserOptional.get();
                 if (passwordEncoder.matches(loginRequest.getPassword(), comicUser.getPassword())) {
                     String jwtToken = "";
                     jwtToken = jwtService.generateToken(comicUser);
@@ -88,7 +88,7 @@ public class AuthenticationService {
 
             var email = signedToken.getJWTClaimsSet().getSubject();
 
-            ComicUserEntity comicUser = comicUserRepository.findByEmail(email).get();
+            UserEntity comicUser = comicUserRepository.findByEmail(email).get();
 
             var newToken = jwtService.generateToken(comicUser);
 

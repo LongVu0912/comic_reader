@@ -1,8 +1,8 @@
 package com.api.comic_reader.controllers;
 
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.dtos.responses.ApiResponse;
-import com.api.comic_reader.services.ComicUserService;
+import com.api.comic_reader.services.UserService;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class PublicController {
 
     @Autowired
-    private final ComicUserService comicUserService;
+    private final UserService comicUserService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest newComicUser) throws Exception {
-        ComicUserEntity newComicUserResponse = comicUserService.register(newComicUser);
+        UserEntity newComicUserResponse = comicUserService.register(newComicUser);
 
         return ResponseEntity.ok().body(
                 ApiResponse

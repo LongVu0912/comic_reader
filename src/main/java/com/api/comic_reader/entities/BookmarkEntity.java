@@ -28,5 +28,5 @@ public class BookmarkEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("comicUserId")
     @JoinColumn(name = "comic_user_id")
-    private ComicUserEntity comicUser;
+    private UserEntity comicUser;
 }

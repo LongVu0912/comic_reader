@@ -1,7 +1,7 @@
 package com.api.comic_reader.services;
 
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 import com.nimbusds.jose.JOSEException;
@@ -28,7 +28,7 @@ public class JwtService {
     private final String SIGNER_KEY = "Cf3X07omDRzLIp2hYuvrBmZ5vGlIcge12VEllyTdD1Q";
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
-    public String generateToken(ComicUserEntity comicUser) {
+    public String generateToken(UserEntity comicUser) {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 

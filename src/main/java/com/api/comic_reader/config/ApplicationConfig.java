@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.enums.Role;
-import com.api.comic_reader.repositories.ComicUserRepository;
+import com.api.comic_reader.repositories.UserRepository;
 import com.api.comic_reader.utils.DateUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final ComicUserRepository userRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
@@ -25,7 +25,7 @@ public class ApplicationConfig {
         return args -> {
             if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
 
-                ComicUserEntity admin = ComicUserEntity.builder()
+                UserEntity admin = UserEntity.builder()
                         .email("admin@gmail.com")
                         .password(passwordEncoder.encode("123456"))
                         .fullName("Admin")

@@ -22,7 +22,7 @@ public class RatingEntity {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "comic_user_id")
-    private ComicUserEntity comicUser;
+    private UserEntity comicUser;
 
     @JsonBackReference
     @ManyToOne

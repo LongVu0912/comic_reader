@@ -1,11 +1,11 @@
 package com.api.comic_reader.services;
 
 import com.api.comic_reader.dtos.requests.RegisterRequest;
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.enums.Role;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
-import com.api.comic_reader.repositories.ComicUserRepository;
+import com.api.comic_reader.repositories.UserRepository;
 import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
@@ -22,13 +22,13 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
-public class ComicUserService {
+public class UserService {
     @Autowired
-    private ComicUserRepository comicUserRepository;
+    private UserRepository comicUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public List<ComicUserEntity> getAllUsers() throws Exception {
-        List<ComicUserEntity> comicUsers = null;
+    public List<UserEntity> getAllUsers() throws Exception {
+        List<UserEntity> comicUsers = null;
         try {
             comicUsers = comicUserRepository.findAll();
         } catch (Exception e) {
@@ -37,14 +37,14 @@ public class ComicUserService {
         return comicUsers;
     }
 
-    public ComicUserEntity register(RegisterRequest newComicUser) throws AppException {
-        ComicUserEntity comicUser = null;
-        Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findByEmail(newComicUser.getEmail());
+    public UserEntity register(RegisterRequest newComicUser) throws AppException {
+        UserEntity comicUser = null;
+        Optional<UserEntity> comicUserOptional = comicUserRepository.findByEmail(newComicUser.getEmail());
         if (comicUserOptional.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
         try {
-            comicUser = ComicUserEntity.builder()
+            comicUser = UserEntity.builder()
                     .email(newComicUser.getEmail())
                     .password(passwordEncoder.encode(newComicUser.getPassword()))
                     .fullName(newComicUser.getFullName())
@@ -61,12 +61,12 @@ public class ComicUserService {
     }
 
     @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.email == authentication.name")
-    public ComicUserEntity getUserInformationById(Long id) throws AppException {
-        Optional<ComicUserEntity> comicUserOptional = comicUserRepository.findById(id);
+    public UserEntity getUserInformationById(Long id) throws AppException {
+        Optional<UserEntity> comicUserOptional = comicUserRepository.findById(id);
         if (comicUserOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        ComicUserEntity comicUser = comicUserOptional.get();
+        UserEntity comicUser = comicUserOptional.get();
         return comicUser;
     }
 }

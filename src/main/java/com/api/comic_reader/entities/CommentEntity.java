@@ -24,7 +24,7 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "comic_user_id")
-    private ComicUserEntity comicUser;
+    private UserEntity comicUser;
 
     @Column(name = "content")
     private String content;

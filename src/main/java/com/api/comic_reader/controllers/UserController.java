@@ -1,8 +1,8 @@
 package com.api.comic_reader.controllers;
 
-import com.api.comic_reader.entities.ComicUserEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.dtos.responses.ApiResponse;
-import com.api.comic_reader.services.ComicUserService;
+import com.api.comic_reader.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,14 +16,14 @@ import java.util.List;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class ComicUserController {
+public class UserController {
 
     @Autowired
-    private final ComicUserService comicUserService;
+    private final UserService comicUserService;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAllUsers() throws Exception {
-        List<ComicUserEntity> comicUsers = comicUserService.getAllUsers();
+        List<UserEntity> comicUsers = comicUserService.getAllUsers();
 
         return ResponseEntity.ok().body(
                 ApiResponse
@@ -35,7 +35,7 @@ public class ComicUserController {
 
     @GetMapping("/getUserInformationById/{id}")
     public ResponseEntity<ApiResponse> getUserInformationById(@PathVariable Long id) {
-        ComicUserEntity userInformation = comicUserService.getUserInformationById(id);
+        UserEntity userInformation = comicUserService.getUserInformationById(id);
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
