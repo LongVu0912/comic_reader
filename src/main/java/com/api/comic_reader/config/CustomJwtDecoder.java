@@ -17,8 +17,7 @@ import com.api.comic_reader.services.AuthenticationService;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    private String signerKey = "Cf3X07omDRzLIp2hYuvrBmZ5vGlIcge12VEllyTdD1Q";
-
+    private String signerKey = EnvironmentVariable.jwtSignerKey;
     @Autowired
     private AuthenticationService authenticationService;
 

@@ -3,6 +3,7 @@ package com.api.comic_reader.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -26,8 +27,12 @@ public class ChapterEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "page_quantity", nullable = false)
-    private Long pageQuantity;
+    @Column(name = "date_created", nullable = false)
+    private Date dateCreated;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ChapterImageEntity> images;
 
     @ManyToOne
     @JoinColumn(name = "comic_id", nullable = false)

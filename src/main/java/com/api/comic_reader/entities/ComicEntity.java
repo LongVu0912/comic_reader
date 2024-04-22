@@ -19,7 +19,7 @@ public class ComicEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "author", nullable = false)
@@ -30,12 +30,13 @@ public class ComicEntity {
 
     @Column(name = "description", nullable = false)
     private String description;
+    
+    @Lob
+    @Column(name = "thumbnail_image")
+    private byte[] thumbnailImage;
 
     @Column(name = "is_finished", nullable = false)
     private Boolean isFinished;
-
-    @Column(name = "image_path", nullable = false)
-    private String imagePath;
 
     @Column(name = "is_deleted", columnDefinition = "boolean default false")
     private Boolean isDeleted;

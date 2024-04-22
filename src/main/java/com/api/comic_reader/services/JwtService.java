@@ -1,5 +1,6 @@
 package com.api.comic_reader.services;
 
+import com.api.comic_reader.config.EnvironmentVariable;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class JwtService {
-    private final String SIGNER_KEY = "Cf3X07omDRzLIp2hYuvrBmZ5vGlIcge12VEllyTdD1Q";
+    private final String SIGNER_KEY = EnvironmentVariable.jwtSignerKey;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     public String generateToken(UserEntity comicUser) {

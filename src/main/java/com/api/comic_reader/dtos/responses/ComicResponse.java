@@ -12,7 +12,7 @@ public class ComicResponse {
     private String name;
     private String author;
     private String description;
-    private String thumbnailPath;
+    private String thumbnailUrl;
     private Long view;
     private boolean isDeleted;
     private boolean isFinished;

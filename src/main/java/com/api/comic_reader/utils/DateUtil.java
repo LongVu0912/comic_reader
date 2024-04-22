@@ -4,9 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class DateUtil {
 
-    public static Date convertStringToDate(String dateInString) {
+    public Date convertStringToDate(String dateInString) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         try {
             Date date = formatter.parse(dateInString);
@@ -17,8 +20,12 @@ public class DateUtil {
         return null;
     }
 
-    public static String convertDateToString(Date date) {
+    public String convertDateToString(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         return formatter.format(date);
+    }
+
+    public Date getCurrentDate() {
+        return new Date();
     }
 }

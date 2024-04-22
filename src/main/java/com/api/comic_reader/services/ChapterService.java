@@ -1,5 +1,6 @@
 package com.api.comic_reader.services;
 
+import com.api.comic_reader.dtos.requests.ChapterRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.ComicEntity;
@@ -7,11 +8,11 @@ import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.ChapterRepository;
 import com.api.comic_reader.repositories.ComicRepository;
+import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,21 @@ public class ChapterService {
     private ComicRepository comicRepository;
     @Autowired
     private ChapterRepository chapterRespository;
+
+    public void insertChapter(ChapterRequest newChapter) {
+        ComicEntity comic = comicRepository.findById(newChapter.getComicId()).get();
+        try {
+            ChapterEntity chapter = ChapterEntity.builder()
+                    .title(newChapter.getTitle())
+                    .chapterNumber(newChapter.getChapterNumber())
+                    .comic(comic)
+                    .dateCreated(DateUtil.getCurrentDate())
+                    .build();
+            chapterRespository.save(chapter);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+    }
 
     public List<ChapterResponse> getComicChapters(Long id) throws AppException {
         ComicEntity comic = null;
@@ -40,30 +56,5 @@ public class ChapterService {
                 .title(chapter.getTitle())
                 .chapterNumber(chapter.getChapterNumber())
                 .build()).collect(Collectors.toList());
-    }
-
-    public List<String> getChapterImages(Long id) {
-        ChapterEntity chapter = chapterRespository.findById(id).get();
-        Long comicId = chapter.getComic().getId();
-        ComicEntity comic = comicRepository.findById(comicId).get();
-
-        String imagePath = comic.getImagePath();
-        Long chapterNumber = chapter.getChapterNumber();
-        Long pageQuantity = chapter.getPageQuantity();
-
-        String baseResource = "";
-
-        List<String> imagesPath = new ArrayList<>();
-
-        if (pageQuantity == null) {
-            throw new AppException(ErrorCode.CHAPTER_IMAGES_NOT_FOUND);
-        }
-
-        for (int i = 1; i <= pageQuantity; i++) {
-            String path = baseResource + imagePath + "/" + "chapter" + chapterNumber + "/" + i + ".jpg";
-            imagesPath.add(path);
-        }
-
-        return imagesPath;
     }
 }

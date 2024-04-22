@@ -29,13 +29,27 @@ public class ApplicationConfig {
                         .email("admin@gmail.com")
                         .password(passwordEncoder.encode("123456"))
                         .fullName("Admin")
-                        .dateOfBirth(DateUtil.convertStringToDate("1-1-2000"))
+                        .dateOfBirth(DateUtil.getCurrentDate())
                         .isMale(true)
                         .isBanned(false)
                         .role(Role.ADMIN)
                         .build();
 
                 userRepository.save(admin);
+            }
+            if (userRepository.findByEmail("user@gmail.com").isEmpty()) {
+
+                UserEntity user = UserEntity.builder()
+                        .email("user@gmail.com")
+                        .password(passwordEncoder.encode("123456"))
+                        .fullName("User")
+                        .dateOfBirth(DateUtil.getCurrentDate())
+                        .isMale(true)
+                        .isBanned(false)
+                        .role(Role.USER)
+                        .build();
+
+                userRepository.save(user);
             }
         };
     }

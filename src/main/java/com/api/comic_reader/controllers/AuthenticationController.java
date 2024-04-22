@@ -54,9 +54,7 @@ public class AuthenticationController {
 
     @PostMapping("/introspect")
     public ResponseEntity<ApiResponse> introspect(@RequestBody IntrospectRequest introspectRequest) throws Exception {
-        IntrospectResponse introspectResponse = null;
-
-        introspectResponse = authenticationService.introspect(introspectRequest);
+        IntrospectResponse introspectResponse = authenticationService.introspect(introspectRequest);
 
         return ResponseEntity.ok().body(ApiResponse.builder()
                 .message("Introspect successfully")
