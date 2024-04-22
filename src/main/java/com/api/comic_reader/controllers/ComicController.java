@@ -42,13 +42,13 @@ public class ComicController {
             @RequestPart("name") String name,
             @RequestPart("author") String author,
             @RequestPart("description") String description,
-            @RequestPart("file") MultipartFile file) throws Exception {
+            @RequestPart("imageData") MultipartFile imageData) throws Exception {
 
         ComicRequest newComic = new ComicRequest();
         newComic.setName(name);
         newComic.setAuthor(author);
         newComic.setDescription(description);
-        newComic.setThumbnailImage(file);
+        newComic.setThumbnailImage(imageData);
 
         comicService.insertComic(newComic);
 
