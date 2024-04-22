@@ -28,24 +28,26 @@ public class ChapterImageController {
 
     @PostMapping("/insertChapterImage")
     public ResponseEntity<ApiResponse> insertChapterImage(
-            @RequestPart("chapterId") String chapterId,
-            @RequestPart("imageData") MultipartFile imageData) throws Exception {
+            @RequestParam("chapterId") String chapterId,
+            @RequestParam("imageData") List<MultipartFile> imageDataList) throws Exception {
         Long chapterIdLong = Long.parseLong(chapterId);
-        chapterImageService.insertChapterImage(ChapterImageRequest.builder()
-                .chapterId(chapterIdLong)
-                .imageData(imageData)
-                .build());
+
+        // Lặp qua từng file ảnh trong danh sách và thực hiện thêm vào hệ thống
+        for (MultipartFile imageData : imageDataList) {
+            chapterImageService.insertChapterImage(ChapterImageRequest.builder()
+                    .chapterId(chapterIdLong)
+                    .imageData(imageData)
+                    .build());
+        }
 
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
-                        .message("Insert chapter image successfully")
+                        .message("Insert chapter images successfully")
                         .result(null)
                         .build());
-
     }
 
-    
     @GetMapping("/getChapterImageUrls/{chapterId}")
     public ResponseEntity<ApiResponse> getChapterImages(@PathVariable Long chapterId) {
         List<String> imageUrls = chapterImageService.getChapterImageUrls(chapterId);
