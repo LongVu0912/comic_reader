@@ -30,7 +30,7 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest loginRequest) throws AppException, Exception {
         AuthResponse loginResponse = null;
         try {
-            Optional<UserEntity> comicUserOptional = comicUserRepository.findByEmail(loginRequest.getEmail());
+            Optional<UserEntity> comicUserOptional = comicUserRepository.findByUsername(loginRequest.getUsername());
             if (comicUserOptional.isPresent()) {
                 UserEntity comicUser = comicUserOptional.get();
                 if (passwordEncoder.matches(loginRequest.getPassword(), comicUser.getPassword())) {
@@ -86,9 +86,9 @@ public class AuthenticationService {
 
             invalidatedTokenRepository.save(invalidatedToken);
 
-            var email = signedToken.getJWTClaimsSet().getSubject();
+            var username = signedToken.getJWTClaimsSet().getSubject();
 
-            UserEntity comicUser = comicUserRepository.findByEmail(email).get();
+            UserEntity comicUser = comicUserRepository.findByUsername(username).get();
 
             var newToken = jwtService.generateToken(comicUser);
 

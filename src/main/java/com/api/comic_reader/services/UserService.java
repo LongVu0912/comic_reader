@@ -39,18 +39,18 @@ public class UserService {
 
     public UserEntity register(RegisterRequest newComicUser) throws AppException {
         UserEntity comicUser = null;
-        Optional<UserEntity> comicUserOptional = comicUserRepository.findByEmail(newComicUser.getEmail());
+        Optional<UserEntity> comicUserOptional = comicUserRepository.findByUsernameOrEmail(newComicUser.getUsername(), newComicUser.getEmail());
         if (comicUserOptional.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
         try {
             comicUser = UserEntity.builder()
+                    .username(newComicUser.getUsername())
                     .email(newComicUser.getEmail())
                     .password(passwordEncoder.encode(newComicUser.getPassword()))
                     .fullName(newComicUser.getFullName())
                     .dateOfBirth(DateUtil.convertStringToDate(newComicUser.getDateOfBirth()))
                     .isMale(newComicUser.getIsMale())
-                    .isBanned(false)
                     .role(Role.USER)
                     .build();
             comicUserRepository.save(comicUser);

@@ -25,7 +25,6 @@ public class ChapterImageEntity {
     @Column(name = "image_order", nullable = false)
     private Long imageOrder;
 
-    @Lob
-    @Column(name = "image_data")
+    @Column(name = "image_data", columnDefinition="BYTEA")
     private byte[] imageData;
 }

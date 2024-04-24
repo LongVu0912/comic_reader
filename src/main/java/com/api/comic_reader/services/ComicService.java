@@ -68,7 +68,7 @@ public class ComicService {
             return comicRepository.save(comic);
 
         } catch (Exception e) {
-            throw new AppException(ErrorCode.THUMBNAIL_INVALID);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.api.comic_reader.entities;
 
-
 import com.api.comic_reader.entities.composite_keys.ComicGenreKey;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,5 +25,4 @@ public class ComicGenreEntity {
     @MapsId("genreId")
     @JoinColumn(name = "genre_id")
     private GenreEntity genre;
-
 }

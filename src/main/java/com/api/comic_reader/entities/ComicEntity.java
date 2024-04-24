@@ -28,11 +28,10 @@ public class ComicEntity {
     @Column(name = "view", nullable = false, columnDefinition = "bigint default 0")
     private Long view;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1000)
     private String description;
-    
-    @Lob
-    @Column(name = "thumbnail_image")
+
+    @Column(name = "thumbnail_image", columnDefinition="BYTEA")
     private byte[] thumbnailImage;
 
     @Column(name = "is_finished", nullable = false)

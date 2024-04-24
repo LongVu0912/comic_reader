@@ -20,23 +20,23 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
+    
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
     @Column(name = "is_male", nullable = false)
     private Boolean isMale;
-
-    @Column(name = "is_banned", nullable = false, columnDefinition = "boolean default false")
-    private Boolean isBanned;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
