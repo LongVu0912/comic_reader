@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
-    private final UserRepository comicUserRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
@@ -30,7 +30,7 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest loginRequest) throws AppException, Exception {
         AuthResponse loginResponse = null;
         try {
-            Optional<UserEntity> comicUserOptional = comicUserRepository.findByUsername(loginRequest.getUsername());
+            Optional<UserEntity> comicUserOptional = userRepository.findByUsername(loginRequest.getUsername());
             if (comicUserOptional.isPresent()) {
                 UserEntity comicUser = comicUserOptional.get();
                 if (passwordEncoder.matches(loginRequest.getPassword(), comicUser.getPassword())) {
@@ -88,7 +88,7 @@ public class AuthenticationService {
 
             var username = signedToken.getJWTClaimsSet().getSubject();
 
-            UserEntity comicUser = comicUserRepository.findByUsername(username).get();
+            UserEntity comicUser = userRepository.findByUsername(username).get();
 
             var newToken = jwtService.generateToken(comicUser);
 

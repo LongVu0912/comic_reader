@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class ChapterService {
     @Autowired
     private ChapterRepository chapterRespository;
 
-    public void insertChapter(ChapterRequest newChapter) {
+    public ChapterEntity insertChapter(ChapterRequest newChapter) {
         ComicEntity comic = comicRepository.findById(newChapter.getComicId()).get();
         try {
             ChapterEntity chapter = ChapterEntity.builder()
@@ -36,6 +37,7 @@ public class ChapterService {
                     .dateCreated(DateUtil.getCurrentDate())
                     .build();
             chapterRespository.save(chapter);
+            return chapter;
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
@@ -55,6 +57,24 @@ public class ChapterService {
                 .id(chapter.getId())
                 .title(chapter.getTitle())
                 .chapterNumber(chapter.getChapterNumber())
+                .dateCreated(DateUtil.convertDateToString(chapter.getDateCreated()))
                 .build()).collect(Collectors.toList());
+    }
+
+    public ChapterResponse getLastestChapter(Long comicId) {
+        ComicEntity comic = comicRepository.findById(comicId).get();
+        
+        Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByDateCreatedDesc(comic);
+        ChapterEntity chapter = chapterEntity.orElse(null);
+        if (chapter == null) {
+            return null;
+        }
+        ChapterResponse lastestChapter = ChapterResponse.builder()
+                .id(chapter.getId())
+                .title(chapter.getTitle())
+                .chapterNumber(chapter.getChapterNumber())
+                .dateCreated(DateUtil.convertDateToString(chapter.getDateCreated()))
+                .build();
+        return lastestChapter;
     }
 }

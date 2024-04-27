@@ -4,10 +4,13 @@ import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
 import com.api.comic_reader.dtos.requests.LogoutRequest;
 import com.api.comic_reader.dtos.requests.RefreshRequest;
+import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.services.AuthenticationService;
+import com.api.comic_reader.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +25,20 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest newUser) throws Exception {
+        UserEntity newUserResponse = userService.register(newUser);
+
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Register successfully")
+                        .result(newUserResponse)
+                        .build());
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {

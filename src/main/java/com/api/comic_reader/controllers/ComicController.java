@@ -12,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
+import java.util.stream.Collectors;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -34,6 +36,26 @@ public class ComicController {
                         .builder()
                         .message("Get all comics successfully")
                         .result(comics)
+                        .build());
+    }
+
+    @GetMapping("/get6LastestComics")
+    public ResponseEntity<ApiResponse> get6LastestComics() {
+        List<ComicResponse> comics = comicService.getAllComics();
+    
+        List<ComicResponse> _6LastestComics = comics.stream()
+                .filter(comic -> comic.getLastestChapter() != null)
+                .sorted(Comparator.comparing(
+                        comic -> comic.getLastestChapter().getDateCreated(),
+                        Comparator.nullsLast(Comparator.reverseOrder())))
+                .limit(6)
+                .collect(Collectors.toList());
+    
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Get 10 lastest comics successfully")
+                        .result(_6LastestComics)
                         .build());
     }
 

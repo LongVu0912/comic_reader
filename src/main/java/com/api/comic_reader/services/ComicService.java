@@ -2,6 +2,7 @@ package com.api.comic_reader.services;
 
 import com.api.comic_reader.config.EnvironmentVariable;
 import com.api.comic_reader.dtos.requests.ComicRequest;
+import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.exception.AppException;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,15 @@ import org.springframework.stereotype.Service;
 public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
+    @Autowired
+    private ChapterService chapterService;
 
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
 
         List<ComicResponse> comicsRespone = comics.stream().map(comic -> {
             String thumbnailUrl = EnvironmentVariable.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+            ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
             return ComicResponse.builder()
                     .id(comic.getId())
@@ -39,6 +44,7 @@ public class ComicService {
                     .description(comic.getDescription())
                     .thumbnailUrl(thumbnailUrl)
                     .view(comic.getView())
+                    .lastestChapter(lastestChapter)
                     .isDeleted(comic.getIsDeleted())
                     .isFinished(comic.getIsFinished())
                     .build();
@@ -47,7 +53,8 @@ public class ComicService {
         return comicsRespone;
     }
 
-    public ComicEntity insertComic(ComicRequest newComic) throws AppException {      
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ComicEntity insertComic(ComicRequest newComic) throws AppException {
         try {
             @SuppressWarnings("null")
             String fileName = StringUtils.cleanPath(newComic.getThumbnailImage().getOriginalFilename());

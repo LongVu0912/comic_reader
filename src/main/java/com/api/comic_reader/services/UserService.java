@@ -60,7 +60,7 @@ public class UserService {
         return comicUser;
     }
 
-    @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.email == authentication.name")
+    @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.username == authentication.name")
     public UserEntity getUserInformationById(Long id) throws AppException {
         Optional<UserEntity> comicUserOptional = comicUserRepository.findById(id);
         if (comicUserOptional.isEmpty()) {

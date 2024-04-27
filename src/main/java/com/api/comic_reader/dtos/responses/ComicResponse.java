@@ -14,6 +14,7 @@ public class ComicResponse {
     private String description;
     private String thumbnailUrl;
     private Long view;
+    private ChapterResponse lastestChapter;
     private boolean isDeleted;
     private boolean isFinished;
 }
