@@ -1,10 +1,11 @@
 package com.api.comic_reader.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.api.comic_reader.dtos.responses.ApiResponse;;
+import com.api.comic_reader.dtos.responses.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,14 +32,14 @@ public class GlobalExceptionHandler {
                 .body(apiResponse);
     }
 
-    // @ExceptionHandler(value = AccessDeniedException.class)
-    // ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
-    //     ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
+        ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
 
-    //     return ResponseEntity.status(errorCode.getStatusCode()).body(
-    //             ApiResponse.builder()
-    //                     .code(errorCode.getCode())
-    //                     .message(errorCode.getMessage())
-    //                     .build());
-    // }
+        return ResponseEntity.status(errorCode.getStatusCode()).body(
+                ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
+    }
 }

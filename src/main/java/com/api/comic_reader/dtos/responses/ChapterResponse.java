@@ -1,7 +1,5 @@
 package com.api.comic_reader.dtos.responses;
 
-import java.util.Date;
-
 import lombok.*;
 
 @Getter

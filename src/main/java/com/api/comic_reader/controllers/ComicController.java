@@ -3,6 +3,7 @@ package com.api.comic_reader.controllers;
 import com.api.comic_reader.dtos.requests.ComicRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
+import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.services.ComicService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,20 +43,20 @@ public class ComicController {
     @GetMapping("/get6LastestComics")
     public ResponseEntity<ApiResponse> get6LastestComics() {
         List<ComicResponse> comics = comicService.getAllComics();
-    
-        List<ComicResponse> _6LastestComics = comics.stream()
+
+        List<ComicResponse> list6LastestComics = comics.stream()
                 .filter(comic -> comic.getLastestChapter() != null)
                 .sorted(Comparator.comparing(
                         comic -> comic.getLastestChapter().getDateCreated(),
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .limit(6)
                 .collect(Collectors.toList());
-    
+
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
-                        .message("Get 10 lastest comics successfully")
-                        .result(_6LastestComics)
+                        .message("Get 6 lastest comics successfully")
+                        .result(list6LastestComics)
                         .build());
     }
 
@@ -64,7 +65,7 @@ public class ComicController {
             @RequestPart("name") String name,
             @RequestPart("author") String author,
             @RequestPart("description") String description,
-            @RequestPart("imageData") MultipartFile imageData) throws Exception {
+            @RequestPart("imageData") MultipartFile imageData) throws AppException {
 
         ComicRequest newComic = new ComicRequest();
         newComic.setName(name);
@@ -83,7 +84,7 @@ public class ComicController {
     }
 
     @GetMapping("/thumbnail/{comicId}")
-    public ResponseEntity<byte[]> getImage(@PathVariable Long comicId) throws Exception {
+    public ResponseEntity<byte[]> getImage(@PathVariable Long comicId) throws AppException {
         byte[] thumbnail = comicService.getThumbnailImage(comicId);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

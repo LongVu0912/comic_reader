@@ -7,15 +7,21 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
-    WRONG_EMAIL_OR_PASSWORD(4000, "Wrong email or password", HttpStatus.OK),
-    TOKEN_IS_REQUIRED(4001, "Token is required", HttpStatus.BAD_REQUEST),
-    TOKEN_INVALID(4002, "Token is invalid", HttpStatus.BAD_REQUEST),
-    EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.BAD_REQUEST),
-    USER_NOT_FOUND(4004, "User not found", HttpStatus.BAD_REQUEST),
-    COMIC_CHAPTERS_NOT_FOUND(4005, "Comic's chapters not found", HttpStatus.BAD_REQUEST),
-    CHAPTER_IMAGES_NOT_FOUND(4006, "Chapter's images not found", HttpStatus.BAD_REQUEST),
-    THUMBNAIL_INVALID(4007, "Thumbnail is invalid", HttpStatus.BAD_REQUEST),
-    IMAGE_NOT_FOUND(4008, "Image not found", HttpStatus.BAD_REQUEST),;
+    ACCESS_DENIED(8888, "Access denied, you don't have permission", HttpStatus.OK),
+    WRONG_USERNAME_OR_PASSWORD(4000, "Wrong username or password", HttpStatus.OK),
+    WRONG_PASSWORD(4000, "Wrong password", HttpStatus.OK),
+    TOKEN_IS_REQUIRED(4001, "Token is required", HttpStatus.OK),
+    INVALID_TOKEN(4002, "Token is invalid", HttpStatus.OK),
+    USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
+
+    USER_NOT_FOUND(4004, "User not found", HttpStatus.OK),
+    COMIC_NOT_FOUND(4004, "Comic not found", HttpStatus.OK),
+    COMIC_CHAPTERS_NOT_FOUND(4004, "Comic's chapters not found", HttpStatus.OK),
+    CHAPTER_NOT_FOUND(4004, "Chapter not found", HttpStatus.OK),
+    CHAPTER_IMAGES_NOT_FOUND(4004, "Chapter's images not found", HttpStatus.OK),
+    IMAGE_NOT_FOUND(4004, "Image not found", HttpStatus.OK),
+
+    THUMBNAIL_INVALID(4009, "Thumbnail is invalid", HttpStatus.OK),;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

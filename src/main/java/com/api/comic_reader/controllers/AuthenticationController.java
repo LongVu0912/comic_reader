@@ -7,6 +7,7 @@ import com.api.comic_reader.dtos.requests.RefreshRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.UserEntity;
+import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.services.AuthenticationService;
@@ -29,7 +30,7 @@ public class AuthenticationController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest newUser) throws Exception {
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest newUser) throws AppException {
         UserEntity newUserResponse = userService.register(newUser);
 
         return ResponseEntity.ok().body(
@@ -70,7 +71,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/introspect")
-    public ResponseEntity<ApiResponse> introspect(@RequestBody IntrospectRequest introspectRequest) throws Exception {
+    public ResponseEntity<ApiResponse> introspect(@RequestBody IntrospectRequest introspectRequest) throws AppException {
         IntrospectResponse introspectResponse = authenticationService.introspect(introspectRequest);
 
         return ResponseEntity.ok().body(ApiResponse.builder()

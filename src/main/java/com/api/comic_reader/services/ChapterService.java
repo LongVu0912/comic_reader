@@ -9,6 +9,7 @@ import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.ChapterRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.utils.DateUtil;
+import java.util.Collections;
 
 import lombok.AllArgsConstructor;
 
@@ -28,7 +29,11 @@ public class ChapterService {
     private ChapterRepository chapterRespository;
 
     public ChapterEntity insertChapter(ChapterRequest newChapter) {
-        ComicEntity comic = comicRepository.findById(newChapter.getComicId()).get();
+        Optional<ComicEntity> comicOptional = comicRepository.findById(newChapter.getComicId());
+        if (comicOptional.isEmpty()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+        ComicEntity comic = comicOptional.get();
         try {
             ChapterEntity chapter = ChapterEntity.builder()
                     .title(newChapter.getTitle())
@@ -44,14 +49,18 @@ public class ChapterService {
     }
 
     public List<ChapterResponse> getComicChapters(Long id) throws AppException {
-        ComicEntity comic = null;
-        try {
-            comic = comicRepository.findById(id).get();
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.COMIC_CHAPTERS_NOT_FOUND);
+        Optional<ComicEntity> comicOptional = comicRepository.findById(id);
+        if (comicOptional.isEmpty()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
+        ComicEntity comic = comicOptional.get();
+
         List<ChapterEntity> chapters = chapterRespository.findByComic(comic);
+
+        if (chapters.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         return chapters.stream().map(chapter -> ChapterResponse.builder()
                 .id(chapter.getId())
@@ -62,19 +71,22 @@ public class ChapterService {
     }
 
     public ChapterResponse getLastestChapter(Long comicId) {
-        ComicEntity comic = comicRepository.findById(comicId).get();
-        
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+        if (comicOptional.isEmpty()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+        ComicEntity comic = comicOptional.get();
+
         Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByDateCreatedDesc(comic);
-        ChapterEntity chapter = chapterEntity.orElse(null);
-        if (chapter == null) {
+        ChapterEntity lastestChapter = chapterEntity.orElse(null);
+        if (lastestChapter == null) {
             return null;
         }
-        ChapterResponse lastestChapter = ChapterResponse.builder()
-                .id(chapter.getId())
-                .title(chapter.getTitle())
-                .chapterNumber(chapter.getChapterNumber())
-                .dateCreated(DateUtil.convertDateToString(chapter.getDateCreated()))
+        return ChapterResponse.builder()
+                .id(lastestChapter.getId())
+                .title(lastestChapter.getTitle())
+                .chapterNumber(lastestChapter.getChapterNumber())
+                .dateCreated(DateUtil.convertDateToString(lastestChapter.getDateCreated()))
                 .build();
-        return lastestChapter;
     }
 }

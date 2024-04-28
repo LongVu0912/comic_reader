@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,49 +25,73 @@ import org.springframework.stereotype.Service;
 @EnableMethodSecurity(prePostEnabled = true)
 public class UserService {
     @Autowired
-    private UserRepository comicUserRepository;
+    private UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public List<UserEntity> getAllUsers() throws Exception {
-        List<UserEntity> comicUsers = null;
+    public List<UserEntity> getAllUsers() throws AppException {
+        List<UserEntity> users = null;
         try {
-            comicUsers = comicUserRepository.findAll();
+            users = userRepository.findAll();
         } catch (Exception e) {
-            throw new Exception(e);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
-        return comicUsers;
+        return users;
     }
 
-    public UserEntity register(RegisterRequest newComicUser) throws AppException {
-        UserEntity comicUser = null;
-        Optional<UserEntity> comicUserOptional = comicUserRepository.findByUsernameOrEmail(newComicUser.getUsername(), newComicUser.getEmail());
-        if (comicUserOptional.isPresent()) {
-            throw new AppException(ErrorCode.EMAIL_TAKEN);
+    public UserEntity register(RegisterRequest newUser) throws AppException {
+        UserEntity user = null;
+        Optional<UserEntity> userOptional = userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
+        if (userOptional.isPresent()) {
+            throw new AppException(ErrorCode.USERNAME_OR_EMAIL_TAKEN);
         }
         try {
-            comicUser = UserEntity.builder()
-                    .username(newComicUser.getUsername())
-                    .email(newComicUser.getEmail())
-                    .password(passwordEncoder.encode(newComicUser.getPassword()))
-                    .fullName(newComicUser.getFullName())
-                    .dateOfBirth(DateUtil.convertStringToDate(newComicUser.getDateOfBirth()))
-                    .isMale(newComicUser.getIsMale())
+            user = UserEntity.builder()
+                    .username(newUser.getUsername())
+                    .email(newUser.getEmail())
+                    .password(passwordEncoder.encode(newUser.getPassword()))
+                    .fullName(newUser.getFullName())
+                    .dateOfBirth(DateUtil.convertStringToDate(newUser.getDateOfBirth()))
+                    .isMale(newUser.getIsMale())
                     .role(Role.USER)
                     .build();
-            comicUserRepository.save(comicUser);
+            userRepository.save(user);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
-        return comicUser;
+        return user;
     }
 
     @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.username == authentication.name")
     public UserEntity getUserInformationById(Long id) throws AppException {
-        Optional<UserEntity> comicUserOptional = comicUserRepository.findById(id);
-        if (comicUserOptional.isEmpty()) {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        UserEntity comicUser = comicUserOptional.get();
-        return comicUser;
+        return userOptional.get();
+    }
+
+    public UserEntity getMyInformation() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(name);
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        return userOptional.get();
+    }
+
+    public void changePassword(String oldPassword, String newPassword) throws AppException {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(name);
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        UserEntity user = userOptional.get();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
