@@ -30,14 +30,14 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = null;
         try {
-            Optional<UserEntity> comicUserOptional = userRepository.findByUsername(loginRequest.getUsername());
-            if (comicUserOptional.isPresent()) {
-                UserEntity comicUser = comicUserOptional.get();
-                if (passwordEncoder.matches(loginRequest.getPassword(), comicUser.getPassword())) {
+            Optional<UserEntity> userOptional = userRepository.findByUsername(loginRequest.getUsername());
+            if (userOptional.isPresent()) {
+                UserEntity user = userOptional.get();
+                if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                     String jwtToken = "";
-                    jwtToken = jwtService.generateToken(comicUser);
+                    jwtToken = jwtService.generateToken(user);
                     loginResponse = AuthResponse.builder()
-                            .id(comicUser.getId())
+                            .id(user.getId())
                             .token(jwtToken)
                             .authenticated(true)
                             .build();
@@ -47,26 +47,26 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         if (loginResponse == null) {
-            throw new AppException(ErrorCode.WRONG_EMAIL_OR_PASSWORD);
+            throw new AppException(ErrorCode.WRONG_USERNAME_OR_PASSWORD);
         }
         return loginResponse;
     }
 
-    public void logout(String token) throws Exception {
-        var signedToken = jwtService.verifyToken(token);
-
-        String jit = signedToken.getJWTClaimsSet().getJWTID();
-
-        Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
-
-        InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
-                .id(jit)
-                .expirationTime(expirationTime)
-                .build();
-
+    public void logout(String token) throws AppException {
         try {
+            var signedToken = jwtService.verifyToken(token);
+
+            String jit = signedToken.getJWTClaimsSet().getJWTID();
+
+            Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
+
+            InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
+                    .id(jit)
+                    .expirationTime(expirationTime)
+                    .build();
             invalidatedTokenRepository.save(invalidatedToken);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
@@ -95,7 +95,7 @@ public class AuthenticationService {
             }
 
             UserEntity currentUser = userOptional.get();
-            
+
             var newToken = jwtService.generateToken(currentUser);
 
             return AuthResponse.builder()

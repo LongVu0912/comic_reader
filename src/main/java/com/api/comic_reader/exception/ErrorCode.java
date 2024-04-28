@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     ACCESS_DENIED(8888, "Access denied, you don't have permission", HttpStatus.OK),
-    WRONG_EMAIL_OR_PASSWORD(4000, "Wrong username or password", HttpStatus.OK),
+    WRONG_USERNAME_OR_PASSWORD(4000, "Wrong username or password", HttpStatus.OK),
+    WRONG_PASSWORD(4000, "Wrong password", HttpStatus.OK),
     TOKEN_IS_REQUIRED(4001, "Token is required", HttpStatus.OK),
     INVALID_TOKEN(4002, "Token is invalid", HttpStatus.OK),
-    EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
+    USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
 
     USER_NOT_FOUND(4004, "User not found", HttpStatus.OK),
     COMIC_NOT_FOUND(4004, "Comic not found", HttpStatus.OK),

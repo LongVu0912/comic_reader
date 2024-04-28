@@ -1,6 +1,8 @@
 package com.api.comic_reader.controllers;
 
 import com.api.comic_reader.entities.UserEntity;
+import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.services.UserService;
 
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,23 +22,23 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private final UserService comicUserService;
+    private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAllUsers() throws Exception {
-        List<UserEntity> comicUsers = comicUserService.getAllUsers();
+    public ResponseEntity<ApiResponse> getAllUsers() throws AppException {
+        List<UserEntity> users = userService.getAllUsers();
 
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
                         .message("Get all user successfully")
-                        .result(comicUsers)
+                        .result(users)
                         .build());
     }
 
     @GetMapping("/getUserInformationById/{id}")
     public ResponseEntity<ApiResponse> getUserInformationById(@PathVariable Long id) {
-        UserEntity userInformation = comicUserService.getUserInformationById(id);
+        UserEntity userInformation = userService.getUserInformationById(id);
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
@@ -44,14 +47,25 @@ public class UserController {
                         .build());
     }
 
-    @GetMapping("/myInformation")
+    @GetMapping("/getMyInformation")
     public ResponseEntity<ApiResponse> getMyInformation() {
-        UserEntity userInformation = comicUserService.getMyInformation();
+        UserEntity userInformation = userService.getMyInformation();
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
                         .message("Get user information successfully")
                         .result(userInformation)
+                        .build());
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(changePasswordRequest.getOldPassword(), changePasswordRequest.getNewPassword());
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Change password successfully")
+                        .result(null)
                         .build());
     }
 }

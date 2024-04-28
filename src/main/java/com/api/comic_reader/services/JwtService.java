@@ -30,15 +30,15 @@ public class JwtService {
     private static final String SIGNER_KEY = EnvironmentVariable.jwtSignerKey;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
-    public String generateToken(UserEntity comicUser) {
+    public String generateToken(UserEntity user) {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .jwtID(UUID.randomUUID().toString())
-                .subject(comicUser.getUsername())
+                .subject(user.getUsername())
                 .issueTime(new Date())
-                .claim("scope", comicUser.getRole().name())
+                .claim("scope", user.getRole().name())
                 .expirationTime(new Date(new Date().getTime() + EnvironmentVariable.jwtExpiration))
                 .build();
 
