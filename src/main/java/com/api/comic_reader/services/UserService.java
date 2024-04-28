@@ -1,5 +1,7 @@
 package com.api.comic_reader.services;
 
+import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
+import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.enums.Role;
@@ -40,7 +42,8 @@ public class UserService {
 
     public UserEntity register(RegisterRequest newUser) throws AppException {
         UserEntity user = null;
-        Optional<UserEntity> userOptional = userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
+        Optional<UserEntity> userOptional = userRepository.findByUsernameOrEmail(newUser.getUsername(),
+                newUser.getEmail());
         if (userOptional.isPresent()) {
             throw new AppException(ErrorCode.USERNAME_OR_EMAIL_TAKEN);
         }
@@ -80,7 +83,7 @@ public class UserService {
         return userOptional.get();
     }
 
-    public void changePassword(String oldPassword, String newPassword) throws AppException {
+    public void changePassword(ChangePasswordRequest changePasswordRequest) throws AppException {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         Optional<UserEntity> userOptional = userRepository.findByUsername(name);
@@ -88,10 +91,24 @@ public class UserService {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         UserEntity user = userOptional.get();
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.WRONG_PASSWORD);
         }
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    public void changeInformation(ChangeInformationRequest changeInformationRequest) throws AppException {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(name);
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        UserEntity user = userOptional.get();
+        user.setFullName(changeInformationRequest.getFullName());
+        user.setDateOfBirth(DateUtil.convertStringToDate(changeInformationRequest.getDateOfBirth()));
+        user.setIsMale(changeInformationRequest.getIsMale());
         userRepository.save(user);
     }
 }

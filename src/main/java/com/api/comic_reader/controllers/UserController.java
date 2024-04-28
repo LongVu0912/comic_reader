@@ -2,6 +2,7 @@ package com.api.comic_reader.controllers;
 
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.services.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/user")
@@ -60,11 +62,23 @@ public class UserController {
 
     @PostMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        userService.changePassword(changePasswordRequest.getOldPassword(), changePasswordRequest.getNewPassword());
+        userService.changePassword(changePasswordRequest);
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
                         .message("Change password successfully")
+                        .result(null)
+                        .build());
+    }
+
+    @PostMapping("/changeInformation")
+    public ResponseEntity<ApiResponse> changeInformation(
+            @RequestBody ChangeInformationRequest changeInformationRequest) {
+        userService.changeInformation(changeInformationRequest);
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Change user information successfully")
                         .result(null)
                         .build());
     }
