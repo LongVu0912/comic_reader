@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
-    WRONG_EMAIL_OR_PASSWORD(4000, "Wrong email or password", HttpStatus.BAD_REQUEST),
+    WRONG_EMAIL_OR_PASSWORD(4000, "Wrong email or password", HttpStatus.OK),
     TOKEN_IS_REQUIRED(4001, "Token is required", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(4002, "Token is invalid", HttpStatus.BAD_REQUEST),
     EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.BAD_REQUEST),

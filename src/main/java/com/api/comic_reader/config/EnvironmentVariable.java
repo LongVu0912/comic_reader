@@ -8,4 +8,5 @@ public class EnvironmentVariable {
     public Long jwtExpiration = (long) (60 * 60 * 1000); // 1 hour
     public String passwordEncoderKey = "Cf3X07omDRzLIp2hYuvrBmZ5vGlIcge12VEllyTdD1Q";
     public String baseUrl = "http://localhost:8080";
+    // public String baseUrl = "http://192.168.21.140:8080";
 }
