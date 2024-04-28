@@ -4,10 +4,12 @@ import com.api.comic_reader.config.EnvironmentVariable;
 import com.api.comic_reader.dtos.requests.ChapterImageRequest;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.ChapterImageEntity;
+import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.ChapterImageRepository;
 import com.api.comic_reader.repositories.ChapterRepository;
+import com.api.comic_reader.repositories.ComicRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -25,6 +27,8 @@ public class ChapterImageService {
     private ChapterImageRepository chapterImageRepository;
     @Autowired
     private ChapterRepository chapterRepository;
+    @Autowired
+    private ComicRepository comicRepository;
 
     public void insertChapterImage(ChapterImageRequest newChapterImage) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newChapterImage.getChapterId());
@@ -57,6 +61,11 @@ public class ChapterImageService {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
         }
         ChapterEntity chapter = chapterOptional.get();
+
+        // Increase the view count of the comic
+        ComicEntity comic = chapter.getComic();
+        comicRepository.increaseView(comic);
+
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapter);
 
         String baseUrl = EnvironmentVariable.baseUrl;
