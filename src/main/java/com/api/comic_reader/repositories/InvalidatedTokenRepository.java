@@ -7,4 +7,5 @@ import com.api.comic_reader.entities.InvalidatedTokenEntity;
 
 @Repository
 public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedTokenEntity, String> {
+    
 }

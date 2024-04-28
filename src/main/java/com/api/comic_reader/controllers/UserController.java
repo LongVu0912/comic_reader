@@ -43,4 +43,15 @@ public class UserController {
                         .result(userInformation)
                         .build());
     }
+
+    @GetMapping("/myInformation")
+    public ResponseEntity<ApiResponse> getMyInformation() {
+        UserEntity userInformation = comicUserService.getMyInformation();
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Get user information successfully")
+                        .result(userInformation)
+                        .build());
+    }
 }

@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
-    public AuthResponse login(LoginRequest loginRequest) throws AppException, Exception {
+    public AuthResponse login(LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = null;
         try {
             Optional<UserEntity> comicUserOptional = userRepository.findByUsername(loginRequest.getUsername());
@@ -43,8 +43,8 @@ public class AuthenticationService {
                             .build();
                 }
             }
-        } catch (Exception e) {
-            throw new Exception(e);
+        } catch (AppException e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         if (loginResponse == null) {
             throw new AppException(ErrorCode.WRONG_EMAIL_OR_PASSWORD);
@@ -67,11 +67,11 @@ public class AuthenticationService {
         try {
             invalidatedTokenRepository.save(invalidatedToken);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 
-    public AuthResponse refreshToken(String token) throws Exception, AppException {
+    public AuthResponse refreshToken(String token) throws AppException {
         try {
             var signedToken = jwtService.verifyToken(token);
 
@@ -88,17 +88,23 @@ public class AuthenticationService {
 
             var username = signedToken.getJWTClaimsSet().getSubject();
 
-            UserEntity comicUser = userRepository.findByUsername(username).get();
+            Optional<UserEntity> userOptional = userRepository.findByUsername(username);
 
-            var newToken = jwtService.generateToken(comicUser);
+            if (userOptional.isEmpty()) {
+                throw new AppException(ErrorCode.USER_NOT_FOUND);
+            }
+
+            UserEntity currentUser = userOptional.get();
+            
+            var newToken = jwtService.generateToken(currentUser);
 
             return AuthResponse.builder()
-                    .id(comicUser.getId())
+                    .id(currentUser.getId())
                     .token(newToken)
                     .authenticated(true)
                     .build();
         } catch (Exception e) {
-            throw new AppException(ErrorCode.TOKEN_INVALID);
+            throw new AppException(ErrorCode.INVALID_TOKEN);
         }
     }
 

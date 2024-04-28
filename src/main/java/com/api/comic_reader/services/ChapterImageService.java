@@ -12,6 +12,7 @@ import com.api.comic_reader.repositories.ChapterRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,12 @@ public class ChapterImageService {
     @Autowired
     private ChapterRepository chapterRepository;
 
-    public void insertChapterImage(ChapterImageRequest newChapterImage) throws Exception {
-        ChapterEntity chapter = chapterRepository.findById(newChapterImage.getChapterId()).get();
+    public void insertChapterImage(ChapterImageRequest newChapterImage) throws AppException {
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newChapterImage.getChapterId());
+        if (chapterOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        ChapterEntity chapter = chapterOptional.get();
         try {
             // Find the highest image order for this chapter
             Long maxOrder = chapterImageRepository.findMaxImageOrder(newChapterImage.getChapterId());
@@ -41,28 +46,32 @@ public class ChapterImageService {
                     .build();
             chapterImageRepository.save(chapterImage);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 
     @Transactional
     public List<String> getChapterImageUrls(Long chapterId) {
-        ChapterEntity chapter = chapterRepository.findById(chapterId).get();
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
+        if (chapterOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        ChapterEntity chapter = chapterOptional.get();
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapter);
 
         String baseUrl = EnvironmentVariable.baseUrl;
 
-        List<String> imageUrls = chapterImages.stream().map(chapterImage -> baseUrl + "/api/comic/image/" + chapterImage.getId())
+        return chapterImages.stream()
+                .map(chapterImage -> baseUrl + "/api/comic/image/" + chapterImage.getId())
                 .toList();
-        return imageUrls;
     }
 
     public byte[] getImageFromImageId(Long imageId) {
-        try {
-            ChapterImageEntity chapterImage = chapterImageRepository.findById(imageId).get();
-            return chapterImage.getImageData();
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.IMAGE_NOT_FOUND);
+        Optional<ChapterImageEntity> chapterImageOptional = chapterImageRepository.findById(imageId);
+        if (chapterImageOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_IMAGES_NOT_FOUND);
         }
+        ChapterImageEntity chapterImage = chapterImageOptional.get();
+        return chapterImage.getImageData();
     }
 }

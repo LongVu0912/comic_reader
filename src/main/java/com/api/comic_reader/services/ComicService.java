@@ -14,7 +14,10 @@ import com.api.comic_reader.repositories.ComicRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +36,11 @@ public class ComicService {
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
 
-        List<ComicResponse> comicsRespone = comics.stream().map(comic -> {
+        if (comics.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return comics.stream().map(comic -> {
             String thumbnailUrl = EnvironmentVariable.baseUrl + "/api/comic/thumbnail/" + comic.getId();
             ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
@@ -49,15 +56,16 @@ public class ComicService {
                     .isFinished(comic.getIsFinished())
                     .build();
         }).collect(Collectors.toList());
-
-        return comicsRespone;
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ComicEntity insertComic(ComicRequest newComic) throws AppException {
         try {
-            @SuppressWarnings("null")
-            String fileName = StringUtils.cleanPath(newComic.getThumbnailImage().getOriginalFilename());
+            String originalFilename = newComic.getThumbnailImage().getOriginalFilename();
+            if (originalFilename == null) {
+                throw new AppException(ErrorCode.THUMBNAIL_INVALID);
+            }
+            String fileName = StringUtils.cleanPath(originalFilename);
             if (fileName.contains("..")) {
                 throw new AppException(ErrorCode.THUMBNAIL_INVALID);
             }
@@ -79,8 +87,12 @@ public class ComicService {
         }
     }
 
-    public byte[] getThumbnailImage(Long id) {
-        ComicEntity comic = comicRepository.findById(id).get();
+    public byte[] getThumbnailImage(Long comicId) {
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+        if (comicOptional.isEmpty()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+        ComicEntity comic = comicOptional.get();
         return comic.getThumbnailImage();
     }
 }

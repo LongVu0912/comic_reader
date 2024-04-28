@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,12 @@ public class UserService {
     private UserRepository comicUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public List<UserEntity> getAllUsers() throws Exception {
+    public List<UserEntity> getAllUsers() throws AppException {
         List<UserEntity> comicUsers = null;
         try {
             comicUsers = comicUserRepository.findAll();
         } catch (Exception e) {
-            throw new Exception(e);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         return comicUsers;
     }
@@ -55,7 +56,7 @@ public class UserService {
                     .build();
             comicUserRepository.save(comicUser);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         return comicUser;
     }
@@ -66,7 +67,16 @@ public class UserService {
         if (comicUserOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        UserEntity comicUser = comicUserOptional.get();
-        return comicUser;
+        return comicUserOptional.get();
+    }
+
+    public UserEntity getMyInformation() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Optional<UserEntity> userOptional = comicUserRepository.findByUsername(name);
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        return userOptional.get();
     }
 }

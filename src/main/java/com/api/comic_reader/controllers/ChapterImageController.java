@@ -29,7 +29,7 @@ public class ChapterImageController {
     @PostMapping("/insertChapterImage")
     public ResponseEntity<ApiResponse> insertChapterImage(
             @RequestParam("chapterId") String chapterId,
-            @RequestParam("imageData") List<MultipartFile> imageDataList) throws Exception {
+            @RequestParam("imageData") List<MultipartFile> imageDataList) throws AppException {
         Long chapterIdLong = Long.parseLong(chapterId);
 
         // Lặp qua từng file ảnh trong danh sách và thực hiện thêm vào hệ thống

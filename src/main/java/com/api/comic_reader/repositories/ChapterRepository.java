@@ -10,7 +10,6 @@ import java.util.Optional;
 
 
 @Repository
-
 public interface ChapterRepository extends JpaRepository<ChapterEntity, Long> {
     @SuppressWarnings("null")
     Optional<ChapterEntity> findById(Long id);
