@@ -1,9 +1,10 @@
 package com.api.comic_reader.entities;
 
+import jakarta.persistence.*;
+
 import com.api.comic_reader.entities.composite_keys.BookmarkKey;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter

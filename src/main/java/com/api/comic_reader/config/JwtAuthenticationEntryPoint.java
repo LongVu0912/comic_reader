@@ -1,6 +1,5 @@
 package com.api.comic_reader.config;
 
-
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;

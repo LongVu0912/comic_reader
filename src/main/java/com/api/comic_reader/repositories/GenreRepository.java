@@ -1,10 +1,9 @@
 package com.api.comic_reader.repositories;
 
-import com.api.comic_reader.entities.GenreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.api.comic_reader.entities.GenreEntity;
+
 @Repository
-public interface GenreRepository extends JpaRepository<GenreEntity, Long> {
-    
-}
+public interface GenreRepository extends JpaRepository<GenreEntity, Long> {}

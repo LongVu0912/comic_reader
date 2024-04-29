@@ -1,7 +1,7 @@
 package com.api.comic_reader.dtos.requests;
 
-import lombok.AllArgsConstructor;
 import lombok.*;
+import lombok.AllArgsConstructor;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ public class RegisterRequest {
     private String password;
 
     private String fullName;
-    
+
     private String email;
 
     private String dateOfBirth;

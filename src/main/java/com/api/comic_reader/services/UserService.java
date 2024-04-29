@@ -1,5 +1,16 @@
 package com.api.comic_reader.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
@@ -13,23 +24,13 @@ import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
 
-import java.util.Optional;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 @Service
 @AllArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
@@ -45,8 +46,8 @@ public class UserService {
 
     public UserEntity register(RegisterRequest newUser) throws AppException {
         UserEntity user = null;
-        Optional<UserEntity> userOptional = userRepository.findByUsernameOrEmail(newUser.getUsername(),
-                newUser.getEmail());
+        Optional<UserEntity> userOptional =
+                userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
         if (userOptional.isPresent()) {
             throw new AppException(ErrorCode.USERNAME_OR_EMAIL_TAKEN);
         }
@@ -83,7 +84,8 @@ public class UserService {
         if (userOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        return UserResponse.builder().id(userOptional.get().getId())
+        return UserResponse.builder()
+                .id(userOptional.get().getId())
                 .username(userOptional.get().getUsername())
                 .email(userOptional.get().getEmail())
                 .fullName(userOptional.get().getFullName())

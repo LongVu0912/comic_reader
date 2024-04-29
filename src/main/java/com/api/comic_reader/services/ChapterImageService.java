@@ -1,5 +1,14 @@
 package com.api.comic_reader.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ChapterImageRequest;
 import com.api.comic_reader.entities.ChapterEntity;
@@ -13,23 +22,16 @@ import com.api.comic_reader.repositories.ComicRepository;
 
 import lombok.AllArgsConstructor;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 @Service
 @EnableMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class ChapterImageService {
     @Autowired
     private ChapterImageRepository chapterImageRepository;
+
     @Autowired
     private ChapterRepository chapterRepository;
+
     @Autowired
     private ComicRepository comicRepository;
 

@@ -2,8 +2,10 @@ package com.api.comic_reader.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.*;
 
 @Getter
@@ -31,7 +33,7 @@ public class ComicEntity {
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
-    @Column(name = "thumbnail_image", columnDefinition="BYTEA")
+    @Column(name = "thumbnail_image", columnDefinition = "BYTEA")
     private byte[] thumbnailImage;
 
     @Column(name = "is_finished", nullable = false)

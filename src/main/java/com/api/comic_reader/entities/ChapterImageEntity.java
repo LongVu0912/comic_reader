@@ -1,8 +1,9 @@
 package com.api.comic_reader.entities;
 
+import jakarta.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -25,6 +26,6 @@ public class ChapterImageEntity {
     @Column(name = "image_order", nullable = false)
     private Long imageOrder;
 
-    @Column(name = "image_data", columnDefinition="BYTEA")
+    @Column(name = "image_data", columnDefinition = "BYTEA")
     private byte[] imageData;
 }

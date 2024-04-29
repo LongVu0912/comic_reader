@@ -24,15 +24,14 @@ public class SecurityConfig {
     private CustomJwtDecoder customJwtDecoder;
 
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/api/auth/**",
-            "/api/comic/**",
+        "/api/auth/**", "/api/comic/**",
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Restrict access based on roles
-        http.authorizeHttpRequests(request -> request
-                .requestMatchers(PUBLIC_ENDPOINTS).permitAll());
+        http.authorizeHttpRequests(
+                request -> request.requestMatchers(PUBLIC_ENDPOINTS).permitAll());
 
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 

@@ -1,7 +1,9 @@
 package com.api.comic_reader.entities;
 
-import com.api.comic_reader.entities.composite_keys.ComicGenreKey;
 import jakarta.persistence.*;
+
+import com.api.comic_reader.entities.composite_keys.ComicGenreKey;
+
 import lombok.*;
 
 @Getter

@@ -1,9 +1,10 @@
 package com.api.comic_reader.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Date;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -31,5 +32,4 @@ public class CommentEntity {
 
     @Column(name = "created_at")
     private Date createdAt;
-
 }

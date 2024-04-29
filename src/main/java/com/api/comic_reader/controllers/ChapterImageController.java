@@ -1,21 +1,20 @@
 package com.api.comic_reader.controllers;
 
-import com.api.comic_reader.dtos.requests.ChapterImageRequest;
-import com.api.comic_reader.dtos.responses.ApiResponse;
-import com.api.comic_reader.exception.AppException;
-import com.api.comic_reader.services.ChapterImageService;
-
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.api.comic_reader.dtos.requests.ChapterImageRequest;
+import com.api.comic_reader.dtos.responses.ApiResponse;
+import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.services.ChapterImageService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/image")
@@ -28,8 +27,8 @@ public class ChapterImageController {
 
     @PostMapping("/insertChapterImage")
     public ResponseEntity<ApiResponse> insertChapterImage(
-            @RequestParam("chapterId") String chapterId,
-            @RequestParam("imageData") List<MultipartFile> imageDataList) throws AppException {
+            @RequestParam("chapterId") String chapterId, @RequestParam("imageData") List<MultipartFile> imageDataList)
+            throws AppException {
         Long chapterIdLong = Long.parseLong(chapterId);
 
         // Lặp qua từng file ảnh trong danh sách và thực hiện thêm vào hệ thống
@@ -40,9 +39,8 @@ public class ChapterImageController {
                     .build());
         }
 
-        return ResponseEntity.ok().body(
-                ApiResponse
-                        .builder()
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
                         .message("Insert chapter images successfully")
                         .result(null)
                         .build());
@@ -52,9 +50,8 @@ public class ChapterImageController {
     public ResponseEntity<ApiResponse> getChapterImages(@PathVariable Long chapterId) {
         List<String> imageUrls = chapterImageService.getChapterImageUrls(chapterId);
 
-        return ResponseEntity.ok().body(
-                ApiResponse
-                        .builder()
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
                         .message("Get all chapter images successfully")
                         .result(imageUrls)
                         .build());
@@ -63,8 +60,6 @@ public class ChapterImageController {
     @GetMapping("/{imageId}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long imageId) throws AppException {
         byte[] image = chapterImageService.getImageFromImageId(imageId);
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(image);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
     }
 }

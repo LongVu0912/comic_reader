@@ -1,7 +1,6 @@
 package com.api.comic_reader.config;
 
 import java.util.Objects;
-
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import com.api.comic_reader.services.AuthenticationService;
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
     private String signerKey = EnvVariables.jwtSignerKey;
+
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -29,8 +29,7 @@ public class CustomJwtDecoder implements JwtDecoder {
             var response = authenticationService.introspect(
                     TokenRequest.builder().token(token).build());
 
-            if (!response.isValid())
-                throw new JwtException("Token is invalid");
+            if (!response.isValid()) throw new JwtException("Token is invalid");
         } catch (JwtException e) {
             throw new JwtException("Token is invalid");
         }

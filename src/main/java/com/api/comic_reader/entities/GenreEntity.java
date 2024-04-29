@@ -1,9 +1,10 @@
 package com.api.comic_reader.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Getter
 @Setter

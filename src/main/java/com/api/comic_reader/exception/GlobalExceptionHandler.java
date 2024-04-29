@@ -37,17 +37,15 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(apiResponse);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
 
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
                         .build());

@@ -1,5 +1,10 @@
 package com.api.comic_reader.services;
 
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.UserEntity;
@@ -18,11 +23,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import lombok.AllArgsConstructor;
-
-import java.util.Date;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -63,9 +63,7 @@ public class JwtService {
             isValid = false;
         }
 
-        return IntrospectResponse.builder()
-                .valid(isValid)
-                .build();
+        return IntrospectResponse.builder().valid(isValid).build();
     }
 
     public SignedJWT verifyToken(String token) throws AppException {
@@ -78,18 +76,15 @@ public class JwtService {
 
             var verified = signedJWT.verify(verifier);
 
-            if (!(verified && expirationTime.after(new Date())))
-                throw new AppException(ErrorCode.INVALID_TOKEN);
+            if (!(verified && expirationTime.after(new Date()))) throw new AppException(ErrorCode.INVALID_TOKEN);
 
             String jit = signedJWT.getJWTClaimsSet().getJWTID();
 
-            if (invalidatedTokenRepository.existsById(jit))
-                throw new AppException(ErrorCode.INVALID_TOKEN);
+            if (invalidatedTokenRepository.existsById(jit)) throw new AppException(ErrorCode.INVALID_TOKEN);
 
             return signedJWT;
         } catch (Exception e) {
             throw new AppException(ErrorCode.INVALID_TOKEN);
         }
-
     }
 }

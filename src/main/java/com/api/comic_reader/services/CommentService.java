@@ -1,21 +1,5 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.config.EnvVariables;
-import com.api.comic_reader.dtos.requests.CommentRequest;
-import com.api.comic_reader.dtos.responses.CommentResponse;
-import com.api.comic_reader.entities.ChapterEntity;
-import com.api.comic_reader.entities.CommentEntity;
-import com.api.comic_reader.entities.UserEntity;
-import com.api.comic_reader.exception.AppException;
-import com.api.comic_reader.exception.ErrorCode;
-
-import com.api.comic_reader.repositories.ChapterRepository;
-import com.api.comic_reader.repositories.CommentRepository;
-import com.api.comic_reader.repositories.UserRepository;
-import com.api.comic_reader.utils.DateUtil;
-
-import lombok.AllArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +10,31 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.api.comic_reader.config.EnvVariables;
+import com.api.comic_reader.dtos.requests.CommentRequest;
+import com.api.comic_reader.dtos.responses.CommentResponse;
+import com.api.comic_reader.entities.ChapterEntity;
+import com.api.comic_reader.entities.CommentEntity;
+import com.api.comic_reader.entities.UserEntity;
+import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.exception.ErrorCode;
+import com.api.comic_reader.repositories.ChapterRepository;
+import com.api.comic_reader.repositories.CommentRepository;
+import com.api.comic_reader.repositories.UserRepository;
+import com.api.comic_reader.utils.DateUtil;
+
+import lombok.AllArgsConstructor;
+
 @Service
 @AllArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
     @Autowired
     private ChapterRepository chapterRepository;
+
     @Autowired
     private UserRepository userRepository;
 

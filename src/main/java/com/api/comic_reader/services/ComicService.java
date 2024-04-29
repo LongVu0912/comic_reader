@@ -1,5 +1,16 @@
 package com.api.comic_reader.services;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ComicRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
@@ -7,22 +18,9 @@ import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
-
-import org.springframework.util.StringUtils;
 import com.api.comic_reader.repositories.ComicRepository;
 
 import lombok.AllArgsConstructor;
-
-import java.util.stream.Collectors;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
+
     @Autowired
     private ChapterService chapterService;
 
@@ -40,22 +39,24 @@ public class ComicService {
             return Collections.emptyList();
         }
 
-        return comics.stream().map(comic -> {
-            String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-            ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+        return comics.stream()
+                .map(comic -> {
+                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
-            return ComicResponse.builder()
-                    .id(comic.getId())
-                    .name(comic.getName())
-                    .author(comic.getAuthor())
-                    .description(comic.getDescription())
-                    .thumbnailUrl(thumbnailUrl)
-                    .view(comic.getView())
-                    .lastestChapter(lastestChapter)
-                    .isDeleted(comic.getIsDeleted())
-                    .isFinished(comic.getIsFinished())
-                    .build();
-        }).collect(Collectors.toList());
+                    return ComicResponse.builder()
+                            .id(comic.getId())
+                            .name(comic.getName())
+                            .author(comic.getAuthor())
+                            .description(comic.getDescription())
+                            .thumbnailUrl(thumbnailUrl)
+                            .view(comic.getView())
+                            .lastestChapter(lastestChapter)
+                            .isDeleted(comic.getIsDeleted())
+                            .isFinished(comic.getIsFinished())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
@@ -113,21 +114,23 @@ public class ComicService {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
-        return comics.stream().map(comic -> {
-            String thumbnailUrl = "/api/comic/thumbnail/" + comic.getId();
-            ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+        return comics.stream()
+                .map(comic -> {
+                    String thumbnailUrl = "/api/comic/thumbnail/" + comic.getId();
+                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
-            return ComicResponse.builder()
-                    .id(comic.getId())
-                    .name(comic.getName())
-                    .author(comic.getAuthor())
-                    .description(comic.getDescription())
-                    .thumbnailUrl(thumbnailUrl)
-                    .view(comic.getView())
-                    .lastestChapter(lastestChapter)
-                    .isDeleted(comic.getIsDeleted())
-                    .isFinished(comic.getIsFinished())
-                    .build();
-        }).collect(Collectors.toList());
+                    return ComicResponse.builder()
+                            .id(comic.getId())
+                            .name(comic.getName())
+                            .author(comic.getAuthor())
+                            .description(comic.getDescription())
+                            .thumbnailUrl(thumbnailUrl)
+                            .view(comic.getView())
+                            .lastestChapter(lastestChapter)
+                            .isDeleted(comic.getIsDeleted())
+                            .isFinished(comic.getIsFinished())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 }

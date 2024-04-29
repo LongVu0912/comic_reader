@@ -1,12 +1,13 @@
 package com.api.comic_reader.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.*;
 
 @Getter
 @Setter

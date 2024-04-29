@@ -1,12 +1,14 @@
 package com.api.comic_reader.entities;
 
-import com.api.comic_reader.enums.Role;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.api.comic_reader.enums.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -28,7 +30,7 @@ public class UserEntity {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
-    
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 

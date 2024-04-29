@@ -1,10 +1,11 @@
 package com.api.comic_reader.entities;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
@@ -33,5 +34,4 @@ public class RatingEntity {
     @Min(value = 1, message = "Score must be at least 1")
     @Max(value = 5, message = "Score must be at most 5")
     private Integer score;
-
 }

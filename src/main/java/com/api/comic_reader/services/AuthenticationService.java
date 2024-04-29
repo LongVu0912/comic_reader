@@ -1,24 +1,23 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.dtos.requests.LoginRequest;
-import com.api.comic_reader.dtos.requests.TokenRequest;
-import com.api.comic_reader.dtos.responses.IntrospectResponse;
-import com.api.comic_reader.dtos.responses.AuthResponse;
-import com.api.comic_reader.entities.UserEntity;
-import com.api.comic_reader.entities.InvalidatedTokenEntity;
-import com.api.comic_reader.exception.AppException;
-import com.api.comic_reader.exception.ErrorCode;
-import com.api.comic_reader.repositories.UserRepository;
-
-import com.api.comic_reader.repositories.InvalidatedTokenRepository;
-
-import lombok.AllArgsConstructor;
+import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
+import com.api.comic_reader.dtos.requests.LoginRequest;
+import com.api.comic_reader.dtos.requests.TokenRequest;
+import com.api.comic_reader.dtos.responses.AuthResponse;
+import com.api.comic_reader.dtos.responses.IntrospectResponse;
+import com.api.comic_reader.entities.InvalidatedTokenEntity;
+import com.api.comic_reader.entities.UserEntity;
+import com.api.comic_reader.exception.AppException;
+import com.api.comic_reader.exception.ErrorCode;
+import com.api.comic_reader.repositories.InvalidatedTokenRepository;
+import com.api.comic_reader.repositories.UserRepository;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -66,8 +65,7 @@ public class AuthenticationService {
                     .expirationTime(expirationTime)
                     .build();
             invalidatedTokenRepository.save(invalidatedToken);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }

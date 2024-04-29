@@ -10,7 +10,7 @@ import lombok.*;
 public class ApiResponse {
     @Builder.Default
     private int code = 200;
-    
+
     private String message;
 
     private Object result;

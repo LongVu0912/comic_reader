@@ -1,7 +1,5 @@
 package com.api.comic_reader.controllers;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,8 @@ import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.CommentResponse;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.services.CommentService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -26,9 +26,8 @@ public class CommentController {
     public ResponseEntity<ApiResponse> leaveComment(@RequestBody CommentRequest newComment) throws AppException {
         commentService.leaveComment(newComment);
 
-        return ResponseEntity.ok().body(
-                ApiResponse
-                        .builder()
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
                         .message("Leave comment successfully")
                         .build());
     }
@@ -36,9 +35,8 @@ public class CommentController {
     @GetMapping("/getComments/{chapterId}")
     public ResponseEntity<ApiResponse> getComments(@PathVariable Long chapterId) throws AppException {
         List<CommentResponse> comments = commentService.getComments(chapterId);
-        return ResponseEntity.ok().body(
-                ApiResponse
-                        .builder()
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
                         .message("Get comments successfully")
                         .result(comments)
                         .build());

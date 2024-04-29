@@ -1,6 +1,7 @@
 package com.api.comic_reader.dtos.requests;
 
 import jakarta.validation.constraints.Min;
+
 import lombok.*;
 
 @Getter

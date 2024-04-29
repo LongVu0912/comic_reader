@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class PasswordEncoderConfig {
 
     private static final String ENCODE_KEY = EnvVariables.passwordEncoderKey;
-    
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         SecureRandom secureRandom = new SecureRandom(ENCODE_KEY.getBytes());
