@@ -2,6 +2,7 @@ package com.api.comic_reader.services;
 
 import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.CommentRequest;
+import com.api.comic_reader.dtos.responses.CommentResponse;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.CommentEntity;
 import com.api.comic_reader.entities.UserEntity;
@@ -15,6 +16,8 @@ import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +62,25 @@ public class CommentService {
                 .createdAt(DateUtil.getCurrentDate())
                 .content(newComment.getContent())
                 .build());
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
+    public List<CommentResponse> getComments(Long chapterId) throws AppException {
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
+        if (!chapterOptional.isPresent()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        List<CommentEntity> comments = commentRepository.findByChapter(chapterOptional.get());
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        for (CommentEntity comment : comments) {
+            commentResponses.add(CommentResponse.builder()
+                    .id(comment.getId())
+                    .userId(comment.getComicUser().getId())
+                    .content(comment.getContent())
+                    .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
+                    .fullName(comment.getComicUser().getFullName())
+                    .build());
+        }
+        return commentResponses;
     }
 }

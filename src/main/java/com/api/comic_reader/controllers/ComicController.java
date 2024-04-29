@@ -59,6 +59,26 @@ public class ComicController {
                         .build());
     }
 
+    @GetMapping("/get3MostViewComics")
+    public ResponseEntity<ApiResponse> get3MostViewComics() {
+        List<ComicResponse> comics = comicService.getAllComics();
+
+        List<ComicResponse> list3MostViewComics = comics.stream()
+            .filter(comic -> comic.getLastestChapter() != null)
+            .sorted(Comparator.comparing(
+                ComicResponse::getView,
+                Comparator.nullsLast(Comparator.reverseOrder())))
+            .limit(3)
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Get 3 most view comics successfully")
+                        .result(list3MostViewComics)
+                        .build());
+    }
+
     @PostMapping("/insertComic")
     public ResponseEntity<ApiResponse> insertComic(
             @RequestPart("name") String name,
