@@ -14,5 +14,5 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity, Long> {
     @SuppressWarnings("null")
     Optional<ChapterEntity> findById(Long id);
     List<ChapterEntity> findByComic(ComicEntity comic);
-    Optional<ChapterEntity> findTopByComicOrderByDateCreatedDesc(ComicEntity comic);
+    Optional<ChapterEntity> findTopByComicOrderByCreatedAtDesc(ComicEntity comic);
 }

@@ -1,5 +1,9 @@
 package com.api.comic_reader.dtos.responses;
 
+import java.util.List;
+
+import com.api.comic_reader.entities.BookmarkEntity;
+
 import lombok.*;
 
 @Getter
@@ -7,9 +11,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class UserInformationResponse {
+public class UserResponse {
 
     private Long id;
+
+    private String username;
 
     private String email;
 
@@ -18,4 +24,6 @@ public class UserInformationResponse {
     private String dateOfBirth;
 
     private boolean isMale;
+
+    List<BookmarkEntity> bookmarks;
 }

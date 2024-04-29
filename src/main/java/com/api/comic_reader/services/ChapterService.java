@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +29,8 @@ public class ChapterService {
     @Autowired
     private ChapterRepository chapterRespository;
 
-    public ChapterEntity insertChapter(ChapterRequest newChapter) {
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void insertChapter(ChapterRequest newChapter) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(newChapter.getComicId());
         if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
@@ -39,10 +41,9 @@ public class ChapterService {
                     .title(newChapter.getTitle())
                     .chapterNumber(newChapter.getChapterNumber())
                     .comic(comic)
-                    .dateCreated(DateUtil.getCurrentDate())
+                    .createdAt(DateUtil.getCurrentDate())
                     .build();
             chapterRespository.save(chapter);
-            return chapter;
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
@@ -66,7 +67,7 @@ public class ChapterService {
                 .id(chapter.getId())
                 .title(chapter.getTitle())
                 .chapterNumber(chapter.getChapterNumber())
-                .dateCreated(DateUtil.convertDateToString(chapter.getDateCreated()))
+                .createdAt(DateUtil.convertDateToString(chapter.getCreatedAt()))
                 .build()).collect(Collectors.toList());
     }
 
@@ -77,7 +78,7 @@ public class ChapterService {
         }
         ComicEntity comic = comicOptional.get();
 
-        Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByDateCreatedDesc(comic);
+        Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByCreatedAtDesc(comic);
         ChapterEntity lastestChapter = chapterEntity.orElse(null);
         if (lastestChapter == null) {
             return null;
@@ -86,7 +87,7 @@ public class ChapterService {
                 .id(lastestChapter.getId())
                 .title(lastestChapter.getTitle())
                 .chapterNumber(lastestChapter.getChapterNumber())
-                .dateCreated(DateUtil.convertDateToString(lastestChapter.getDateCreated()))
+                .createdAt(DateUtil.convertDateToString(lastestChapter.getCreatedAt()))
                 .build();
     }
 }

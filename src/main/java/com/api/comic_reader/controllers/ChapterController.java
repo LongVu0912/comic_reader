@@ -3,7 +3,6 @@ package com.api.comic_reader.controllers;
 import com.api.comic_reader.dtos.requests.ChapterRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
-import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.services.ChapterService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comic/chapter")
+@RequestMapping("/api/chapter")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ChapterController {
@@ -25,12 +24,12 @@ public class ChapterController {
 
     @PostMapping("/insertChapter")
     public ResponseEntity<ApiResponse> insertChapter(@RequestBody ChapterRequest newChapter) {
-        ChapterEntity chapter = chapterService.insertChapter(newChapter);
+        chapterService.insertChapter(newChapter);
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()
                         .message("Insert chapter successfully")
-                        .result(chapter)
+                        .result(null)
                         .build());
 
     }
@@ -47,7 +46,7 @@ public class ChapterController {
                         .build());
     }
 
-    @GetMapping("getLastestChapter/{comicId}")
+    @GetMapping("/getLastestChapter/{comicId}")
     public ResponseEntity<ApiResponse> getLastestChapter(@PathVariable Long comicId) {
         ChapterResponse chapters = chapterService.getLastestChapter(comicId);
 

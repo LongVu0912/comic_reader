@@ -1,6 +1,6 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.config.EnvironmentVariable;
+import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class JwtService {
-    private static final String SIGNER_KEY = EnvironmentVariable.jwtSignerKey;
+    private static final String SIGNER_KEY = EnvVariables.jwtSignerKey;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     public String generateToken(UserEntity user) {
@@ -39,7 +39,7 @@ public class JwtService {
                 .subject(user.getUsername())
                 .issueTime(new Date())
                 .claim("scope", user.getRole().name())
-                .expirationTime(new Date(new Date().getTime() + EnvironmentVariable.jwtExpiration))
+                .expirationTime(new Date(new Date().getTime() + EnvVariables.jwtExpiration))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

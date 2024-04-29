@@ -29,7 +29,7 @@ public class CommentEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "create_at")
-    private Date createAt;
+    @Column(name = "created_at")
+    private Date createdAt;
 
 }

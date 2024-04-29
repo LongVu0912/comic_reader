@@ -1,8 +1,7 @@
 package com.api.comic_reader.controllers;
 
-import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
-import com.api.comic_reader.dtos.requests.LogoutRequest;
+import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.requests.RefreshRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
@@ -42,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = authenticationService.login(loginRequest);
 
         return ResponseEntity.ok().body(ApiResponse.builder()
@@ -52,7 +51,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(@RequestBody LogoutRequest logoutRequest) throws Exception {
+    public ResponseEntity<ApiResponse> logout(@RequestBody TokenRequest logoutRequest) throws AppException {
         authenticationService.logout(logoutRequest.getToken());
 
         return ResponseEntity.ok().body(ApiResponse.builder()
@@ -61,7 +60,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshRequest refreshRequest) throws Exception {
+    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshRequest refreshRequest) throws AppException {
         AuthResponse authenticationResponse = authenticationService.refreshToken(refreshRequest.getToken());
 
         return ResponseEntity.ok().body(ApiResponse.builder()
@@ -71,7 +70,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/introspect")
-    public ResponseEntity<ApiResponse> introspect(@RequestBody IntrospectRequest introspectRequest) throws AppException {
+    public ResponseEntity<ApiResponse> introspect(@RequestBody TokenRequest introspectRequest) throws AppException {
         IntrospectResponse introspectResponse = authenticationService.introspect(introspectRequest);
 
         return ResponseEntity.ok().body(ApiResponse.builder()

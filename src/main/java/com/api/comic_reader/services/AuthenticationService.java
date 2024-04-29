@@ -1,7 +1,7 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.dtos.requests.IntrospectRequest;
 import com.api.comic_reader.dtos.requests.LoginRequest;
+import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.entities.UserEntity;
@@ -9,6 +9,7 @@ import com.api.comic_reader.entities.InvalidatedTokenEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.UserRepository;
+
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 
 import lombok.AllArgsConstructor;
@@ -108,7 +109,7 @@ public class AuthenticationService {
         }
     }
 
-    public IntrospectResponse introspect(IntrospectRequest request) throws AppException {
+    public IntrospectResponse introspect(TokenRequest request) throws AppException {
         var token = request.getToken();
 
         if (token == null) {

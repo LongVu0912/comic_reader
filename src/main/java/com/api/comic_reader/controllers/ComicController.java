@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ComicController {
-
     @Autowired
     private final ComicService comicService;
 
@@ -47,7 +46,7 @@ public class ComicController {
         List<ComicResponse> list6LastestComics = comics.stream()
                 .filter(comic -> comic.getLastestChapter() != null)
                 .sorted(Comparator.comparing(
-                        comic -> comic.getLastestChapter().getDateCreated(),
+                        comic -> comic.getLastestChapter().getCreatedAt(),
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .limit(6)
                 .collect(Collectors.toList());
@@ -89,5 +88,17 @@ public class ComicController {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(thumbnail);
+    }
+
+    @GetMapping("/searchComics/{keyword}")
+    public ResponseEntity<ApiResponse> searchComics(@PathVariable String keyword) {
+        List<ComicResponse> comics = comicService.searchComics(keyword);
+
+        return ResponseEntity.ok().body(
+                ApiResponse
+                        .builder()
+                        .message("Search comics successfully")
+                        .result(comics)
+                        .build());
     }
 }

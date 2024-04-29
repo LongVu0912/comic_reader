@@ -1,6 +1,6 @@
 package com.api.comic_reader.services;
 
-import com.api.comic_reader.config.EnvironmentVariable;
+import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ComicRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
@@ -41,7 +41,7 @@ public class ComicService {
         }
 
         return comics.stream().map(comic -> {
-            String thumbnailUrl = EnvironmentVariable.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+            String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
             ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
             return ComicResponse.builder()
@@ -60,16 +60,23 @@ public class ComicService {
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ComicEntity insertComic(ComicRequest newComic) throws AppException {
-        try {
-            String originalFilename = newComic.getThumbnailImage().getOriginalFilename();
-            if (originalFilename == null) {
-                throw new AppException(ErrorCode.THUMBNAIL_INVALID);
-            }
-            String fileName = StringUtils.cleanPath(originalFilename);
-            if (fileName.contains("..")) {
-                throw new AppException(ErrorCode.THUMBNAIL_INVALID);
-            }
 
+        String originalFilename = newComic.getThumbnailImage().getOriginalFilename();
+        if (originalFilename == null) {
+            throw new AppException(ErrorCode.INVALID_THUMBNAIL);
+        }
+
+        String fileName = StringUtils.cleanPath(originalFilename);
+        if (fileName.contains("..")) {
+            throw new AppException(ErrorCode.INVALID_THUMBNAIL);
+        }
+
+        Optional<ComicEntity> comicOptional = comicRepository.findByName(newComic.getName());
+        if (comicOptional.isPresent()) {
+            throw new AppException(ErrorCode.COMIC_NAME_TAKEN);
+        }
+
+        try {
             ComicEntity comic = ComicEntity.builder()
                     .name(newComic.getName())
                     .author(newComic.getAuthor())
@@ -94,5 +101,33 @@ public class ComicService {
         }
         ComicEntity comic = comicOptional.get();
         return comic.getThumbnailImage();
+    }
+
+    public List<ComicResponse> searchComics(String keyword) throws AppException {
+        if (keyword == null || keyword.length() < EnvVariables.minSearchKeywordLength) {
+            throw new AppException(ErrorCode.INVALID_KEYWORD);
+        }
+        List<ComicEntity> comics = comicRepository.findByNameContainingIgnoreCase(keyword);
+
+        if (comics.isEmpty()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+
+        return comics.stream().map(comic -> {
+            String thumbnailUrl = "/api/comic/thumbnail/" + comic.getId();
+            ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+
+            return ComicResponse.builder()
+                    .id(comic.getId())
+                    .name(comic.getName())
+                    .author(comic.getAuthor())
+                    .description(comic.getDescription())
+                    .thumbnailUrl(thumbnailUrl)
+                    .view(comic.getView())
+                    .lastestChapter(lastestChapter)
+                    .isDeleted(comic.getIsDeleted())
+                    .isFinished(comic.getIsFinished())
+                    .build();
+        }).collect(Collectors.toList());
     }
 }

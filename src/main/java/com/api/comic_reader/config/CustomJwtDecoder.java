@@ -12,12 +12,12 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import com.api.comic_reader.dtos.requests.IntrospectRequest;
+import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.services.AuthenticationService;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    private String signerKey = EnvironmentVariable.jwtSignerKey;
+    private String signerKey = EnvVariables.jwtSignerKey;
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -27,7 +27,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException {
         try {
             var response = authenticationService.introspect(
-                    IntrospectRequest.builder().token(token).build());
+                    TokenRequest.builder().token(token).build());
 
             if (!response.isValid())
                 throw new JwtException("Token is invalid");

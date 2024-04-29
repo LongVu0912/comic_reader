@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PasswordEncoderConfig {
 
-    private static final String ENCODE_KEY = EnvironmentVariable.passwordEncoderKey;
+    private static final String ENCODE_KEY = EnvVariables.passwordEncoderKey;
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

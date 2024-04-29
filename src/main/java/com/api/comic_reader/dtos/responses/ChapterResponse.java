@@ -11,5 +11,5 @@ public class ChapterResponse {
     private Long id;
     private String title;
     private Long chapterNumber;
-    private String dateCreated;
+    private String createdAt;
 }

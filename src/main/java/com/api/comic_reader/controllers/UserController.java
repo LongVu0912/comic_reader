@@ -5,6 +5,7 @@ import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
+import com.api.comic_reader.dtos.responses.UserResponse;
 import com.api.comic_reader.services.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    @GetMapping("")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<ApiResponse> getAllUsers() throws AppException {
         List<UserEntity> users = userService.getAllUsers();
 
@@ -51,7 +52,7 @@ public class UserController {
 
     @GetMapping("/getMyInformation")
     public ResponseEntity<ApiResponse> getMyInformation() {
-        UserEntity userInformation = userService.getMyInformation();
+        UserResponse userInformation = userService.getMyInformation();
         return ResponseEntity.ok().body(
                 ApiResponse
                         .builder()

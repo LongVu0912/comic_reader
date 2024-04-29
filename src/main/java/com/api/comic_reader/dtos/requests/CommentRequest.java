@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LogoutRequest {
-    private String token;
+public class CommentRequest {
+    Long chapterId;
+    String content;
 }

@@ -3,6 +3,7 @@ package com.api.comic_reader.services;
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
+import com.api.comic_reader.dtos.responses.UserResponse;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.enums.Role;
 import com.api.comic_reader.exception.AppException;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +32,7 @@ public class UserService {
     private UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public List<UserEntity> getAllUsers() throws AppException {
         List<UserEntity> users = null;
         try {
@@ -73,14 +76,21 @@ public class UserService {
         return userOptional.get();
     }
 
-    public UserEntity getMyInformation() {
+    public UserResponse getMyInformation() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         Optional<UserEntity> userOptional = userRepository.findByUsername(name);
         if (userOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        return userOptional.get();
+        return UserResponse.builder().id(userOptional.get().getId())
+                .username(userOptional.get().getUsername())
+                .email(userOptional.get().getEmail())
+                .fullName(userOptional.get().getFullName())
+                .dateOfBirth(DateUtil.convertDateToString(userOptional.get().getDateOfBirth()))
+                .isMale(userOptional.get().getIsMale())
+                .bookmarks(userOptional.get().getBookmarks())
+                .build();
     }
 
     public void changePassword(ChangePasswordRequest changePasswordRequest) throws AppException {

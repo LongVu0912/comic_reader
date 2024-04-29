@@ -2,6 +2,9 @@ package com.api.comic_reader.repositories;
 
 import com.api.comic_reader.entities.ComicEntity;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +16,8 @@ public interface ComicRepository extends JpaRepository<ComicEntity, Long> {
     @Modifying
     @Query("UPDATE ComicEntity c SET c.view = c.view + 1 WHERE c = :comicEntity")
     void increaseView(@Param("comicEntity") ComicEntity comicEntity);
+
+    Optional<ComicEntity> findByName(String name);
+    
+    List<ComicEntity> findByNameContainingIgnoreCase(String name);
 }

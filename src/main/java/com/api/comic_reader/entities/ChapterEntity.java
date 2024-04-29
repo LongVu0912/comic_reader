@@ -27,8 +27,8 @@ public class ChapterEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "date_created", nullable = false)
-    private Date dateCreated;
+    @Column(name = "created_at", nullable = false)
+    private Date createdAt;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
