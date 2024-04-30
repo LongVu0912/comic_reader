@@ -33,5 +33,5 @@ public class RatingEntity {
     @Column(name = "score")
     @Min(value = 1, message = "Score must be at least 1")
     @Max(value = 5, message = "Score must be at most 5")
-    private Integer score;
+    private Long score;
 }

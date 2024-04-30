@@ -7,9 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentRequest {
-    Long chapterId;
-
-    @NonNull
-    String content;
+public class BookmarkRequest {
+    private Long chapterId;
 }

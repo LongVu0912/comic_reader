@@ -56,7 +56,10 @@ public class AuthenticationController {
         authenticationService.logout(logoutRequest.getToken());
 
         return ResponseEntity.ok()
-                .body(ApiResponse.builder().message("Logout successfully").build());
+                .body(ApiResponse.builder()
+                        .message("Logout successfully")
+                        .result(null)
+                        .build());
     }
 
     @PostMapping("/refresh")

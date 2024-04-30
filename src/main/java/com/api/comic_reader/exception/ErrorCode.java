@@ -22,6 +22,7 @@ public enum ErrorCode {
 
     USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
     COMIC_NAME_TAKEN(4003, "Comic name is already taken", HttpStatus.OK),
+    BOOKMARK_EXISTS(4003, "Bookmark exists", HttpStatus.OK),
 
     USER_NOT_FOUND(4004, "User not found", HttpStatus.OK),
     COMIC_NOT_FOUND(4004, "Comic not found", HttpStatus.OK),

@@ -91,7 +91,7 @@ public class UserService {
                 .fullName(userOptional.get().getFullName())
                 .dateOfBirth(DateUtil.convertDateToString(userOptional.get().getDateOfBirth()))
                 .isMale(userOptional.get().getIsMale())
-                .bookmarks(userOptional.get().getBookmarks())
+                .ratings(userOptional.get().getRatings())
                 .build();
     }
 

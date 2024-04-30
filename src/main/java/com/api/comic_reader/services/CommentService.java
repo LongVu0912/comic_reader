@@ -40,7 +40,6 @@ public class CommentService {
 
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
-
         if (newComment.getContent() == null || newComment.getContent().length() < EnvVariables.minCommentLength) {
             throw new AppException(ErrorCode.INVALID_COMMENT);
         }
