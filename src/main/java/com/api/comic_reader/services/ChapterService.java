@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ChapterRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
+import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.exception.AppException;
@@ -50,7 +52,7 @@ public class ChapterService {
         }
     }
 
-    public List<ChapterResponse> getComicChapters(Long id) throws AppException {
+    public ComicResponse getComicChapters(Long id) throws AppException {
         Optional<ComicEntity> comicOptional = comicRepository.findById(id);
         if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
@@ -60,11 +62,24 @@ public class ChapterService {
 
         List<ChapterEntity> chapters = chapterRespository.findByComic(comic);
 
+        String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+
         if (chapters.isEmpty()) {
-            return Collections.emptyList();
+            return ComicResponse.builder()
+                    .id(comic.getId())
+                    .name(comic.getName())
+                    .author(comic.getAuthor())
+                    .description(comic.getDescription())
+                    .thumbnailUrl(thumbnailUrl)
+                    .view(comic.getView())
+                    .lastestChapter(null)
+                    .isDeleted(comic.getIsDeleted())
+                    .isFinished(comic.getIsFinished())
+                    .chapters(Collections.emptyList())
+                    .build();
         }
 
-        return chapters.stream()
+        List<ChapterResponse> chaptersResponse = chapters.stream()
                 .map(chapter -> ChapterResponse.builder()
                         .id(chapter.getId())
                         .title(chapter.getTitle())
@@ -72,6 +87,19 @@ public class ChapterService {
                         .createdAt(DateUtil.convertDateToString(chapter.getCreatedAt()))
                         .build())
                 .collect(Collectors.toList());
+
+        return ComicResponse.builder()
+                .id(comic.getId())
+                .name(comic.getName())
+                .author(comic.getAuthor())
+                .description(comic.getDescription())
+                .thumbnailUrl(thumbnailUrl)
+                .view(comic.getView())
+                .lastestChapter(null)
+                .isDeleted(comic.getIsDeleted())
+                .isFinished(comic.getIsFinished())
+                .chapters(chaptersResponse)
+                .build();
     }
 
     public ChapterResponse getLastestChapter(Long comicId) {

@@ -75,7 +75,7 @@ public class ChapterImageService {
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapter);
 
         return chapterImages.stream()
-                .map(chapterImage -> EnvVariables.baseUrl + "/api/comic/image/" + chapterImage.getId())
+                .map(chapterImage -> EnvVariables.baseUrl + "/api/image/" + chapterImage.getId())
                 .toList();
     }
 

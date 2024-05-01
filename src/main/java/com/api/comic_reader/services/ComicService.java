@@ -54,6 +54,7 @@ public class ComicService {
                             .lastestChapter(lastestChapter)
                             .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
+                            .chapters(null)
                             .build();
                 })
                 .collect(Collectors.toList());

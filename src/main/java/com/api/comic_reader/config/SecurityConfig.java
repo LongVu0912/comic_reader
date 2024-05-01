@@ -23,7 +23,9 @@ public class SecurityConfig {
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
-    private static final String[] PUBLIC_ENDPOINTS = {"/api/auth/**", "/api/comic/**", "/api/rating/**"};
+    private static final String[] PUBLIC_ENDPOINTS = {
+        "/api/auth/**", "/api/comic/**", "/api/chapter/**", "/api/image/**", "/api/rating/**"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

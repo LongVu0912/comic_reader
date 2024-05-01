@@ -1,5 +1,7 @@
 package com.api.comic_reader.dtos.responses;
 
+import java.util.List;
+
 import lombok.*;
 
 @Getter
@@ -17,4 +19,5 @@ public class ComicResponse {
     private ChapterResponse lastestChapter;
     private boolean isDeleted;
     private boolean isFinished;
+    private List<ChapterResponse> chapters;
 }
