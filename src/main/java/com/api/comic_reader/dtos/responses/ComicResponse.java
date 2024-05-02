@@ -19,5 +19,6 @@ public class ComicResponse {
     private ChapterResponse lastestChapter;
     private boolean isDeleted;
     private boolean isFinished;
+    private List<ComicGenreResponse> genres;
     private List<ChapterResponse> chapters;
 }

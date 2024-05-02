@@ -46,7 +46,7 @@ public class ComicEntity {
     private List<ChapterEntity> chapters;
 
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ComicGenreEntity> comicGenres;
+    private List<ComicGenreEntity> genres;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
