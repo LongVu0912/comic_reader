@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ChapterRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
-import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.exception.AppException;
@@ -52,34 +50,26 @@ public class ChapterService {
         }
     }
 
-    public ComicResponse getComicChapters(Long id) throws AppException {
-        Optional<ComicEntity> comicOptional = comicRepository.findById(id);
+    public List<ChapterResponse> getComicChapters(Long comicId) throws AppException {
+        // Find comic by id
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+
         if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
         ComicEntity comic = comicOptional.get();
 
-        List<ChapterEntity> chapters = chapterRespository.findByComic(comic);
+        // Get all chapters of comic
+        List<ChapterEntity> chapters = comic.getChapters();
 
-        String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-
+        // If comic has no chapter
         if (chapters.isEmpty()) {
-            return ComicResponse.builder()
-                    .id(comic.getId())
-                    .name(comic.getName())
-                    .author(comic.getAuthor())
-                    .description(comic.getDescription())
-                    .thumbnailUrl(thumbnailUrl)
-                    .view(comic.getView())
-                    .lastestChapter(null)
-                    .isDeleted(comic.getIsDeleted())
-                    .isFinished(comic.getIsFinished())
-                    .chapters(Collections.emptyList())
-                    .build();
+            return Collections.emptyList();
         }
 
-        List<ChapterResponse> chaptersResponse = chapters.stream()
+        // Convert chapter entity to chapter response
+        return chapters.stream()
                 .map(chapter -> ChapterResponse.builder()
                         .id(chapter.getId())
                         .title(chapter.getTitle())
@@ -87,33 +77,26 @@ public class ChapterService {
                         .createdAt(DateUtil.convertDateToString(chapter.getCreatedAt()))
                         .build())
                 .collect(Collectors.toList());
-
-        return ComicResponse.builder()
-                .id(comic.getId())
-                .name(comic.getName())
-                .author(comic.getAuthor())
-                .description(comic.getDescription())
-                .thumbnailUrl(thumbnailUrl)
-                .view(comic.getView())
-                .lastestChapter(null)
-                .isDeleted(comic.getIsDeleted())
-                .isFinished(comic.getIsFinished())
-                .chapters(chaptersResponse)
-                .build();
     }
 
     public ChapterResponse getLastestChapter(Long comicId) {
+        // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+
         if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
+
         ComicEntity comic = comicOptional.get();
 
+        // Get lastest chapter of comic
         Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByCreatedAtDesc(comic);
         ChapterEntity lastestChapter = chapterEntity.orElse(null);
         if (lastestChapter == null) {
             return null;
         }
+
+        // Convert chapter entity to chapter response
         return ChapterResponse.builder()
                 .id(lastestChapter.getId())
                 .title(lastestChapter.getTitle())

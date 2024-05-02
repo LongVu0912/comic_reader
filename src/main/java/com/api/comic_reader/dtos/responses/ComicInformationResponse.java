@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ComicResponse {
+public class ComicInformationResponse {
     private Long id;
     private String name;
     private String author;

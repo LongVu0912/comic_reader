@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.comic_reader.dtos.requests.ComicRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
+import com.api.comic_reader.dtos.responses.ComicInformationResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.services.ComicService;
@@ -34,6 +36,34 @@ public class ComicController {
                 .body(ApiResponse.builder()
                         .message("Get all comics successfully")
                         .result(comics)
+                        .build());
+    }
+
+    @GetMapping("/getFinishedComics")
+    public ResponseEntity<ApiResponse> getFinishedComics() {
+        List<ComicResponse> comics = comicService.getAllComics();
+
+        List<ComicResponse> finishedComics =
+                comics.stream().filter(ComicResponse::isFinished).collect(Collectors.toList());
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Get finished comics successfully")
+                        .result(finishedComics)
+                        .build());
+    }
+
+    @GetMapping("/getNotFinishedComics")
+    public ResponseEntity<ApiResponse> getNotFinishedComics() {
+        List<ComicResponse> comics = comicService.getAllComics();
+
+        List<ComicResponse> notFinishedComics =
+                comics.stream().filter(comic -> !comic.isFinished()).collect(Collectors.toList());
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Get not finished comics successfully")
+                        .result(notFinishedComics)
                         .build());
     }
 
@@ -110,6 +140,17 @@ public class ComicController {
                 .body(ApiResponse.builder()
                         .message("Search comics successfully")
                         .result(comics)
+                        .build());
+    }
+
+    @GetMapping("/getComicInformation/{comicId}")
+    public ResponseEntity<ApiResponse> getComicInformation(@PathVariable Long comicId) {
+        ComicInformationResponse comic = comicService.getComicInformation(comicId);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Get comic information successfully")
+                        .result(comic)
                         .build());
     }
 }
