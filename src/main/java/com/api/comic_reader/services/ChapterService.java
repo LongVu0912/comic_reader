@@ -75,6 +75,7 @@ public class ChapterService {
                         .title(chapter.getTitle())
                         .chapterNumber(chapter.getChapterNumber())
                         .createdAt(DateUtil.convertDateToString(chapter.getCreatedAt()))
+                        .imageUrls(null)
                         .build())
                 .collect(Collectors.toList());
     }

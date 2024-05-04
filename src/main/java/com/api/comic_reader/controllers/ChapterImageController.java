@@ -46,17 +46,6 @@ public class ChapterImageController {
                         .build());
     }
 
-    @GetMapping("/getChapterImageUrls/{chapterId}")
-    public ResponseEntity<ApiResponse> getChapterImages(@PathVariable Long chapterId) {
-        List<String> imageUrls = chapterImageService.getChapterImageUrls(chapterId);
-
-        return ResponseEntity.ok()
-                .body(ApiResponse.builder()
-                        .message("Get all chapter images successfully")
-                        .result(imageUrls)
-                        .build());
-    }
-
     @GetMapping("/{imageId}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long imageId) throws AppException {
         byte[] image = chapterImageService.getImageFromImageId(imageId);

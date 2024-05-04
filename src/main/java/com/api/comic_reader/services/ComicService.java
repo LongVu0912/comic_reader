@@ -124,7 +124,7 @@ public class ComicService {
 
         return comics.stream()
                 .map(comic -> {
-                    String thumbnailUrl = "/api/comic/thumbnail/" + comic.getId();
+                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
 
                     return ComicResponse.builder()
@@ -135,6 +135,7 @@ public class ComicService {
                             .thumbnailUrl(thumbnailUrl)
                             .view(comic.getView())
                             .lastestChapter(lastestChapter)
+                            .genres(genreService.getComicGenres(comic.getId()))
                             .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
                             .build();

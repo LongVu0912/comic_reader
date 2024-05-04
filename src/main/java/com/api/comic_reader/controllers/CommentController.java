@@ -32,7 +32,7 @@ public class CommentController {
                         .build());
     }
 
-    @GetMapping("/getComments/{chapterId}")
+    @GetMapping("/getCommentsOfChapter/{chapterId}")
     public ResponseEntity<ApiResponse> getComments(@PathVariable Long chapterId) throws AppException {
         List<CommentResponse> comments = commentService.getComments(chapterId);
         return ResponseEntity.ok()

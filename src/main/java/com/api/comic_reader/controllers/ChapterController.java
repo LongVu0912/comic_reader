@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.api.comic_reader.dtos.requests.ChapterRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
+import com.api.comic_reader.services.ChapterImageService;
 import com.api.comic_reader.services.ChapterService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,9 @@ public class ChapterController {
     @Autowired
     private final ChapterService chapterService;
 
+    @Autowired
+    private final ChapterImageService chapterImageService;
+
     @PostMapping("/insertChapter")
     public ResponseEntity<ApiResponse> insertChapter(@RequestBody ChapterRequest newChapter) {
         chapterService.insertChapter(newChapter);
@@ -29,6 +33,17 @@ public class ChapterController {
                 .body(ApiResponse.builder()
                         .message("Insert chapter successfully")
                         .result(null)
+                        .build());
+    }
+
+    @GetMapping("/getChapter/{chapterId}")
+    public ResponseEntity<ApiResponse> getChapterImages(@PathVariable Long chapterId) {
+        ChapterResponse chapter = chapterImageService.getChapterImageUrls(chapterId);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Get all chapter images successfully")
+                        .result(chapter)
                         .build());
     }
 

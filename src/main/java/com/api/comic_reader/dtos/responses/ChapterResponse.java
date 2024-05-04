@@ -1,5 +1,7 @@
 package com.api.comic_reader.dtos.responses;
 
+import java.util.List;
+
 import lombok.*;
 
 @Getter
@@ -12,4 +14,5 @@ public class ChapterResponse {
     private String title;
     private Long chapterNumber;
     private String createdAt;
+    List<String> imageUrls;
 }

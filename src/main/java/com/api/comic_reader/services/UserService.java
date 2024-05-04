@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
+import com.api.comic_reader.dtos.responses.BookmarkResponse;
 import com.api.comic_reader.dtos.responses.UserResponse;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.enums.Role;
@@ -30,6 +31,9 @@ import lombok.AllArgsConstructor;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BookmarkService bookmarkService;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -84,6 +88,9 @@ public class UserService {
         if (userOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
+
+        List<BookmarkResponse> bookmarks = bookmarkService.getMyBookmarks();
+
         return UserResponse.builder()
                 .id(userOptional.get().getId())
                 .username(userOptional.get().getUsername())
@@ -91,7 +98,7 @@ public class UserService {
                 .fullName(userOptional.get().getFullName())
                 .dateOfBirth(DateUtil.convertDateToString(userOptional.get().getDateOfBirth()))
                 .isMale(userOptional.get().getIsMale())
-                .ratings(userOptional.get().getRatings())
+                .bookmarks(bookmarks)
                 .build();
     }
 

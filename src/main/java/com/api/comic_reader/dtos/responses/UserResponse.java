@@ -2,8 +2,6 @@ package com.api.comic_reader.dtos.responses;
 
 import java.util.List;
 
-import com.api.comic_reader.entities.RatingEntity;
-
 import lombok.*;
 
 @Getter
@@ -25,5 +23,5 @@ public class UserResponse {
 
     private boolean isMale;
 
-    List<RatingEntity> ratings;
+    List<BookmarkResponse> bookmarks;
 }

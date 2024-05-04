@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ChapterImageRequest;
+import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.entities.ChapterEntity;
 import com.api.comic_reader.entities.ChapterImageEntity;
 import com.api.comic_reader.entities.ComicEntity;
@@ -61,7 +62,7 @@ public class ChapterImageService {
     }
 
     @Transactional
-    public List<String> getChapterImageUrls(Long chapterId) {
+    public ChapterResponse getChapterImageUrls(Long chapterId) {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
         if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
@@ -74,9 +75,17 @@ public class ChapterImageService {
 
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapter);
 
-        return chapterImages.stream()
+        List<String> imageUrls = chapterImages.stream()
                 .map(chapterImage -> EnvVariables.baseUrl + "/api/image/" + chapterImage.getId())
                 .toList();
+
+        return ChapterResponse.builder()
+                .id(chapterId)
+                .title(chapter.getTitle())
+                .chapterNumber(chapter.getChapterNumber())
+                .createdAt(chapter.getCreatedAt().toString())
+                .imageUrls(imageUrls)
+                .build();
     }
 
     public byte[] getImageFromImageId(Long imageId) {
