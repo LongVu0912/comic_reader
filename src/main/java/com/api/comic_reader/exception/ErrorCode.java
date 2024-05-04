@@ -30,6 +30,9 @@ public enum ErrorCode {
     CHAPTER_NOT_FOUND(4004, "Chapter not found", HttpStatus.OK),
     CHAPTER_IMAGES_NOT_FOUND(4004, "Chapter's images not found", HttpStatus.OK),
     IMAGE_NOT_FOUND(4004, "Image not found", HttpStatus.OK),
+    GENRE_NOT_FOUND(4004, "Genre not found", HttpStatus.OK),
+
+    NO_COMMENT(4005, "No comment", HttpStatus.OK),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

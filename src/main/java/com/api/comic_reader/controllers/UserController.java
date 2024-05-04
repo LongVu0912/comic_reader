@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<ApiResponse> getAllUsers() throws AppException {
-        List<UserEntity> users = userService.getAllUsers();
+        List<UserResponse> users = userService.getAllUsers();
 
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()

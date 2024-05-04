@@ -38,14 +38,24 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public List<UserEntity> getAllUsers() throws AppException {
-        List<UserEntity> users = null;
-        try {
-            users = userRepository.findAll();
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+    public List<UserResponse> getAllUsers() throws AppException {
+        List<UserEntity> users = userRepository.findAll();
+
+        if (users.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        return users;
+
+        return users.stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .fullName(user.getFullName())
+                        .dateOfBirth(DateUtil.convertDateToString(user.getDateOfBirth()))
+                        .isMale(user.getIsMale())
+                        .role(user.getRole())
+                        .build())
+                .toList();
     }
 
     public UserEntity register(RegisterRequest newUser) throws AppException {

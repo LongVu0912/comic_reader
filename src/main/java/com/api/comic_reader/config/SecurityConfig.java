@@ -24,7 +24,15 @@ public class SecurityConfig {
     private CustomJwtDecoder customJwtDecoder;
 
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/api/auth/**", "/api/comic/**", "/api/chapter/**", "/api/image/**", "/api/rating/**"
+        "/api/auth/**",
+        "/api/comic/**",
+        "/api/chapter/**",
+        "/api/image/**",
+        "/api/rating/**",
+        "/api/genre/**",
+        "/api/comment/**",
+        "/api/user/**",
+        "/api/role/**",
     };
 
     @Bean

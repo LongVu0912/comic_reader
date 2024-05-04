@@ -1,6 +1,5 @@
 package com.api.comic_reader.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +37,26 @@ public class CommentService {
     @Autowired
     private UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public List<CommentResponse> getAllComments() throws AppException {
+        List<CommentEntity> comments = commentRepository.findAll();
+
+        if (comments.isEmpty()) {
+            throw new AppException(ErrorCode.NO_COMMENT);
+        }
+
+        return comments.stream()
+                .map(comment -> CommentResponse.builder()
+                        .id(comment.getId())
+                        .userId(comment.getComicUser().getId())
+                        .chapterId(comment.getChapter().getId())
+                        .fullName(comment.getComicUser().getFullName())
+                        .content(comment.getContent())
+                        .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
+                        .build())
+                .toList();
+    }
+
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
         if (newComment.getContent() == null || newComment.getContent().length() < EnvVariables.minCommentLength) {
@@ -65,22 +84,26 @@ public class CommentService {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
-    public List<CommentResponse> getComments(Long chapterId) throws AppException {
+    public List<CommentResponse> getCommentsOfChapter(Long chapterId) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
         if (!chapterOptional.isPresent()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
         }
         List<CommentEntity> comments = commentRepository.findByChapter(chapterOptional.get());
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        for (CommentEntity comment : comments) {
-            commentResponses.add(CommentResponse.builder()
-                    .id(comment.getId())
-                    .userId(comment.getComicUser().getId())
-                    .content(comment.getContent())
-                    .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
-                    .fullName(comment.getComicUser().getFullName())
-                    .build());
+
+        if (comments.isEmpty()) {
+            throw new AppException(ErrorCode.NO_COMMENT);
         }
-        return commentResponses;
+
+        return comments.stream()
+                .map(comment -> CommentResponse.builder()
+                        .id(comment.getId())
+                        .chapterId(comment.getChapter().getId())
+                        .userId(comment.getComicUser().getId())
+                        .fullName(comment.getComicUser().getFullName())
+                        .content(comment.getContent())
+                        .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
+                        .build())
+                .toList();
     }
 }

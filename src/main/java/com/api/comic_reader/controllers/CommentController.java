@@ -22,6 +22,16 @@ public class CommentController {
     @Autowired
     private final CommentService commentService;
 
+    @GetMapping("/getAllComments")
+    public ResponseEntity<ApiResponse> getAllComments() throws AppException {
+        List<CommentResponse> comments = commentService.getAllComments();
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Get all comments successfully")
+                        .result(comments)
+                        .build());
+    }
+
     @PostMapping("/leaveComment")
     public ResponseEntity<ApiResponse> leaveComment(@RequestBody CommentRequest newComment) throws AppException {
         commentService.leaveComment(newComment);
@@ -34,7 +44,7 @@ public class CommentController {
 
     @GetMapping("/getCommentsOfChapter/{chapterId}")
     public ResponseEntity<ApiResponse> getComments(@PathVariable Long chapterId) throws AppException {
-        List<CommentResponse> comments = commentService.getComments(chapterId);
+        List<CommentResponse> comments = commentService.getCommentsOfChapter(chapterId);
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Get comments successfully")

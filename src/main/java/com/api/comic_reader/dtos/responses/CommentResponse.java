@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class CommentResponse {
     private Long id;
+    private Long chapterId;
     private Long userId;
     private String fullName;
     private String content;

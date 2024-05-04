@@ -2,6 +2,8 @@ package com.api.comic_reader.dtos.responses;
 
 import java.util.List;
 
+import com.api.comic_reader.enums.Role;
+
 import lombok.*;
 
 @Getter
@@ -22,6 +24,8 @@ public class UserResponse {
     private String dateOfBirth;
 
     private boolean isMale;
+
+    private Role role;
 
     List<BookmarkResponse> bookmarks;
 }

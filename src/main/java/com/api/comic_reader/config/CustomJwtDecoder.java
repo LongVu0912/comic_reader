@@ -24,14 +24,14 @@ public class CustomJwtDecoder implements JwtDecoder {
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Override
-    public Jwt decode(String token) throws JwtException {
+    public Jwt decode(String token) {
         try {
             var response = authenticationService.introspect(
                     TokenRequest.builder().token(token).build());
 
-            if (!response.isValid()) throw new JwtException("Token is invalid");
+            if (!response.isValid()) return null;
         } catch (JwtException e) {
-            throw new JwtException("Token is invalid");
+            return null;
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
