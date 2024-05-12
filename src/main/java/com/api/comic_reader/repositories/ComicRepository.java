@@ -20,4 +20,7 @@ public interface ComicRepository extends JpaRepository<ComicEntity, Long> {
     Optional<ComicEntity> findByName(String name);
 
     List<ComicEntity> findByNameContainingIgnoreCase(String name);
+
+    @Query("SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id IN :genreIds")
+    List<ComicEntity> findByGenresIdIn(@Param("genreIds") List<Long> genreIds);
 }

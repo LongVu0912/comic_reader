@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Service;
 
+import com.api.comic_reader.config.EnvVariables;
+import com.api.comic_reader.dtos.requests.GenresRequest;
+import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.dtos.responses.ComicGenreResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.dtos.responses.GenreResponse;
@@ -30,6 +33,9 @@ public class GenreService {
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    private ChapterService chapterService;
 
     public List<GenreResponse> getAllGenres() {
         List<GenreEntity> genres = genreRepository.findAll();
@@ -85,5 +91,30 @@ public class GenreService {
                 .collect(Collectors.toList());
 
         return genreResponses;
+    }
+
+    public List<ComicResponse> getComicsByGenres(GenresRequest genresRequest) {
+        List<Long> genreIds = genresRequest.getGenreIds();
+        List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds);
+
+        return comics.stream()
+                .map(comic -> {
+                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+
+                    return ComicResponse.builder()
+                            .id(comic.getId())
+                            .name(comic.getName())
+                            .author(comic.getAuthor())
+                            .description(comic.getDescription())
+                            .thumbnailUrl(thumbnailUrl)
+                            .view(comic.getView())
+                            .lastestChapter(lastestChapter)
+                            .genres(this.getComicGenres(comic.getId()))
+                            .isDeleted(comic.getIsDeleted())
+                            .isFinished(comic.getIsFinished())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 }
