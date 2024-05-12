@@ -8,7 +8,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class BookmarkResponse {
-    private Long chapterId;
-    private String chapterTitle;
-    private Long chapterNumber;
+    private Long comicId;
+    private String name;
+    private String thumbnailUrl;
+    private ChapterResponse lastChapter;
 }

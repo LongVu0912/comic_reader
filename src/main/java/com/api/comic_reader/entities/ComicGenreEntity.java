@@ -18,12 +18,12 @@ public class ComicGenreEntity {
     @EmbeddedId
     private ComicGenreKey id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("comicId")
     @JoinColumn(name = "comic_id")
     private ComicEntity comic;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("genreId")
     @JoinColumn(name = "genre_id")
     private GenreEntity genre;

@@ -31,9 +31,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BookmarkService bookmarkService;
-
     private final BCryptPasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")

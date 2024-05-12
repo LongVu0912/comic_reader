@@ -20,13 +20,13 @@ public class BookmarkEntity {
     private BookmarkKey id;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("comicId")
     @JoinColumn(name = "comic_id")
     private ComicEntity comic;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private UserEntity user;

@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class BookmarkRequest {
-    private Long chapterId;
+    private Long comicId;
 }
