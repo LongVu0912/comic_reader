@@ -56,10 +56,10 @@ public class RatingService {
         }
 
         // Check if user has rated this comic before
-        if (!ratingRepository.existsByComicAndComicUser(comic.get(), user.get())) {
+        if (!ratingRepository.existsByComicAndUser(comic.get(), user.get())) {
             ratingRepository.save(RatingEntity.builder()
                     .comic(comic.get())
-                    .comicUser(user.get())
+                    .user(user.get())
                     .score(ratingRequest.getScore())
                     .build());
         } else {

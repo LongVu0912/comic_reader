@@ -15,7 +15,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class BookmarkKey implements Serializable {
 
-    private Long chapterId;
+    private Long comicId;
 
-    private Long comicUserId;
+    private Long userId;
 }

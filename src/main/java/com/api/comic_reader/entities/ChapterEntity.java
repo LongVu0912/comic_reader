@@ -41,9 +41,5 @@ public class ChapterEntity {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<BookmarkEntity> bookmarkedBy;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 }

@@ -4,8 +4,6 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.*;
 
 @Getter
@@ -48,7 +46,9 @@ public class ComicEntity {
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ComicGenreEntity> genres;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RatingEntity> ratings;
+
+    @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BookmarkEntity> bookmarkedBy;
 }

@@ -45,10 +45,10 @@ public class UserEntity {
     private Role role;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "comicUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RatingEntity> ratings;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "comicUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BookmarkEntity> bookmarks;
 }
