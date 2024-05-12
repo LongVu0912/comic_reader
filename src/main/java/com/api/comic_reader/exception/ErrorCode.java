@@ -18,7 +18,7 @@ public enum ErrorCode {
     INVALID_TOKEN(4002, "Token is invalid", HttpStatus.OK),
     INVALID_THUMBNAIL(4002, "Thumbnail is invalid", HttpStatus.OK),
     INVALID_KEYWORD(4002, "Keyword must be larger than 3 characters", HttpStatus.OK),
-    INVALID_COMMENT(4002, "Comment is invalid", HttpStatus.OK),
+    INVALID_COMMENT(4002, "Comment is invalid, comment must be larger than 7 characters", HttpStatus.OK),
 
     USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
     COMIC_NAME_TAKEN(4003, "Comic name is already taken", HttpStatus.OK),

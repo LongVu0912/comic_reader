@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<ApiResponse> getAllUsers() throws AppException {

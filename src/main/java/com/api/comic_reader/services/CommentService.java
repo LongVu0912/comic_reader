@@ -1,7 +1,9 @@
 package com.api.comic_reader.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,16 +47,20 @@ public class CommentService {
             throw new AppException(ErrorCode.NO_COMMENT);
         }
 
-        return comments.stream()
+        List<CommentResponse> commentsResponse = comments.stream()
                 .map(comment -> CommentResponse.builder()
                         .id(comment.getId())
-                        .userId(comment.getComicUser().getId())
                         .chapterId(comment.getChapter().getId())
+                        .userId(comment.getComicUser().getId())
                         .fullName(comment.getComicUser().getFullName())
                         .content(comment.getContent())
                         .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
                         .build())
-                .toList();
+                .collect(Collectors.toList());
+
+        Collections.reverse(commentsResponse);
+
+        return commentsResponse;
     }
 
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
@@ -95,7 +101,7 @@ public class CommentService {
             throw new AppException(ErrorCode.NO_COMMENT);
         }
 
-        return comments.stream()
+        List<CommentResponse> commentsResponse = comments.stream()
                 .map(comment -> CommentResponse.builder()
                         .id(comment.getId())
                         .chapterId(comment.getChapter().getId())
@@ -104,6 +110,10 @@ public class CommentService {
                         .content(comment.getContent())
                         .createdAt(DateUtil.convertDateToString(comment.getCreatedAt()))
                         .build())
-                .toList();
+                .collect(Collectors.toList());
+
+        Collections.reverse(commentsResponse);
+
+        return commentsResponse;
     }
 }
