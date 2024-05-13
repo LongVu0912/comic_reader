@@ -99,14 +99,14 @@ public class BookmarkService {
                 .map(bookmark -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/"
                             + bookmark.getComic().getId();
-                    ChapterResponse lastestChapter =
-                            chapterService.getLastestChapter(bookmark.getComic().getId());
+                    ChapterResponse lastChapter =
+                            chapterService.getLastChapter(bookmark.getComic().getId());
 
                     return BookmarkResponse.builder()
                             .comicId(bookmark.getComic().getId())
                             .name(bookmark.getComic().getName())
                             .thumbnailUrl(thumbnailUrl)
-                            .lastChapter(lastestChapter)
+                            .lastChapter(lastChapter)
                             .build();
                 })
                 .collect(Collectors.toList());

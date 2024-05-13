@@ -67,22 +67,22 @@ public class ComicController {
                         .build());
     }
 
-    @GetMapping("/get6LastestComics")
-    public ResponseEntity<ApiResponse> get6LastestComics() {
+    @GetMapping("/get6LastComics")
+    public ResponseEntity<ApiResponse> get6LastComics() {
         List<ComicResponse> comics = comicService.getAllComics();
 
-        List<ComicResponse> list6LastestComics = comics.stream()
-                .filter(comic -> comic.getLastestChapter() != null)
+        List<ComicResponse> list6LastComics = comics.stream()
+                .filter(comic -> comic.getLastChapter() != null)
                 .sorted(Comparator.comparing(
-                        comic -> comic.getLastestChapter().getCreatedAt(),
+                        comic -> comic.getLastChapter().getCreatedAt(),
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .limit(6)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
-                        .message("Get 6 lastest comics successfully")
-                        .result(list6LastestComics)
+                        .message("Get 6 last comics successfully")
+                        .result(list6LastComics)
                         .build());
     }
 
@@ -91,7 +91,7 @@ public class ComicController {
         List<ComicResponse> comics = comicService.getAllComics();
 
         List<ComicResponse> list3MostViewComics = comics.stream()
-                .filter(comic -> comic.getLastestChapter() != null)
+                .filter(comic -> comic.getLastChapter() != null)
                 .sorted(Comparator.comparing(ComicResponse::getView, Comparator.nullsLast(Comparator.reverseOrder())))
                 .limit(3)
                 .collect(Collectors.toList());

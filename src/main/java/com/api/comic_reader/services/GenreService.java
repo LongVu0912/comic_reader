@@ -108,7 +108,7 @@ public class GenreService {
         return comics.stream()
                 .map(comic -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+                    ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     return ComicResponse.builder()
                             .id(comic.getId())
@@ -117,7 +117,7 @@ public class GenreService {
                             .description(comic.getDescription())
                             .thumbnailUrl(thumbnailUrl)
                             .view(comic.getView())
-                            .lastestChapter(lastestChapter)
+                            .lastChapter(lastChapter)
                             .genres(this.getComicGenres(comic.getId()))
                             .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())

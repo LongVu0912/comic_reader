@@ -80,7 +80,7 @@ public class ChapterService {
                 .collect(Collectors.toList());
     }
 
-    public ChapterResponse getLastestChapter(Long comicId) {
+    public ChapterResponse getLastChapter(Long comicId) {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
@@ -90,19 +90,19 @@ public class ChapterService {
 
         ComicEntity comic = comicOptional.get();
 
-        // Get lastest chapter of comic
+        // Get last chapter of comic
         Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByCreatedAtDesc(comic);
-        ChapterEntity lastestChapter = chapterEntity.orElse(null);
-        if (lastestChapter == null) {
+        ChapterEntity lastChapter = chapterEntity.orElse(null);
+        if (lastChapter == null) {
             return null;
         }
 
         // Convert chapter entity to chapter response
         return ChapterResponse.builder()
-                .id(lastestChapter.getId())
-                .title(lastestChapter.getTitle())
-                .chapterNumber(lastestChapter.getChapterNumber())
-                .createdAt(DateUtil.convertDateToString(lastestChapter.getCreatedAt()))
+                .id(lastChapter.getId())
+                .title(lastChapter.getTitle())
+                .chapterNumber(lastChapter.getChapterNumber())
+                .createdAt(DateUtil.convertDateToString(lastChapter.getCreatedAt()))
                 .build();
     }
 }

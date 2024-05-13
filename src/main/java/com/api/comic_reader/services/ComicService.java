@@ -47,7 +47,7 @@ public class ComicService {
         return comics.stream()
                 .map(comic -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+                    ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     List<ComicGenreResponse> genreResponses = genreService.getComicGenres(comic.getId());
 
@@ -58,7 +58,7 @@ public class ComicService {
                             .description(comic.getDescription())
                             .thumbnailUrl(thumbnailUrl)
                             .view(comic.getView())
-                            .lastestChapter(lastestChapter)
+                            .lastChapter(lastChapter)
                             .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
                             .genres(genreResponses)
@@ -125,7 +125,7 @@ public class ComicService {
         return comics.stream()
                 .map(comic -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-                    ChapterResponse lastestChapter = chapterService.getLastestChapter(comic.getId());
+                    ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     return ComicResponse.builder()
                             .id(comic.getId())
@@ -134,7 +134,7 @@ public class ComicService {
                             .description(comic.getDescription())
                             .thumbnailUrl(thumbnailUrl)
                             .view(comic.getView())
-                            .lastestChapter(lastestChapter)
+                            .lastChapter(lastChapter)
                             .genres(genreService.getComicGenres(comic.getId()))
                             .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())

@@ -58,13 +58,13 @@ public class ChapterController {
                         .build());
     }
 
-    @GetMapping("/getLastestChapter/{comicId}")
-    public ResponseEntity<ApiResponse> getLastestChapter(@PathVariable Long comicId) {
-        ChapterResponse chapters = chapterService.getLastestChapter(comicId);
+    @GetMapping("/getLastChapter/{comicId}")
+    public ResponseEntity<ApiResponse> getLastChapter(@PathVariable Long comicId) {
+        ChapterResponse chapters = chapterService.getLastChapter(comicId);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
-                        .message("Get lastest chapters successfully")
+                        .message("Get last chapters successfully")
                         .result(chapters)
                         .build());
     }
