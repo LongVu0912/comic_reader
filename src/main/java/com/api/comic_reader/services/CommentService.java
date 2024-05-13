@@ -63,6 +63,15 @@ public class CommentService {
         return commentsResponse;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void deleteComment(Long commentId) throws AppException {
+        Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
+        if (!commentOptional.isPresent()) {
+            throw new AppException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        commentRepository.delete(commentOptional.get());
+    }
+
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
         if (newComment.getContent() == null || newComment.getContent().length() < EnvVariables.minCommentLength) {

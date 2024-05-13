@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.api.comic_reader.dtos.requests.GenresRequest;
+import com.api.comic_reader.dtos.requests.AddGenresToComicRequest;
+import com.api.comic_reader.dtos.requests.AddNewGenreRequest;
+import com.api.comic_reader.dtos.requests.FilterGenresRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.dtos.responses.GenreResponse;
@@ -43,12 +45,30 @@ public class GenreController {
     }
 
     @GetMapping("/getComicsByGenres")
-    public ResponseEntity<ApiResponse> getComicsByGenres(@RequestBody GenresRequest genresRequest) {
+    public ResponseEntity<ApiResponse> getComicsByGenres(@RequestBody FilterGenresRequest genresRequest) {
         List<ComicResponse> comics = genreService.getComicsByGenres(genresRequest);
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Get comics by genres successfully")
                         .result(comics)
+                        .build());
+    }
+
+    @PostMapping("/addNewGenre")
+    public ResponseEntity<ApiResponse> addNewGenre(@RequestBody AddNewGenreRequest newGenre) {
+        genreService.addNewGenre(newGenre);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Add new genre successfully")
+                        .build());
+    }
+
+    @PostMapping("/addGenresToComic")
+    public ResponseEntity<ApiResponse> addGenresToComic(@RequestBody AddGenresToComicRequest genresRequest) {
+        genreService.addGenresToComic(genresRequest);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Add genres to comic successfully")
                         .build());
     }
 }

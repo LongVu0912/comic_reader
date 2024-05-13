@@ -23,6 +23,7 @@ public enum ErrorCode {
     USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
     COMIC_NAME_TAKEN(4003, "Comic name is already taken", HttpStatus.OK),
     BOOKMARK_EXISTS(4003, "Bookmark exists", HttpStatus.OK),
+    GENRE_EXISTS(4003, "Genre exists", HttpStatus.OK),
 
     USER_NOT_FOUND(4004, "User not found", HttpStatus.OK),
     COMIC_NOT_FOUND(4004, "Comic not found", HttpStatus.OK),
@@ -31,6 +32,7 @@ public enum ErrorCode {
     CHAPTER_IMAGES_NOT_FOUND(4004, "Chapter's images not found", HttpStatus.OK),
     IMAGE_NOT_FOUND(4004, "Image not found", HttpStatus.OK),
     GENRE_NOT_FOUND(4004, "Genre not found", HttpStatus.OK),
+    COMMENT_NOT_FOUND(4004, "Comment not found", HttpStatus.OK),
 
     NO_COMMENT(4005, "No comment", HttpStatus.OK),
     ;

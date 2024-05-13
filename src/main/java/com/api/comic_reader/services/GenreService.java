@@ -5,11 +5,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Service;
 
 import com.api.comic_reader.config.EnvVariables;
-import com.api.comic_reader.dtos.requests.GenresRequest;
+import com.api.comic_reader.dtos.requests.AddGenresToComicRequest;
+import com.api.comic_reader.dtos.requests.AddNewGenreRequest;
+import com.api.comic_reader.dtos.requests.FilterGenresRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.dtos.responses.ComicGenreResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
@@ -17,8 +20,10 @@ import com.api.comic_reader.dtos.responses.GenreResponse;
 import com.api.comic_reader.entities.ComicEntity;
 import com.api.comic_reader.entities.ComicGenreEntity;
 import com.api.comic_reader.entities.GenreEntity;
+import com.api.comic_reader.entities.composite_keys.ComicGenreKey;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
+import com.api.comic_reader.repositories.ComicGenreRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.GenreRepository;
 
@@ -36,6 +41,9 @@ public class GenreService {
 
     @Autowired
     private ChapterService chapterService;
+
+    @Autowired
+    private ComicGenreRepository comicGenreRepository;
 
     public List<GenreResponse> getAllGenres() {
         List<GenreEntity> genres = genreRepository.findAll();
@@ -93,7 +101,7 @@ public class GenreService {
         return genreResponses;
     }
 
-    public List<ComicResponse> getComicsByGenres(GenresRequest genresRequest) {
+    public List<ComicResponse> getComicsByGenres(FilterGenresRequest genresRequest) {
         List<Long> genreIds = genresRequest.getGenreIds();
         List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds);
 
@@ -116,5 +124,50 @@ public class GenreService {
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void addNewGenre(AddNewGenreRequest newGenre) {
+        try {
+            genreRepository.save(GenreEntity.builder()
+                    .name(newGenre.getName())
+                    .genreDescription(newGenre.getGenreDescription())
+                    .build());
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.GENRE_EXISTS);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void addGenresToComic(AddGenresToComicRequest addGenresRequest) {
+        Long comicId = addGenresRequest.getComicId();
+        List<Long> genresId = addGenresRequest.getGenreIds();
+
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+
+        if (!comicOptional.isPresent()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+
+        ComicEntity comic = comicOptional.get();
+
+        List<GenreEntity> genres = genreRepository.findAllById(genresId);
+
+        for (GenreEntity genre : genres) {
+            if (comic.getGenres().stream()
+                    .anyMatch(comicGenres -> comicGenres.getGenre().getId().equals(genre.getId()))) {
+                continue;
+            }
+
+            ComicGenreKey comicGenreKey = new ComicGenreKey();
+            comicGenreKey.setComicId(comic.getId());
+            comicGenreKey.setGenreId(genre.getId());
+
+            comicGenreRepository.save(ComicGenreEntity.builder()
+                    .id(comicGenreKey)
+                    .comic(comic)
+                    .genre(genre)
+                    .build());
+        }
     }
 }

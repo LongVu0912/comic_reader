@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GenresRequest {
+public class FilterGenresRequest {
     private List<Long> genreIds;
 }
