@@ -48,37 +48,19 @@ public class GenreService {
     public List<GenreResponse> getAllGenres() {
         List<GenreEntity> genres = genreRepository.findAll();
 
-        List<GenreResponse> genreResponses = genres.stream()
-                .map(genre -> {
-                    return GenreResponse.builder()
-                            .id(genre.getId())
-                            .name(genre.getName())
-                            .genreDescription(genre.getGenreDescription())
-                            .build();
-                })
+        return genres.stream()
+                .map(genre -> GenreResponse.builder()
+                        .id(genre.getId())
+                        .name(genre.getName())
+                        .genreDescription(genre.getGenreDescription())
+                        .build())
                 .collect(Collectors.toList());
-
-        return genreResponses;
-    }
-
-    public GenreEntity getGenreById(Long genreId) {
-        Optional<GenreEntity> genreOptional = genreRepository.findById(genreId);
-
-        if (!genreOptional.isPresent()) {
-            throw new AppException(ErrorCode.GENRE_NOT_FOUND);
-        }
-
-        return genreOptional.get();
-    }
-
-    public List<ComicResponse> getComicsByGenre(Long genreId) {
-        return null;
     }
 
     public List<ComicGenreResponse> getComicGenres(Long comicId) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (!comicOptional.isPresent()) {
+        if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -87,18 +69,44 @@ public class GenreService {
         List<ComicGenreEntity> genres = comic.getGenres();
 
         List<GenreEntity> genreEntities =
-                genres.stream().map(ComicGenreEntity::getGenre).collect(Collectors.toList());
+                genres.stream().map(ComicGenreEntity::getGenre).toList();
 
-        List<ComicGenreResponse> genreResponses = genreEntities.stream()
-                .map(genre -> {
-                    return ComicGenreResponse.builder()
-                            .id(genre.getId())
-                            .name(genre.getName())
+        return genreEntities.stream()
+                .map(genre -> ComicGenreResponse.builder()
+                        .id(genre.getId())
+                        .name(genre.getName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<ComicResponse> getComicsByGenre(Long genreId) {
+        Optional<GenreEntity> genreOptional = genreRepository.findById(genreId);
+
+        if (genreOptional.isEmpty()) {
+            throw new AppException(ErrorCode.GENRE_NOT_FOUND);
+        }
+
+        List<ComicEntity> comics = comicRepository.findByGenreId(genreId);
+
+        return comics.stream()
+                .map(comic -> {
+                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
+
+                    return ComicResponse.builder()
+                            .id(comic.getId())
+                            .name(comic.getName())
+                            .author(comic.getAuthor())
+                            .description(comic.getDescription())
+                            .thumbnailUrl(thumbnailUrl)
+                            .view(comic.getView())
+                            .lastChapter(lastChapter)
+                            .genres(this.getComicGenres(comic.getId()))
+                            .isDeleted(comic.getIsDeleted())
+                            .isFinished(comic.getIsFinished())
                             .build();
                 })
                 .collect(Collectors.toList());
-
-        return genreResponses;
     }
 
     public List<ComicResponse> getComicsByGenres(FilterGenresRequest genresRequest) {
@@ -145,7 +153,7 @@ public class GenreService {
 
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (!comicOptional.isPresent()) {
+        if (comicOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 

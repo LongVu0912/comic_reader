@@ -23,4 +23,7 @@ public interface ComicRepository extends JpaRepository<ComicEntity, Long> {
 
     @Query("SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id IN :genreIds")
     List<ComicEntity> findByGenresIdIn(@Param("genreIds") List<Long> genreIds);
+
+    @Query("SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id = :genreId")
+    List<ComicEntity> findByGenreId(Long genreId);
 }

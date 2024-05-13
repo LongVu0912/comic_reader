@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public UserEntity register(RegisterRequest newUser) throws AppException {
-        UserEntity user = null;
+        UserEntity user;
         Optional<UserEntity> userOptional =
                 userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
         if (userOptional.isPresent()) {

@@ -44,14 +44,14 @@ public class RatingService {
         // Check if user exists
         Optional<UserEntity> user = userRepository.findByUsername(name);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
         // Check if comic exists
         Optional<ComicEntity> comic = comicRepository.findById(ratingRequest.getComicId());
 
-        if (!comic.isPresent()) {
+        if (comic.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -70,7 +70,7 @@ public class RatingService {
     public Long getComicAverageRating(Long comicId) throws AppException {
         Optional<ComicEntity> comic = comicRepository.findById(comicId);
 
-        if (!comic.isPresent()) {
+        if (comic.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 

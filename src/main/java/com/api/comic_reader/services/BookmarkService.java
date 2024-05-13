@@ -52,14 +52,14 @@ public class BookmarkService {
         // Check if user exists
         Optional<UserEntity> user = userRepository.findByUsername(name);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
         // Check if chapter exists
         Optional<ComicEntity> comic = comicRepository.findById(comicId);
 
-        if (!comic.isPresent()) {
+        if (comic.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -89,7 +89,7 @@ public class BookmarkService {
         // Check if user exists
         Optional<UserEntity> user = userRepository.findByUsername(name);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 

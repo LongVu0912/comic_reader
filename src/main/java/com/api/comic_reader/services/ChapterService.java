@@ -28,7 +28,7 @@ public class ChapterService {
     private ComicRepository comicRepository;
 
     @Autowired
-    private ChapterRepository chapterRespository;
+    private ChapterRepository chapterRepository;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertChapter(ChapterRequest newChapter) {
@@ -44,7 +44,7 @@ public class ChapterService {
                     .comic(comic)
                     .createdAt(DateUtil.getCurrentDate())
                     .build();
-            chapterRespository.save(chapter);
+            chapterRepository.save(chapter);
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
@@ -91,7 +91,7 @@ public class ChapterService {
         ComicEntity comic = comicOptional.get();
 
         // Get last chapter of comic
-        Optional<ChapterEntity> chapterEntity = chapterRespository.findTopByComicOrderByCreatedAtDesc(comic);
+        Optional<ChapterEntity> chapterEntity = chapterRepository.findTopByComicOrderByCreatedAtDesc(comic);
         ChapterEntity lastChapter = chapterEntity.orElse(null);
         if (lastChapter == null) {
             return null;

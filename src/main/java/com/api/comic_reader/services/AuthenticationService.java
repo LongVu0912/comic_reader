@@ -34,7 +34,7 @@ public class AuthenticationService {
             if (userOptional.isPresent()) {
                 UserEntity user = userOptional.get();
                 if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                    String jwtToken = "";
+                    String jwtToken;
                     jwtToken = jwtService.generateToken(user);
                     loginResponse = AuthResponse.builder()
                             .id(user.getId())

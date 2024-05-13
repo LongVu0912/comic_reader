@@ -68,7 +68,7 @@ public class ComicService {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ComicEntity insertComic(ComicRequest newComic) throws AppException {
+    public void insertComic(ComicRequest newComic) throws AppException {
 
         String originalFilename = newComic.getThumbnailImage().getOriginalFilename();
         if (originalFilename == null) {
@@ -96,7 +96,7 @@ public class ComicService {
                     .thumbnailImage(newComic.getThumbnailImage().getBytes())
                     .build();
 
-            return comicRepository.save(comic);
+            comicRepository.save(comic);
 
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);

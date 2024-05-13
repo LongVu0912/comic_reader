@@ -66,7 +66,7 @@ public class CommentService {
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteComment(Long commentId) throws AppException {
         Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
-        if (!commentOptional.isPresent()) {
+        if (commentOptional.isEmpty()) {
             throw new AppException(ErrorCode.COMMENT_NOT_FOUND);
         }
         commentRepository.delete(commentOptional.get());
@@ -74,11 +74,11 @@ public class CommentService {
 
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
-        if (newComment.getContent() == null || newComment.getContent().length() < EnvVariables.minCommentLength) {
+        if (newComment.getContent().length() < EnvVariables.minCommentLength) {
             throw new AppException(ErrorCode.INVALID_COMMENT);
         }
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newComment.getChapterId());
-        if (!chapterOptional.isPresent()) {
+        if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
         }
         var context = SecurityContextHolder.getContext();
@@ -86,7 +86,7 @@ public class CommentService {
 
         Optional<UserEntity> userOptional = userRepository.findByUsername(name);
 
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -101,7 +101,7 @@ public class CommentService {
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public List<CommentResponse> getCommentsOfChapter(Long chapterId) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
-        if (!chapterOptional.isPresent()) {
+        if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
         }
         List<CommentEntity> comments = commentRepository.findByChapter(chapterOptional.get());
