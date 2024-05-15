@@ -35,6 +35,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(4004, "Comment not found", HttpStatus.OK),
 
     NO_COMMENT(4005, "No comment", HttpStatus.OK),
+    NO_AI_FUNCTION(4005, "AI function is turned off", HttpStatus.OK),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
