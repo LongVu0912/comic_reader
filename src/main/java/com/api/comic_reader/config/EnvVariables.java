@@ -12,11 +12,11 @@ public class EnvVariables {
     public final Long minCommentLength = 8L;
 
     // ChatGpt
-    public final String chatGptApiUrl = "https://api.openai.com/v1/chat/completion";
+    public final String chatGptApiUrl = "https://api.openai.com/v1/chat/completions";
     public final String chatGptModel = "gpt-3.5-turbo";
 
     // LM Studio
     public final String lmStudioApiUrl = "http://localhost:8088/v1/chat/completions";
     public final String lmStudioModel = "janhq/Vistral-7b-Chat-GGUF";
-    public final String modelPrompt = "Always answer in funny style.";
+    public final String modelPrompt = "Trả lời câu hỏi theo phong cách vui nhộn";
 }
