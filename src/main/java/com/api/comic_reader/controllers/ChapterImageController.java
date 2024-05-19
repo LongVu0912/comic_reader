@@ -25,16 +25,14 @@ public class ChapterImageController {
     @Autowired
     private final ChapterImageService chapterImageService;
 
-    @PostMapping("/insertChapterImage")
+    @PostMapping("/insertChapterImages/{chapterId}")
     public ResponseEntity<ApiResponse> insertChapterImage(
-            @RequestParam("chapterId") String chapterId, @RequestParam("imageData") List<MultipartFile> imageDataList)
+            @PathVariable Long chapterId, @RequestParam("imageData") List<MultipartFile> imageDataList)
             throws AppException {
-        Long chapterIdLong = Long.parseLong(chapterId);
-
         // Lặp qua từng file ảnh trong danh sách và thực hiện thêm vào hệ thống
         for (MultipartFile imageData : imageDataList) {
-            chapterImageService.insertChapterImage(ChapterImageRequest.builder()
-                    .chapterId(chapterIdLong)
+            chapterImageService.insertChapterImages(ChapterImageRequest.builder()
+                    .chapterId(chapterId)
                     .imageData(imageData)
                     .build());
         }
@@ -50,5 +48,15 @@ public class ChapterImageController {
     public ResponseEntity<byte[]> getImage(@PathVariable Long imageId) throws AppException {
         byte[] image = chapterImageService.getImageFromImageId(imageId);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+    }
+
+    @DeleteMapping("/deleteChapterImages/{imageId}")
+    public ResponseEntity<ApiResponse> deleteChapterImage(@PathVariable Long imageId) throws AppException {
+        chapterImageService.deleteChapterImages(imageId);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Delete chapter images successfully")
+                        .result(null)
+                        .build());
     }
 }

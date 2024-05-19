@@ -37,7 +37,7 @@ public class ChapterImageService {
     private ComicRepository comicRepository;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public void insertChapterImage(ChapterImageRequest newChapterImage) throws AppException {
+    public void insertChapterImages(ChapterImageRequest newChapterImage) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newChapterImage.getChapterId());
         if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
@@ -95,5 +95,18 @@ public class ChapterImageService {
         }
         ChapterImageEntity chapterImage = chapterImageOptional.get();
         return chapterImage.getImageData();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void deleteChapterImages(Long imageId) {
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(imageId);
+        if (chapterOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapterOptional.get());
+
+        for (ChapterImageEntity chapterImage : chapterImages) {
+            chapterImageRepository.delete(chapterImage);
+        }
     }
 }

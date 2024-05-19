@@ -33,7 +33,7 @@ public class ChapterService {
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertChapter(ChapterRequest newChapter) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(newChapter.getComicId());
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
         ComicEntity comic = comicOptional.get();
@@ -54,7 +54,7 @@ public class ChapterService {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -84,7 +84,7 @@ public class ChapterService {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -104,5 +104,27 @@ public class ChapterService {
                 .chapterNumber(lastChapter.getChapterNumber())
                 .createdAt(DateUtil.convertDateToString(lastChapter.getCreatedAt()))
                 .build();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void deleteChapter(Long chapterId) {
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
+        if (chapterOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        ChapterEntity chapter = chapterOptional.get();
+        chapterRepository.delete(chapter);
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void editChapter(Long chapterId, ChapterRequest editChapter) {
+        Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
+        if (chapterOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        ChapterEntity chapter = chapterOptional.get();
+        chapter.setTitle(editChapter.getTitle());
+        chapter.setChapterNumber(editChapter.getChapterNumber());
+        chapterRepository.save(chapter);
     }
 }

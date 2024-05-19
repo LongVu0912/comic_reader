@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.comic_reader.dtos.requests.ComicRequest;
@@ -151,6 +150,41 @@ public class ComicController {
                 .body(ApiResponse.builder()
                         .message("Get comic information successfully")
                         .result(comic)
+                        .build());
+    }
+
+    @PutMapping("/editComic/{comicId}")
+    public ResponseEntity<ApiResponse> editComic(
+            @PathVariable Long comicId,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "imageData", required = false) MultipartFile imageData)
+            throws AppException {
+
+        ComicRequest editComicRequest = new ComicRequest();
+        editComicRequest.setName(name);
+        editComicRequest.setAuthor(author);
+        editComicRequest.setDescription(description);
+        editComicRequest.setThumbnailImage(imageData);
+
+        comicService.editComic(comicId, editComicRequest);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Edit comic successfully")
+                        .result(null)
+                        .build());
+    }
+
+    @DeleteMapping("/deleteComic/{comicId}")
+    public ResponseEntity<ApiResponse> deleteComic(@PathVariable Long comicId) throws AppException {
+        comicService.deleteComic(comicId);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Delete comic successfully")
+                        .result(null)
                         .build());
     }
 }

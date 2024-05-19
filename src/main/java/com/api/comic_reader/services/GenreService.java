@@ -60,7 +60,7 @@ public class GenreService {
     public List<ComicGenreResponse> getComicGenres(Long comicId) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
@@ -153,7 +153,7 @@ public class GenreService {
 
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 

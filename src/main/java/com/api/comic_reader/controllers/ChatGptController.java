@@ -11,7 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,7 +53,7 @@ public class ChatGptController {
     private static final RestTemplate restTemplate = new RestTemplate();
 
     @SuppressWarnings("null")
-    @GetMapping("/findComics")
+    @PostMapping("/findComics")
     public ResponseEntity<ApiResponse> findComics(@RequestBody AskGptRequest askGPTRequest) throws AppException {
         List<ComicResponse> comics = comicService.getAllComics();
 
@@ -88,6 +88,7 @@ public class ChatGptController {
 
         ChatGptResponse chatGptResponse = responseEntity.getBody();
 
+        System.out.println(chatGptResponse.getChoices().get(0).getMessage().getContent());
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask GPT successfully")
@@ -96,7 +97,7 @@ public class ChatGptController {
     }
 
     @SuppressWarnings("null")
-    @GetMapping("/ask")
+    @PostMapping("/askGpt")
     public ResponseEntity<ApiResponse> askGpt(@RequestBody AskGptRequest askGPTRequest) throws AppException {
         String question = askGPTRequest.getQuestion();
 
@@ -117,7 +118,7 @@ public class ChatGptController {
                         .build());
     }
 
-    @GetMapping("/askAI")
+    @PostMapping("/askLMStudio")
     public ResponseEntity<ApiResponse> askAI(@RequestBody AskGptRequest askGptRequest)
             throws JsonMappingException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
@@ -127,11 +128,12 @@ public class ChatGptController {
 
         Map<String, Object> body = new HashMap<>();
         body.put("model", lmStudioModel);
-        body.put("temperature", 0.7);
-        body.put("n", 1);
+        body.put("temperature", 0.8);
+        body.put("max_tokens", -1);
         body.put("stream", false);
 
         List<Map<String, String>> messages = new ArrayList<>();
+
         Map<String, String> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
         systemMessage.put("content", modelPrompt);

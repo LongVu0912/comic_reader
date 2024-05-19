@@ -68,4 +68,27 @@ public class ChapterController {
                         .result(chapters)
                         .build());
     }
+
+    @DeleteMapping("/deleteChapter/{chapterId}")
+    public ResponseEntity<ApiResponse> deleteChapter(@PathVariable Long chapterId) {
+        chapterService.deleteChapter(chapterId);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Delete chapter successfully")
+                        .result(null)
+                        .build());
+    }
+
+    @PutMapping("/editChapter/{chapterId}")
+    public ResponseEntity<ApiResponse> editChapter(
+            @PathVariable Long chapterId, @RequestBody ChapterRequest editChapterRequest) {
+        chapterService.editChapter(chapterId, editChapterRequest);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Edit chapter successfully")
+                        .result(null)
+                        .build());
+    }
 }

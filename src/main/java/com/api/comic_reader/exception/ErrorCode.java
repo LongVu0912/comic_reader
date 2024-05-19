@@ -20,8 +20,8 @@ public enum ErrorCode {
     INVALID_KEYWORD(4002, "Keyword must be larger than 3 characters", HttpStatus.OK),
     INVALID_COMMENT(4002, "Comment is invalid, comment must be larger than 7 characters", HttpStatus.OK),
 
-    USERNAME_OR_EMAIL_TAKEN(4003, "Email is already taken", HttpStatus.OK),
-    COMIC_NAME_TAKEN(4003, "Comic name is already taken", HttpStatus.OK),
+    USERNAME_OR_EMAIL_TAKEN(4003, "Username or Email exists", HttpStatus.OK),
+    COMIC_NAME_TAKEN(4003, "Comic name exists", HttpStatus.OK),
     BOOKMARK_EXISTS(4003, "Bookmark exists", HttpStatus.OK),
     GENRE_EXISTS(4003, "Genre exists", HttpStatus.OK),
 

@@ -33,7 +33,6 @@ public class SecurityConfig {
         "/api/comment/**",
         "/api/user/**",
         "/api/role/**",
-        "/api/gpt/**",
     };
 
     @Bean

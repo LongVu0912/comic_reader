@@ -46,6 +46,9 @@ public class ComicService {
 
         return comics.stream()
                 .map(comic -> {
+                    if (comic.getIsDeleted()) {
+                        return null;
+                    }
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
@@ -105,7 +108,7 @@ public class ComicService {
 
     public byte[] getThumbnailImage(Long comicId) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
         ComicEntity comic = comicOptional.get();
@@ -146,7 +149,7 @@ public class ComicService {
     public ComicInformationResponse getComicInformation(Long comicId) {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
-        if (comicOptional.isEmpty()) {
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
         ComicEntity comic = comicOptional.get();
@@ -165,5 +168,55 @@ public class ComicService {
                 .isFinished(comic.getIsFinished())
                 .genres(genres)
                 .build();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void editComic(Long comicId, ComicRequest editComicRequest) throws AppException {
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+
+        ComicEntity comic = comicOptional.get();
+
+        if (editComicRequest.getName() != null) {
+            comic.setName(editComicRequest.getName());
+        }
+        if (editComicRequest.getAuthor() != null) {
+            comic.setAuthor(editComicRequest.getAuthor());
+        }
+        if (editComicRequest.getDescription() != null) {
+            comic.setDescription(editComicRequest.getDescription());
+        }
+        if (editComicRequest.getThumbnailImage() != null) {
+            try {
+                String originalFilename = editComicRequest.getThumbnailImage().getOriginalFilename();
+                if (originalFilename == null) {
+                    throw new AppException(ErrorCode.INVALID_THUMBNAIL);
+                }
+
+                String fileName = StringUtils.cleanPath(originalFilename);
+                if (fileName.contains("..")) {
+                    throw new AppException(ErrorCode.INVALID_THUMBNAIL);
+                }
+                comic.setThumbnailImage(editComicRequest.getThumbnailImage().getBytes());
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+            }
+        }
+
+        comicRepository.save(comic);
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public void deleteComic(Long comicId) throws AppException {
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+
+        ComicEntity comic = comicOptional.get();
+        comic.setIsDeleted(true);
+        comicRepository.save(comic);
     }
 }
