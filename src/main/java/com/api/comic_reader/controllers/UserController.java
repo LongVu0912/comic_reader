@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
@@ -58,7 +57,7 @@ public class UserController {
                         .build());
     }
 
-    @PostMapping("/changePassword")
+    @PutMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         userService.changePassword(changePasswordRequest);
         return ResponseEntity.ok()
@@ -68,7 +67,7 @@ public class UserController {
                         .build());
     }
 
-    @PostMapping("/changeInformation")
+    @PutMapping("/changeInformation")
     public ResponseEntity<ApiResponse> changeInformation(
             @RequestBody ChangeInformationRequest changeInformationRequest) {
         userService.changeInformation(changeInformationRequest);

@@ -79,36 +79,6 @@ public class GenreService {
                 .collect(Collectors.toList());
     }
 
-    public List<ComicResponse> getComicsByGenre(Long genreId) {
-        Optional<GenreEntity> genreOptional = genreRepository.findById(genreId);
-
-        if (genreOptional.isEmpty()) {
-            throw new AppException(ErrorCode.GENRE_NOT_FOUND);
-        }
-
-        List<ComicEntity> comics = comicRepository.findByGenreId(genreId);
-
-        return comics.stream()
-                .map(comic -> {
-                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
-                    ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
-
-                    return ComicResponse.builder()
-                            .id(comic.getId())
-                            .name(comic.getName())
-                            .author(comic.getAuthor())
-                            .description(comic.getDescription())
-                            .thumbnailUrl(thumbnailUrl)
-                            .view(comic.getView())
-                            .lastChapter(lastChapter)
-                            .genres(this.getComicGenres(comic.getId()))
-                            .isDeleted(comic.getIsDeleted())
-                            .isFinished(comic.getIsFinished())
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
-
     public List<ComicResponse> getComicsByGenres(FilterGenresRequest genresRequest) {
         List<Long> genreIds = genresRequest.getGenreIds();
         List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds);

@@ -5,11 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.api.comic_reader.dtos.requests.CommentRequest;
-import com.api.comic_reader.dtos.requests.DeleteCommentRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.CommentResponse;
 import com.api.comic_reader.exception.AppException;
@@ -55,10 +52,9 @@ public class CommentController {
                         .build());
     }
 
-    @PostMapping("/deleteComment")
-    public ResponseEntity<ApiResponse> deleteComment(@RequestBody DeleteCommentRequest deleteCommentRequest)
-            throws AppException {
-        commentService.deleteComment(deleteCommentRequest.getCommentId());
+    @DeleteMapping("/deleteComment")
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId) throws AppException {
+        commentService.deleteComment(commentId);
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Delete comment successfully")

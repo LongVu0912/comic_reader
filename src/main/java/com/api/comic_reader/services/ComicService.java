@@ -56,10 +56,8 @@ public class ComicService {
         }
 
         return comics.stream()
+                .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
-                    if (comic.getIsDeleted()) {
-                        return null;
-                    }
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 

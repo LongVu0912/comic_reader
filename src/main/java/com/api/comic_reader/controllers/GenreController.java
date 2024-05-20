@@ -34,16 +34,6 @@ public class GenreController {
                         .build());
     }
 
-    @GetMapping("/getComicsByGenre/{genreId}")
-    public ResponseEntity<ApiResponse> getComicsByGenre(@PathVariable Long genreId) {
-        List<ComicResponse> comics = genreService.getComicsByGenre(genreId);
-        return ResponseEntity.ok()
-                .body(ApiResponse.builder()
-                        .message("Get comics by genre successfully")
-                        .result(comics)
-                        .build());
-    }
-
     @PostMapping("/getComicsByGenres")
     public ResponseEntity<ApiResponse> getComicsByGenres(@RequestBody FilterGenresRequest genresRequest) {
         List<ComicResponse> comics = genreService.getComicsByGenres(genresRequest);
