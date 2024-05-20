@@ -84,6 +84,7 @@ public class GenreService {
         List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds);
 
         return comics.stream()
+                .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,6 +25,7 @@ import com.api.comic_reader.entities.RatingEntity;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
+import com.api.comic_reader.repositories.BookmarkRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.RatingRepository;
 import com.api.comic_reader.repositories.UserRepository;
@@ -47,6 +50,9 @@ public class ComicService {
 
     @Autowired
     private RatingRepository ratingRepository;
+
+    @Autowired
+    private BookmarkRepository bookmarkRepository;
 
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
@@ -135,6 +141,7 @@ public class ComicService {
         }
 
         return comics.stream()
+                .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
@@ -234,6 +241,7 @@ public class ComicService {
         comicRepository.save(comic);
     }
 
+    @Transactional
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteComic(Long comicId) throws AppException {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
@@ -243,6 +251,8 @@ public class ComicService {
 
         ComicEntity comic = comicOptional.get();
         comic.setIsDeleted(true);
+
+        bookmarkRepository.deleteByComic(comic);
         comicRepository.save(comic);
     }
 }

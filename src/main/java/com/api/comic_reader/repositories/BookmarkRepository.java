@@ -18,4 +18,6 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Bookma
     void deleteByComicAndUser(ComicEntity comic, UserEntity user);
 
     List<BookmarkEntity> findByUser(UserEntity user);
+
+    void deleteByComic(ComicEntity comic);
 }

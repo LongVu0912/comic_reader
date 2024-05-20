@@ -96,6 +96,7 @@ public class BookmarkService {
         List<BookmarkEntity> bookmarks = bookmarkRepository.findByUser(user.get());
 
         return bookmarks.stream()
+                .filter(bookmark -> !bookmark.getComic().getIsDeleted())
                 .map(bookmark -> {
                     String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/"
                             + bookmark.getComic().getId();
