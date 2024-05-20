@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,9 +19,13 @@ import com.api.comic_reader.dtos.responses.ComicGenreResponse;
 import com.api.comic_reader.dtos.responses.ComicInformationResponse;
 import com.api.comic_reader.dtos.responses.ComicResponse;
 import com.api.comic_reader.entities.ComicEntity;
+import com.api.comic_reader.entities.RatingEntity;
+import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.ComicRepository;
+import com.api.comic_reader.repositories.RatingRepository;
+import com.api.comic_reader.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -36,6 +41,12 @@ public class ComicService {
 
     @Autowired
     private GenreService genreService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
 
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
@@ -157,6 +168,23 @@ public class ComicService {
         // Get genres of comic
         List<ComicGenreResponse> genres = genreService.getComicGenres(comicId);
 
+        // Get user rating score of comic
+        Long ratingScore = null;
+
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Optional<UserEntity> userOptional = userRepository.findByUsername(name);
+
+        if (!userOptional.isEmpty()) {
+            UserEntity user = userOptional.get();
+            RatingEntity rating = ratingRepository.findByComicAndUser(comic, user);
+
+            if (rating != null) {
+                ratingScore = rating.getScore();
+            }
+        }
+
         return ComicInformationResponse.builder()
                 .id(comic.getId())
                 .name(comic.getName())
@@ -164,8 +192,8 @@ public class ComicService {
                 .description(comic.getDescription())
                 .thumbnailUrl(EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId())
                 .view(comic.getView())
-                .isDeleted(comic.getIsDeleted())
                 .isFinished(comic.getIsFinished())
+                .ratingScore(ratingScore)
                 .genres(genres)
                 .build();
     }

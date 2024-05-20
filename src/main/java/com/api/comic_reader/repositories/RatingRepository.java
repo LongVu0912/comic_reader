@@ -21,4 +21,7 @@ public interface RatingRepository extends JpaRepository<RatingEntity, Long> {
 
     @Query("select avg(r.score) from RatingEntity r where r.comic = :comic")
     Long getComicAverageRating(@Param("comic") ComicEntity comic);
+
+    @Query("select r from RatingEntity r where r.comic = :comic and r.user = :user")
+    RatingEntity findByComicAndUser(@Param("comic") ComicEntity comic, @Param("user") UserEntity user);
 }
