@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class BookmarkService {
     @Autowired
     private BookmarkRepository bookmarkRepository;

@@ -12,12 +12,10 @@ public class DateUtil {
     public Date convertStringToDate(String dateInString) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            Date date = formatter.parse(dateInString);
-            return date;
+            return formatter.parse(dateInString);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public String convertDateToString(Date date) {

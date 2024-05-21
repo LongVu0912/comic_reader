@@ -24,7 +24,7 @@ import com.api.comic_reader.repositories.ComicRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 @RequiredArgsConstructor
 public class ChapterImageService {
     @Autowired
@@ -108,8 +108,6 @@ public class ChapterImageService {
         }
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapterOptional.get());
 
-        for (ChapterImageEntity chapterImage : chapterImages) {
-            chapterImageRepository.delete(chapterImage);
-        }
+        chapterImageRepository.deleteAll(chapterImages);
     }
 }

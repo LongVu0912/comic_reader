@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;

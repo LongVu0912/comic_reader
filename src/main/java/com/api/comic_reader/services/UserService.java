@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
-import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.responses.UserResponse;
 import com.api.comic_reader.entities.UserEntity;
-import com.api.comic_reader.enums.Role;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.UserRepository;
@@ -52,30 +50,6 @@ public class UserService {
                         .role(user.getRole())
                         .build())
                 .toList();
-    }
-
-    public UserEntity register(RegisterRequest newUser) throws AppException {
-        UserEntity user;
-        Optional<UserEntity> userOptional =
-                userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
-        if (userOptional.isPresent()) {
-            throw new AppException(ErrorCode.USERNAME_OR_EMAIL_TAKEN);
-        }
-        try {
-            user = UserEntity.builder()
-                    .username(newUser.getUsername())
-                    .email(newUser.getEmail())
-                    .password(passwordEncoder.encode(newUser.getPassword()))
-                    .fullName(newUser.getFullName())
-                    .dateOfBirth(DateUtil.convertStringToDate(newUser.getDateOfBirth()))
-                    .isMale(newUser.getIsMale())
-                    .role(Role.USER)
-                    .build();
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
-        }
-        return user;
     }
 
     @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.username == authentication.name")

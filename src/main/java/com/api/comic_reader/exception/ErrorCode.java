@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     TOKEN_IS_REQUIRED(4001, "Token is required", HttpStatus.OK),
 
+    INVALID_CODE(4002, "", HttpStatus.OK),
     INVALID_TOKEN(4002, "Token is invalid", HttpStatus.OK),
     INVALID_THUMBNAIL(4002, "Thumbnail is invalid", HttpStatus.OK),
     INVALID_KEYWORD(4002, "Keyword must be larger than 3 characters", HttpStatus.OK),

@@ -7,15 +7,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.api.comic_reader.dtos.requests.LoginRequest;
+import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.InvalidatedTokenEntity;
 import com.api.comic_reader.entities.UserEntity;
+import com.api.comic_reader.enums.Role;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.InvalidatedTokenRepository;
 import com.api.comic_reader.repositories.UserRepository;
+import com.api.comic_reader.utils.DateUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -26,6 +29,27 @@ public class AuthenticationService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
+
+    public void register(RegisterRequest newUser) throws AppException {
+        Optional<UserEntity> userOptional =
+                userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
+        if (userOptional.isPresent()) {
+            throw new AppException(ErrorCode.USERNAME_OR_EMAIL_TAKEN);
+        }
+        try {
+            userRepository.save(UserEntity.builder()
+                    .username(newUser.getUsername())
+                    .email(newUser.getEmail())
+                    .password(passwordEncoder.encode(newUser.getPassword()))
+                    .fullName(newUser.getFullName())
+                    .dateOfBirth(DateUtil.convertStringToDate(newUser.getDateOfBirth()))
+                    .isMale(newUser.getIsMale())
+                    .role(Role.USER)
+                    .build());
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+    }
 
     public AuthResponse login(LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = null;

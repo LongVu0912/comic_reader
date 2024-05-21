@@ -1,5 +1,7 @@
 package com.api.comic_reader.controllers;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +12,8 @@ import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
-import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.services.AuthenticationService;
-import com.api.comic_reader.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,17 +25,14 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest newUser) throws AppException {
-        UserEntity newUserResponse = userService.register(newUser);
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest newUser) throws AppException {
+        authenticationService.register(newUser);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Register successfully")
-                        .result(newUserResponse)
+                        .result(null)
                         .build());
     }
 
