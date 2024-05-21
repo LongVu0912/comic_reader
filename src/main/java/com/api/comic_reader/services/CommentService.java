@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.CommentRequest;
 import com.api.comic_reader.dtos.responses.CommentResponse;
 import com.api.comic_reader.entities.ChapterEntity;
@@ -24,10 +23,10 @@ import com.api.comic_reader.repositories.CommentRepository;
 import com.api.comic_reader.repositories.UserRepository;
 import com.api.comic_reader.utils.DateUtil;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class CommentService {
     @Autowired
@@ -74,7 +73,7 @@ public class CommentService {
 
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
-        if (newComment.getContent().length() < EnvVariables.minCommentLength) {
+        if (newComment.getContent().length() < 8L) {
             throw new AppException(ErrorCode.INVALID_COMMENT);
         }
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newComment.getChapterId());

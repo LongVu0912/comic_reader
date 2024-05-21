@@ -20,10 +20,10 @@ import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.RatingRepository;
 import com.api.comic_reader.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class RatingService {
     @Autowired

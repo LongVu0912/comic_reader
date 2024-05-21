@@ -17,7 +17,6 @@ public class ComicResponse {
     private String thumbnailUrl;
     private Long view;
     private ChapterResponse lastChapter;
-    private boolean isDeleted;
     private boolean isFinished;
     private List<ComicGenreResponse> genres;
 }

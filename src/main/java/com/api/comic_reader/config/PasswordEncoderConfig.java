@@ -2,6 +2,7 @@ package com.api.comic_reader.config;
 
 import java.security.SecureRandom;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PasswordEncoderConfig {
 
-    private static final String ENCODE_KEY = EnvVariables.passwordEncoderKey;
+    @Value("${app.encoder-key}")
+    private String ENCODE_KEY;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

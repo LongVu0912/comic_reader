@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.comic_reader.dtos.requests.LoginRequest;
-import com.api.comic_reader.dtos.requests.RefreshRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
 import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
@@ -63,7 +62,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshRequest refreshRequest) throws AppException {
+    public ResponseEntity<ApiResponse> refreshToken(@RequestBody TokenRequest refreshRequest) throws AppException {
         AuthResponse authenticationResponse = authenticationService.refreshToken(refreshRequest.getToken());
 
         return ResponseEntity.ok()

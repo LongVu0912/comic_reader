@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.responses.BookmarkResponse;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.entities.BookmarkEntity;
@@ -25,10 +25,10 @@ import com.api.comic_reader.repositories.BookmarkRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class BookmarkService {
     @Autowired
@@ -42,6 +42,9 @@ public class BookmarkService {
 
     @Autowired
     private ChapterService chapterService;
+
+    @Value("${app.base-url}")
+    private String BASE_URL;
 
     @Transactional
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
@@ -98,7 +101,7 @@ public class BookmarkService {
         return bookmarks.stream()
                 .filter(bookmark -> !bookmark.getComic().getIsDeleted())
                 .map(bookmark -> {
-                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/"
+                    String thumbnailUrl = BASE_URL + "/api/comic/thumbnail/"
                             + bookmark.getComic().getId();
                     ChapterResponse lastChapter =
                             chapterService.getLastChapter(bookmark.getComic().getId());

@@ -1,0 +1,47 @@
+{"properties": [
+  {
+    "name": "jwt.signer-key",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.signer-key'"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "A description for 'jwt.expiration'"
+  },
+  {
+    "name": "app.encoder-key",
+    "type": "java.lang.String",
+    "description": "A description for 'app.encoder-key'"
+  },
+  {
+    "name": "app.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.base-url'"
+  },
+  {
+    "name": "gpt.api-url",
+    "type": "java.lang.String",
+    "description": "A description for 'gpt.api-url'"
+  },
+  {
+    "name": "gpt.model",
+    "type": "java.lang.String",
+    "description": "A description for 'gpt.model'"
+  },
+  {
+    "name": "lmstudio.api-url",
+    "type": "java.lang.String",
+    "description": "A description for 'lmstudio.api-url'"
+  },
+  {
+    "name": "lmstudio.model",
+    "type": "java.lang.String",
+    "description": "A description for 'lmstudio.model'"
+  },
+  {
+    "name": "lmstudio.model-prompt",
+    "type": "java.lang.String",
+    "description": "A description for 'lmstudio.model-prompt'"
+  }
+]}

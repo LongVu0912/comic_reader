@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ComicRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.dtos.responses.ComicGenreResponse;
@@ -30,10 +30,10 @@ import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.RatingRepository;
 import com.api.comic_reader.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class ComicService {
     @Autowired
@@ -52,7 +52,13 @@ public class ComicService {
     private RatingRepository ratingRepository;
 
     @Autowired
+    private RatingService ratingService;
+
+    @Autowired
     private BookmarkRepository bookmarkRepository;
+
+    @Value("${app.base-url}")
+    private String BASE_URL;
 
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
@@ -64,7 +70,7 @@ public class ComicService {
         return comics.stream()
                 .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
-                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    String thumbnailUrl = BASE_URL + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     List<ComicGenreResponse> genreResponses = genreService.getComicGenres(comic.getId());
@@ -77,7 +83,6 @@ public class ComicService {
                             .thumbnailUrl(thumbnailUrl)
                             .view(comic.getView())
                             .lastChapter(lastChapter)
-                            .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
                             .genres(genreResponses)
                             .build();
@@ -131,7 +136,7 @@ public class ComicService {
     }
 
     public List<ComicResponse> searchComics(String keyword) throws AppException {
-        if (keyword == null || keyword.length() < EnvVariables.minSearchKeywordLength) {
+        if (keyword == null || keyword.length() < 4L) {
             throw new AppException(ErrorCode.INVALID_KEYWORD);
         }
         List<ComicEntity> comics = comicRepository.findByNameContainingIgnoreCase(keyword);
@@ -143,7 +148,7 @@ public class ComicService {
         return comics.stream()
                 .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
-                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    String thumbnailUrl = BASE_URL + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     return ComicResponse.builder()
@@ -155,7 +160,6 @@ public class ComicService {
                             .view(comic.getView())
                             .lastChapter(lastChapter)
                             .genres(genreService.getComicGenres(comic.getId()))
-                            .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
                             .build();
                 })
@@ -174,7 +178,7 @@ public class ComicService {
         List<ComicGenreResponse> genres = genreService.getComicGenres(comicId);
 
         // Get user rating score of comic
-        Long ratingScore = null;
+        Long userRatingScore = null;
 
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -186,7 +190,7 @@ public class ComicService {
             RatingEntity rating = ratingRepository.findByComicAndUser(comic, user);
 
             if (rating != null) {
-                ratingScore = rating.getScore();
+                userRatingScore = rating.getScore();
             }
         }
 
@@ -195,10 +199,11 @@ public class ComicService {
                 .name(comic.getName())
                 .author(comic.getAuthor())
                 .description(comic.getDescription())
-                .thumbnailUrl(EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId())
+                .thumbnailUrl(BASE_URL + "/api/comic/thumbnail/" + comic.getId())
                 .view(comic.getView())
                 .isFinished(comic.getIsFinished())
-                .ratingScore(ratingScore)
+                .userRatingScore(userRatingScore)
+                .averageRatingScore(ratingService.getComicAverageRating(comicId))
                 .genres(genres)
                 .build();
     }

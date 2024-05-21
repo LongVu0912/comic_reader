@@ -19,10 +19,10 @@ import com.api.comic_reader.repositories.ChapterRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.utils.DateUtil;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChapterService {
     @Autowired
     private ComicRepository comicRepository;

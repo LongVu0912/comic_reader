@@ -5,11 +5,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Service;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.AddGenresToComicRequest;
 import com.api.comic_reader.dtos.requests.AddNewGenreRequest;
 import com.api.comic_reader.dtos.requests.FilterGenresRequest;
@@ -27,10 +27,10 @@ import com.api.comic_reader.repositories.ComicGenreRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 import com.api.comic_reader.repositories.GenreRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class GenreService {
     @Autowired
@@ -44,6 +44,9 @@ public class GenreService {
 
     @Autowired
     private ComicGenreRepository comicGenreRepository;
+
+    @Value("${app.base-url}")
+    private String BASE_URL;
 
     public List<GenreResponse> getAllGenres() {
         List<GenreEntity> genres = genreRepository.findAll();
@@ -86,7 +89,7 @@ public class GenreService {
         return comics.stream()
                 .filter(comic -> !comic.getIsDeleted())
                 .map(comic -> {
-                    String thumbnailUrl = EnvVariables.baseUrl + "/api/comic/thumbnail/" + comic.getId();
+                    String thumbnailUrl = BASE_URL + "/api/comic/thumbnail/" + comic.getId();
                     ChapterResponse lastChapter = chapterService.getLastChapter(comic.getId());
 
                     return ComicResponse.builder()
@@ -98,7 +101,6 @@ public class GenreService {
                             .view(comic.getView())
                             .lastChapter(lastChapter)
                             .genres(this.getComicGenres(comic.getId()))
-                            .isDeleted(comic.getIsDeleted())
                             .isFinished(comic.getIsFinished())
                             .build();
                 })

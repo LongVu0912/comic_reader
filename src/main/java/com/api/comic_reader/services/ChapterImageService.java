@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.ChapterImageRequest;
 import com.api.comic_reader.dtos.responses.ChapterResponse;
 import com.api.comic_reader.entities.ChapterEntity;
@@ -21,11 +21,11 @@ import com.api.comic_reader.repositories.ChapterImageRepository;
 import com.api.comic_reader.repositories.ChapterRepository;
 import com.api.comic_reader.repositories.ComicRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @EnableMethodSecurity(prePostEnabled = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChapterImageService {
     @Autowired
     private ChapterImageRepository chapterImageRepository;
@@ -35,6 +35,9 @@ public class ChapterImageService {
 
     @Autowired
     private ComicRepository comicRepository;
+
+    @Value("${app.base-url}")
+    private String BASE_URL;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertChapterImages(ChapterImageRequest newChapterImage) throws AppException {
@@ -76,7 +79,7 @@ public class ChapterImageService {
         List<ChapterImageEntity> chapterImages = chapterImageRepository.findByChapter(chapter);
 
         List<String> imageUrls = chapterImages.stream()
-                .map(chapterImage -> EnvVariables.baseUrl + "/api/image/" + chapterImage.getId())
+                .map(chapterImage -> BASE_URL + "/api/image/" + chapterImage.getId())
                 .toList();
 
         return ChapterResponse.builder()

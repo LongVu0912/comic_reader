@@ -22,10 +22,10 @@ import com.api.comic_reader.exception.ErrorCode;
 import com.api.comic_reader.repositories.UserRepository;
 import com.api.comic_reader.utils.DateUtil;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class UserService {
     @Autowired

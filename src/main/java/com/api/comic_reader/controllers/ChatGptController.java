@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.api.comic_reader.chatgpt.ChatGptRequest;
 import com.api.comic_reader.chatgpt.ChatGptResponse;
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.requests.AskGptRequest;
 import com.api.comic_reader.dtos.requests.ComicsAskGptRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
@@ -43,12 +43,20 @@ public class ChatGptController {
     @Autowired
     private ComicService comicService;
 
-    private final String chatGptApiUrl = EnvVariables.chatGptApiUrl;
-    private final String chatGptModel = EnvVariables.chatGptModel;
+    @Value("${gpt.api-url}")
+    private String chatGptApiUrl;
 
-    private final String lmStudioApiUrl = EnvVariables.lmStudioApiUrl;
-    private final String lmStudioModel = EnvVariables.lmStudioModel;
-    private final String modelPrompt = EnvVariables.modelPrompt;
+    @Value("${gpt.model}")
+    private String chatGptModel;
+
+    @Value("${lmstudio.api-url}")
+    private String lmStudioApiUrl;
+
+    @Value("${lmstudio.model}")
+    private String lmStudioModel;
+
+    @Value("${lmstudio.model-prompt}")
+    private String modelPrompt;
 
     private static final RestTemplate restTemplate = new RestTemplate();
 

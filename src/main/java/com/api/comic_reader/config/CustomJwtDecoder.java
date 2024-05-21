@@ -4,6 +4,7 @@ import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -16,7 +17,8 @@ import com.api.comic_reader.services.AuthenticationService;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    private String signerKey = EnvVariables.jwtSignerKey;
+    @Value("${jwt.signer-key}")
+    private String signerKey;
 
     @Autowired
     private AuthenticationService authenticationService;

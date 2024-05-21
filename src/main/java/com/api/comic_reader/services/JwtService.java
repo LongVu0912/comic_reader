@@ -3,9 +3,9 @@ package com.api.comic_reader.services;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.api.comic_reader.config.EnvVariables;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.entities.UserEntity;
 import com.api.comic_reader.exception.AppException;
@@ -22,12 +22,18 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JwtService {
-    private static final String SIGNER_KEY = EnvVariables.jwtSignerKey;
+
+    @Value("${jwt.signer-key}")
+    private String SIGNER_KEY;
+
+    @Value("${jwt.expiration}")
+    private Long JWT_EXPIRATION;
+
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     public String generateToken(UserEntity user) {
@@ -39,7 +45,7 @@ public class JwtService {
                 .subject(user.getUsername())
                 .issueTime(new Date())
                 .claim("scope", user.getRole().name())
-                .expirationTime(new Date(new Date().getTime() + EnvVariables.jwtExpiration))
+                .expirationTime(new Date(new Date().getTime() + JWT_EXPIRATION))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

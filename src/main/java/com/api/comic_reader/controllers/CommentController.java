@@ -52,7 +52,7 @@ public class CommentController {
                         .build());
     }
 
-    @DeleteMapping("/deleteComment")
+    @DeleteMapping("/deleteComment/{commentId}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId) throws AppException {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok()
