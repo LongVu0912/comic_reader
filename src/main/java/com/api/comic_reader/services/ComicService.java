@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
@@ -185,7 +185,7 @@ public class ComicService {
 
         Optional<UserEntity> userOptional = userRepository.findByUsername(name);
 
-        if (!userOptional.isEmpty()) {
+        if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
             RatingEntity rating = ratingRepository.findByComicAndUser(comic, user);
 

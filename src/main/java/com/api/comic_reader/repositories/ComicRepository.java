@@ -21,8 +21,9 @@ public interface ComicRepository extends JpaRepository<ComicEntity, Long> {
 
     List<ComicEntity> findByNameContainingIgnoreCase(String name);
 
-    @Query("SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id IN :genreIds")
-    List<ComicEntity> findByGenresIdIn(@Param("genreIds") List<Long> genreIds);
+    @Query(
+            "SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id IN :genreIds GROUP BY c HAVING COUNT(DISTINCT g.genre.id) = :genreCount")
+    List<ComicEntity> findByGenresIdIn(@Param("genreIds") List<Long> genreIds, @Param("genreCount") long genreCount);
 
     @Query("SELECT c FROM ComicEntity c JOIN c.genres g WHERE g.genre.id = :genreId")
     List<ComicEntity> findByGenreId(Long genreId);

@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class GenreService {
     @Autowired
     private ComicRepository comicRepository;
@@ -84,7 +84,7 @@ public class GenreService {
 
     public List<ComicResponse> getComicsByGenres(FilterGenresRequest genresRequest) {
         List<Long> genreIds = genresRequest.getGenreIds();
-        List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds);
+        List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds, genreIds.size());
 
         return comics.stream()
                 .filter(comic -> !comic.getIsDeleted())
