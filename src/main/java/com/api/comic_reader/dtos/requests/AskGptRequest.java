@@ -9,5 +9,4 @@ import lombok.*;
 @Builder
 public class AskGptRequest {
     private String question;
-    private String key;
 }

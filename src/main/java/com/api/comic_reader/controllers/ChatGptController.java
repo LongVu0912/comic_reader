@@ -49,6 +49,9 @@ public class ChatGptController {
     @Value("${gpt.model}")
     private String chatGptModel;
 
+    @Value("${gpt.key}")
+    private String chatGptKey;
+
     @Value("${lmstudio.api-url}")
     private String lmStudioApiUrl;
 
@@ -88,7 +91,7 @@ public class ChatGptController {
 
         ChatGptRequest request = new ChatGptRequest(chatGptModel, question);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + askGPTRequest.getKey());
+        headers.add("Authorization", "Bearer " + chatGptKey);
         HttpEntity<ChatGptRequest> entity = new HttpEntity<>(request, headers);
 
         ResponseEntity<ChatGptResponse> responseEntity =
@@ -111,7 +114,7 @@ public class ChatGptController {
 
         ChatGptRequest request = new ChatGptRequest(chatGptModel, question);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + askGPTRequest.getKey());
+        headers.add("Authorization", "Bearer " + chatGptKey);
         HttpEntity<ChatGptRequest> entity = new HttpEntity<>(request, headers);
 
         ResponseEntity<ChatGptResponse> responseEntity =
