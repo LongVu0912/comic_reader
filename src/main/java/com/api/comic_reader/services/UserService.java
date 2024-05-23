@@ -107,4 +107,14 @@ public class UserService {
         user.setIsMale(changeInformationRequest.getIsMale());
         userRepository.save(user);
     }
+
+    public void changePasswordByEmail(String email, String newPassword) {
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        UserEntity user = userOptional.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

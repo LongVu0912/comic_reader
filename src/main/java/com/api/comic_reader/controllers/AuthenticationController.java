@@ -7,13 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.comic_reader.dtos.requests.LoginRequest;
+import com.api.comic_reader.dtos.requests.OtpRequest;
 import com.api.comic_reader.dtos.requests.RegisterRequest;
+import com.api.comic_reader.dtos.requests.ResetPasswordRequest;
 import com.api.comic_reader.dtos.requests.TokenRequest;
 import com.api.comic_reader.dtos.responses.ApiResponse;
 import com.api.comic_reader.dtos.responses.AuthResponse;
 import com.api.comic_reader.dtos.responses.IntrospectResponse;
 import com.api.comic_reader.exception.AppException;
 import com.api.comic_reader.services.AuthenticationService;
+import com.api.comic_reader.services.ResetPasswordService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private ResetPasswordService resetPasswordService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest newUser) throws AppException {
@@ -77,6 +83,29 @@ public class AuthenticationController {
                 .body(ApiResponse.builder()
                         .message("Introspect successfully")
                         .result(introspectResponse)
+                        .build());
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
+            throws AppException {
+
+        resetPasswordService.resetPassword(resetPasswordRequest);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Otp has been sent to your email")
+                        .result(null)
+                        .build());
+    }
+
+    @PostMapping("/verifyOtp")
+    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody OtpRequest otpRequest) throws AppException {
+        resetPasswordService.verifyOtp(otpRequest);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("OTP verified successfully, new password has been sent to your email")
+                        .result(null)
                         .build());
     }
 }

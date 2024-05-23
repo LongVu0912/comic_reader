@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_THUMBNAIL(4002, "Thumbnail is invalid", HttpStatus.OK),
     INVALID_KEYWORD(4002, "Keyword must be larger than 3 characters", HttpStatus.OK),
     INVALID_COMMENT(4002, "Comment is invalid, comment must be larger than 7 characters", HttpStatus.OK),
+    INVALID_OTP(4002, "OTP is invalid", HttpStatus.OK),
 
     USERNAME_OR_EMAIL_TAKEN(4003, "Username or Email exists", HttpStatus.OK),
     COMIC_NAME_TAKEN(4003, "Comic name exists", HttpStatus.OK),
@@ -37,6 +38,8 @@ public enum ErrorCode {
 
     NO_COMMENT(4005, "No comment", HttpStatus.OK),
     NO_AI_FUNCTION(4005, "AI function is turned off", HttpStatus.OK),
+
+    ALREADY_SENT_OTP(4006, "OTP has already been sent", HttpStatus.OK),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
