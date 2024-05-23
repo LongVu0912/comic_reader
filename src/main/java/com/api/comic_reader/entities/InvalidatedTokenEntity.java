@@ -21,7 +21,7 @@ import lombok.Setter;
 @Table(name = "invalidated_token")
 public class InvalidatedTokenEntity {
     @Id
-    private String id;
+    private String token;
 
     private Date expirationTime;
 }

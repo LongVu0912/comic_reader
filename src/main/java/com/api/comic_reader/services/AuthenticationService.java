@@ -85,7 +85,7 @@ public class AuthenticationService {
             Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
 
             InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
-                    .id(jit)
+                    .token(jit)
                     .expirationTime(expirationTime)
                     .build();
             invalidatedTokenRepository.save(invalidatedToken);
@@ -103,7 +103,7 @@ public class AuthenticationService {
             Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
 
             InvalidatedTokenEntity invalidatedToken = InvalidatedTokenEntity.builder()
-                    .id(jit)
+                    .token(jit)
                     .expirationTime(expirationTime)
                     .build();
 

@@ -48,7 +48,7 @@ public class ResetPasswordService {
     public void storeOtp(String key, int otp) {
         otpData.put(key, otp);
         // Schedule a task to remove the OTP after 5 minutes
-        executorService.schedule(() -> otpData.remove(key), 5, TimeUnit.MINUTES);
+        executorService.schedule(() -> otpData.remove(key), 1, TimeUnit.MINUTES);
     }
 
     public int retrieveOtp(String key) {
@@ -72,7 +72,8 @@ public class ResetPasswordService {
 
         this.storeOtp(resetPasswordRequest.getEmail(), otp);
 
-        this.sendEmail(resetPasswordRequest.getEmail(), "Your OTP is: " + otp, "Reset Password");
+        this.sendEmail(
+                resetPasswordRequest.getEmail(), "Your OTP is: " + otp, "Reset Password, OTP is valid for 1 minutes.");
     }
 
     public void verifyOtp(OtpRequest otpRequest) {
