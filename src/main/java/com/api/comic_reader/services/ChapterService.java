@@ -115,7 +115,7 @@ public class ChapterService {
         if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
         }
-        if (chapterOptional.get().getComic().getIsDeleted()) {
+        if (chapterOptional.get().getComic().getIsFinished()) {
             throw new AppException(ErrorCode.COMIC_ALREADY_FINISHED);
         }
         ChapterEntity chapter = chapterOptional.get();

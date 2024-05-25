@@ -86,7 +86,7 @@ public class ChatGptController {
         try {
             comicsAskGptRequestsJson = objectMapper.writeValueAsString(comicsAskGptRequests);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
 
         String question = askGPTRequest.getQuestion() + " trong các truyện sau, dựa trên thể loại và nội dung: "
