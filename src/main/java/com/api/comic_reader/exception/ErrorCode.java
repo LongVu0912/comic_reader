@@ -22,6 +22,7 @@ public enum ErrorCode {
     INVALID_COMMENT(4002, "Comment is invalid, comment must be larger than 7 characters", HttpStatus.OK),
     INVALID_OTP(4002, "OTP is invalid", HttpStatus.OK),
 
+    EXISTS_CODE(4003, "", HttpStatus.OK),
     USERNAME_OR_EMAIL_TAKEN(4003, "Username or Email exists", HttpStatus.OK),
     COMIC_NAME_TAKEN(4003, "Comic name exists", HttpStatus.OK),
     BOOKMARK_EXISTS(4003, "Bookmark exists", HttpStatus.OK),

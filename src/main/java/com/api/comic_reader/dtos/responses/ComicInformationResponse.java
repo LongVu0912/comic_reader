@@ -17,7 +17,7 @@ public class ComicInformationResponse {
     private String thumbnailUrl;
     private Long view;
     private boolean isFinished;
-    private Long averageRatingScore;
+    private Double averageRatingScore;
     private Long userRatingScore;
     private List<ComicGenreResponse> genres;
 }

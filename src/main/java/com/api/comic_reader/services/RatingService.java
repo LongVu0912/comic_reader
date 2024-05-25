@@ -67,17 +67,17 @@ public class RatingService {
         }
     }
 
-    public Long getComicAverageRating(Long comicId) throws AppException {
+    public Double getComicAverageRating(Long comicId) throws AppException {
         Optional<ComicEntity> comic = comicRepository.findById(comicId);
 
         if (comic.isEmpty()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
 
-        Long averageRating = ratingRepository.getComicAverageRating(comic.get());
+        Double averageRating = ratingRepository.getComicAverageRating(comic.get());
 
         if (averageRating == null) {
-            return 0L;
+            return 0D;
         }
 
         return averageRating;

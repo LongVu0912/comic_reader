@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.builder()
-                        .code(ErrorCode.INVALID_CODE.getCode())
+                        .code(ErrorCode.EXISTS_CODE.getCode())
                         .message(message)
                         .build());
     }

@@ -32,7 +32,7 @@ public class RatingController {
 
     @GetMapping("/getComicAverageRating/{comicId}")
     public ResponseEntity<ApiResponse> getComicAverageRating(@PathVariable Long comicId) {
-        double averageRating = ratingService.getComicAverageRating(comicId);
+        Double averageRating = ratingService.getComicAverageRating(comicId);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()

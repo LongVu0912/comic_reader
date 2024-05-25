@@ -86,8 +86,9 @@ public class ChatGptController {
             e.printStackTrace();
         }
 
-        String question = askGPTRequest.getQuestion() + " trong các truyện sau đây, dựa trên thể loại và nội dung: "
-                + comicsAskGptRequestsJson + " .Chỉ đưa ra tên truyện";
+        String question = askGPTRequest.getQuestion() + " trong các truyện sau, dựa trên thể loại và nội dung: "
+                + comicsAskGptRequestsJson
+                + " .Chỉ trả lời tên truyện.";
 
         ChatGptRequest request = new ChatGptRequest(chatGptModel, question);
         HttpHeaders headers = new HttpHeaders();
@@ -99,11 +100,16 @@ public class ChatGptController {
 
         ChatGptResponse chatGptResponse = responseEntity.getBody();
 
-        System.out.println(chatGptResponse.getChoices().get(0).getMessage().getContent());
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask GPT successfully")
-                        .result(chatGptResponse.getChoices().get(0).getMessage().getContent())
+                        .result(
+                                "Tôi đã tìm truyện dựa trên dữ liệu của comic.pantech.vn, đây là danh sách truyện theo gợi ý của bạn: \n"
+                                        + chatGptResponse
+                                                .getChoices()
+                                                .get(0)
+                                                .getMessage()
+                                                .getContent())
                         .build());
     }
 
