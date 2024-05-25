@@ -41,6 +41,7 @@ public enum ErrorCode {
     NO_AI_FUNCTION(4005, "AI function is turned off", HttpStatus.OK),
 
     ALREADY_SENT_OTP(4006, "OTP has already been sent", HttpStatus.OK),
+    COMIC_ALREADY_FINISHED(4006, "Comic has already been finished", HttpStatus.OK),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

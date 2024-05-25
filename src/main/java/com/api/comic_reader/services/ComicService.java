@@ -260,4 +260,25 @@ public class ComicService {
         bookmarkRepository.deleteByComic(comic);
         comicRepository.save(comic);
     }
+
+    @Transactional
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public Boolean setIsFinished(Long comicId) throws AppException {
+        Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
+        if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
+            throw new AppException(ErrorCode.COMIC_NOT_FOUND);
+        }
+
+        ComicEntity comic = comicOptional.get();
+
+        if (comic.getIsFinished()) {
+            comic.setIsFinished(false);
+            comicRepository.save(comic);
+            return false;
+        } else {
+            comic.setIsFinished(true);
+            comicRepository.save(comic);
+            return true;
+        }
+    }
 }

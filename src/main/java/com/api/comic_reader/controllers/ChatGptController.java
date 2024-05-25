@@ -58,6 +58,9 @@ public class ChatGptController {
     @Value("${lmstudio.model}")
     private String lmStudioModel;
 
+    @Value("${lmstudio.is-enabled}")
+    private boolean lmStudioIsEnabled;
+
     @Value("${lmstudio.model-prompt}")
     private String modelPrompt;
 
@@ -103,13 +106,12 @@ public class ChatGptController {
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask GPT successfully")
-                        .result(
-                                "Tôi đã tìm truyện dựa trên dữ liệu của comic.pantech.vn, đây là danh sách truyện theo gợi ý của bạn: \n"
-                                        + chatGptResponse
-                                                .getChoices()
-                                                .get(0)
-                                                .getMessage()
-                                                .getContent())
+                        .result("Tôi đã tìm truyện dựa trên dữ liệu, đây là danh sách truyện theo gợi ý của bạn: \n"
+                                + chatGptResponse
+                                        .getChoices()
+                                        .get(0)
+                                        .getMessage()
+                                        .getContent())
                         .build());
     }
 
@@ -138,6 +140,11 @@ public class ChatGptController {
     @PostMapping("/askLMStudio")
     public ResponseEntity<ApiResponse> askAI(@RequestBody AskGptRequest askGptRequest)
             throws JsonMappingException, JsonProcessingException {
+
+        if (!lmStudioIsEnabled) {
+            throw new AppException(ErrorCode.NO_AI_FUNCTION);
+        }
+
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();

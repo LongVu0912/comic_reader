@@ -36,6 +36,9 @@ public class ChapterService {
         if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
             throw new AppException(ErrorCode.COMIC_NOT_FOUND);
         }
+        if (comicOptional.get().getIsFinished()) {
+            throw new AppException(ErrorCode.COMIC_ALREADY_FINISHED);
+        }
         ComicEntity comic = comicOptional.get();
         try {
             ChapterEntity chapter = ChapterEntity.builder()
@@ -111,6 +114,9 @@ public class ChapterService {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
         if (chapterOptional.isEmpty()) {
             throw new AppException(ErrorCode.CHAPTER_NOT_FOUND);
+        }
+        if (chapterOptional.get().getComic().getIsDeleted()) {
+            throw new AppException(ErrorCode.COMIC_ALREADY_FINISHED);
         }
         ChapterEntity chapter = chapterOptional.get();
         chapterRepository.delete(chapter);

@@ -48,5 +48,10 @@
     "name": "gpt.key",
     "type": "java.lang.String",
     "description": "A description for 'gpt.key'"
+  },
+  {
+    "name": "lmstudio.is-enabled",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'lmstudio.is-enabled'"
   }
 ]}

@@ -187,4 +187,22 @@ public class ComicController {
                         .result(null)
                         .build());
     }
+
+    @PutMapping("/setIsFinished/{comicId}")
+    public ResponseEntity<ApiResponse> setIsFinished(@PathVariable Long comicId) throws AppException {
+        Boolean isFinished = comicService.setIsFinished(comicId);
+
+        if (!isFinished) {
+            return ResponseEntity.ok()
+                    .body(ApiResponse.builder()
+                            .message("Set comic to unfinished successfully")
+                            .result(null)
+                            .build());
+        }
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("Set comic to finished successfully")
+                        .result(null)
+                        .build());
+    }
 }
