@@ -24,6 +24,7 @@ public class GenreController {
     @Autowired
     private final GenreService genreService;
 
+    // This method handles the GET request to fetch all genres
     @GetMapping("/getAllGenres")
     public ResponseEntity<ApiResponse> getAllGenres() {
         List<GenreResponse> genres = genreService.getAllGenres();
@@ -34,6 +35,7 @@ public class GenreController {
                         .build());
     }
 
+    // This method handles the POST request to fetch comics by genres
     @PostMapping("/getComicsByGenres")
     public ResponseEntity<ApiResponse> getComicsByGenres(@RequestBody FilterGenresRequest genresRequest) {
         List<ComicResponse> comics = genreService.getComicsByGenres(genresRequest);
@@ -44,6 +46,7 @@ public class GenreController {
                         .build());
     }
 
+    // This method handles the POST request to add a new genre
     @PostMapping("/addNewGenre")
     public ResponseEntity<ApiResponse> addNewGenre(@RequestBody AddNewGenreRequest newGenre) {
         genreService.addNewGenre(newGenre);
@@ -53,6 +56,7 @@ public class GenreController {
                         .build());
     }
 
+    // This method handles the POST request to add genres to a comic
     @PostMapping("/addGenresToComic")
     public ResponseEntity<ApiResponse> addGenresToComic(@RequestBody AddGenresToComicRequest genresRequest) {
         genreService.addGenresToComic(genresRequest);

@@ -22,6 +22,7 @@ public class CommentController {
     @Autowired
     private final CommentService commentService;
 
+    // This method handles the GET request to get all comments.
     @GetMapping("/getAllComments")
     public ResponseEntity<ApiResponse> getAllComments() throws AppException {
         List<CommentResponse> comments = commentService.getAllComments();
@@ -32,19 +33,21 @@ public class CommentController {
                         .build());
     }
 
+    // This method handles the POST request to leave a comment.
     @PostMapping("/leaveComment")
     public ResponseEntity<ApiResponse> leaveComment(@RequestBody CommentRequest newComment) throws AppException {
         commentService.leaveComment(newComment);
-
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Leave comment successfully")
                         .build());
     }
 
+    // This method handles the GET request to get all comments of a specific chapter.
     @GetMapping("/getCommentsOfChapter/{chapterId}")
     public ResponseEntity<ApiResponse> getCommentsOfChapter(@PathVariable Long chapterId) throws AppException {
         List<CommentResponse> comments = commentService.getCommentsOfChapter(chapterId);
+
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Get comments successfully")
@@ -52,9 +55,11 @@ public class CommentController {
                         .build());
     }
 
+    // This method handles the DELETE request to delete a comment.
     @DeleteMapping("/deleteComment/{commentId}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId) throws AppException {
         commentService.deleteComment(commentId);
+
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Delete comment successfully")

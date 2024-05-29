@@ -43,6 +43,7 @@ public class ChatGptController {
     @Autowired
     private ComicService comicService;
 
+    // Configuration values for the GPT and LMStudio APIs
     @Value("${gpt.api-url}")
     private String chatGptApiUrl;
 
@@ -66,11 +67,14 @@ public class ChatGptController {
 
     private static final RestTemplate restTemplate = new RestTemplate();
 
+    // This method handles the POST request to find comics based on a question asked to the GPT model.
     @SuppressWarnings("null")
     @PostMapping("/findComics")
     public ResponseEntity<ApiResponse> findComics(@RequestBody AskGptRequest askGPTRequest) throws AppException {
+        // Get all comics
         List<ComicResponse> comics = comicService.getAllComics();
 
+        // Prepare the request for the GPT model
         List<ComicsAskGptRequest> comicsAskGptRequests = comics.stream()
                 .map(comic -> ComicsAskGptRequest.builder()
                         .name(comic.getName())
@@ -98,11 +102,13 @@ public class ChatGptController {
         headers.add("Authorization", "Bearer " + chatGptKey);
         HttpEntity<ChatGptRequest> entity = new HttpEntity<>(request, headers);
 
+        // Send the request to the GPT model and get the response
         ResponseEntity<ChatGptResponse> responseEntity =
                 restTemplate.exchange(chatGptApiUrl, HttpMethod.POST, entity, ChatGptResponse.class);
 
         ChatGptResponse chatGptResponse = responseEntity.getBody();
 
+        // Return the response
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask GPT successfully")
@@ -115,9 +121,11 @@ public class ChatGptController {
                         .build());
     }
 
+    // This method handles the POST request to ask a question to the GPT model.
     @SuppressWarnings("null")
     @PostMapping("/askGpt")
     public ResponseEntity<ApiResponse> askGpt(@RequestBody AskGptRequest askGPTRequest) throws AppException {
+        // Prepare the request for the GPT model
         String question = askGPTRequest.getQuestion();
 
         ChatGptRequest request = new ChatGptRequest(chatGptModel, question);
@@ -125,11 +133,13 @@ public class ChatGptController {
         headers.add("Authorization", "Bearer " + chatGptKey);
         HttpEntity<ChatGptRequest> entity = new HttpEntity<>(request, headers);
 
+        // Send the request to the GPT model and get the response
         ResponseEntity<ChatGptResponse> responseEntity =
                 restTemplate.exchange(chatGptApiUrl, HttpMethod.POST, entity, ChatGptResponse.class);
 
         ChatGptResponse chatGptResponse = responseEntity.getBody();
 
+        // Return the response
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask GPT successfully")
@@ -137,14 +147,17 @@ public class ChatGptController {
                         .build());
     }
 
+    // This method handles the POST request to ask a question to the LMStudio model.
     @PostMapping("/askLMStudio")
     public ResponseEntity<ApiResponse> askAI(@RequestBody AskGptRequest askGptRequest)
             throws JsonMappingException, JsonProcessingException {
 
+        // Check if the LMStudio model is enabled
         if (!lmStudioIsEnabled) {
             throw new AppException(ErrorCode.NO_AI_FUNCTION);
         }
 
+        // Prepare the request for the LMStudio model
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -173,7 +186,9 @@ public class ChatGptController {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         ResponseEntity<String> responseEntity = null;
+
         try {
+            // Send the request to the LMStudio model and get the response
             responseEntity = restTemplate.exchange(lmStudioApiUrl, HttpMethod.POST, entity, String.class);
         } catch (Exception e) {
             throw new AppException(ErrorCode.NO_AI_FUNCTION);
@@ -184,6 +199,7 @@ public class ChatGptController {
         String content =
                 rootNode.path("choices").get(0).path("message").path("content").asText();
 
+        // Return the response
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Ask AI successfully")

@@ -30,9 +30,13 @@ public class ResetPasswordService {
     @Autowired
     private UserService userService;
 
+    // This map stores the OTPs for each email
     private Map<String, Integer> otpData = new ConcurrentHashMap<>();
+
+    // This executor service is used to schedule tasks
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
+    // This method sends an email with the given subject and body to the given email address
     public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -45,24 +49,28 @@ public class ResetPasswordService {
         mailSender.send(message);
     }
 
+    // This method stores the given OTP for the given key (email) and schedules a task to remove it after 1 minutes
     public void storeOtp(String key, int otp) {
         otpData.put(key, otp);
-        // Schedule a task to remove the OTP after 5 minutes
         executorService.schedule(() -> otpData.remove(key), 1, TimeUnit.MINUTES);
     }
 
+    // This method retrieves the OTP for the given key (email). If no OTP is found, it returns -1
     public int retrieveOtp(String key) {
         return otpData.getOrDefault(key, -1);
     }
 
+    // This method removes the OTP for the given key (email)
     public void clearOtp(String key) {
         otpData.remove(key);
     }
 
+    // This method returns a list of all emails for which an OTP is stored
     public List<String> getEmails() {
         return new ArrayList<>(otpData.keySet());
     }
 
+    // This method resets the password for the given email. It generates a new OTP, stores it, and sends it via email
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
         if (this.getEmails().contains(resetPasswordRequest.getEmail())) {
             throw new AppException(ErrorCode.ALREADY_SENT_OTP);
@@ -76,6 +84,8 @@ public class ResetPasswordService {
                 resetPasswordRequest.getEmail(), "Your OTP is: " + otp, "Reset Password, OTP is valid for 1 minutes.");
     }
 
+    // This method verifies the given OTP. If it matches the stored OTP, it generates a new password, changes the user's
+    // password, removes the OTP, and sends the new password via email
     public void verifyOtp(OtpRequest otpRequest) {
         int storedOtp = this.retrieveOtp(otpRequest.getEmail());
 

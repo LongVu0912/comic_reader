@@ -27,8 +27,10 @@ public class ComicController {
     @Autowired
     private final ComicService comicService;
 
+    // This method handles the GET request to get all comics.
     @GetMapping("/getAllComics")
     public ResponseEntity<ApiResponse> getAllComics() {
+        // Fetch all comics using the comic service
         List<ComicResponse> comics = comicService.getAllComics();
 
         return ResponseEntity.ok()
@@ -38,10 +40,12 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get all finished comics.
     @GetMapping("/getFinishedComics")
     public ResponseEntity<ApiResponse> getFinishedComics() {
+        // Fetch all comics using the comic service
         List<ComicResponse> comics = comicService.getAllComics();
-
+        // Filter the comics to only include finished ones
         List<ComicResponse> finishedComics =
                 comics.stream().filter(ComicResponse::isFinished).collect(Collectors.toList());
 
@@ -52,10 +56,12 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get all not finished comics.
     @GetMapping("/getNotFinishedComics")
     public ResponseEntity<ApiResponse> getNotFinishedComics() {
+        // Fetch all comics using the comic service
         List<ComicResponse> comics = comicService.getAllComics();
-
+        // Filter the comics to only include not finished ones
         List<ComicResponse> notFinishedComics =
                 comics.stream().filter(comic -> !comic.isFinished()).collect(Collectors.toList());
 
@@ -66,10 +72,12 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get the 6 last comics.
     @GetMapping("/get6LastComics")
     public ResponseEntity<ApiResponse> get6LastComics() {
+        // Fetch all comics using the comic service
         List<ComicResponse> comics = comicService.getAllComics();
-
+        // Filter and sort the comics to get the 6 last ones
         List<ComicResponse> list6LastComics = comics.stream()
                 .filter(comic -> comic.getLastChapter() != null)
                 .sorted(Comparator.comparing(
@@ -85,10 +93,12 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get the 3 most viewed comics.
     @GetMapping("/get3MostViewComics")
     public ResponseEntity<ApiResponse> get3MostViewComics() {
+        // Fetch all comics using the comic service
         List<ComicResponse> comics = comicService.getAllComics();
-
+        // Filter and sort the comics to get the 3 most viewed ones
         List<ComicResponse> list3MostViewComics = comics.stream()
                 .filter(comic -> comic.getLastChapter() != null)
                 .sorted(Comparator.comparing(ComicResponse::getView, Comparator.nullsLast(Comparator.reverseOrder())))
@@ -102,6 +112,7 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the POST request to insert a new comic.
     @PostMapping("/insertComic")
     public ResponseEntity<ApiResponse> insertComic(
             @RequestPart("name") String name,
@@ -109,13 +120,13 @@ public class ComicController {
             @RequestPart("description") String description,
             @RequestPart("imageData") MultipartFile imageData)
             throws AppException {
-
+        // Create a new comic request with the provided details
         ComicRequest newComic = new ComicRequest();
         newComic.setName(name);
         newComic.setAuthor(author);
         newComic.setDescription(description);
         newComic.setThumbnailImage(imageData);
-
+        // Use the comic service to insert the new comic
         comicService.insertComic(newComic);
 
         return ResponseEntity.ok()
@@ -125,14 +136,19 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get the thumbnail image of a comic.
     @GetMapping("/thumbnail/{comicId}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long comicId) throws AppException {
+        // Fetch the thumbnail image of the comic using the comic service
         byte[] thumbnail = comicService.getThumbnailImage(comicId);
+
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(thumbnail);
     }
 
+    // This method handles the GET request to search comics by a keyword.
     @GetMapping("/searchComics/{keyword}")
     public ResponseEntity<ApiResponse> searchComics(@PathVariable String keyword) {
+        // Search for comics using the keyword and the comic service
         List<ComicResponse> comics = comicService.searchComics(keyword);
 
         return ResponseEntity.ok()
@@ -142,8 +158,10 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the GET request to get the information of a comic.
     @GetMapping("/getComicInformation/{comicId}")
     public ResponseEntity<ApiResponse> getComicInformation(@PathVariable Long comicId) {
+        // Fetch the information of the comic using the comic service
         ComicInformationResponse comic = comicService.getComicInformation(comicId);
 
         return ResponseEntity.ok()
@@ -153,6 +171,7 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the PUT request to edit a comic.
     @PutMapping("/editComic/{comicId}")
     public ResponseEntity<ApiResponse> editComic(
             @PathVariable Long comicId,
@@ -161,15 +180,14 @@ public class ComicController {
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "imageData", required = false) MultipartFile imageData)
             throws AppException {
-
+        // Create a new comic request with the provided details
         ComicRequest editComicRequest = new ComicRequest();
         editComicRequest.setName(name);
         editComicRequest.setAuthor(author);
         editComicRequest.setDescription(description);
         editComicRequest.setThumbnailImage(imageData);
-
+        // Use the comic service to edit the comic
         comicService.editComic(comicId, editComicRequest);
-
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Edit comic successfully")
@@ -177,10 +195,10 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the DELETE request to delete a comic.
     @DeleteMapping("/deleteComic/{comicId}")
     public ResponseEntity<ApiResponse> deleteComic(@PathVariable Long comicId) throws AppException {
         comicService.deleteComic(comicId);
-
         return ResponseEntity.ok()
                 .body(ApiResponse.builder()
                         .message("Delete comic successfully")
@@ -188,10 +206,12 @@ public class ComicController {
                         .build());
     }
 
+    // This method handles the PUT request to set a comic as finished or not finished.
     @PutMapping("/setIsFinished/{comicId}")
     public ResponseEntity<ApiResponse> setIsFinished(@PathVariable Long comicId) throws AppException {
+        // Use the comic service to set the comic as finished or not finished
         Boolean isFinished = comicService.setIsFinished(comicId);
-
+        // Return a success message based on the result
         if (!isFinished) {
             return ResponseEntity.ok()
                     .body(ApiResponse.builder()

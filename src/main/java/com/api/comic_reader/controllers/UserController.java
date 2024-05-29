@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.api.comic_reader.dtos.requests.ChangeInformationRequest;
 import com.api.comic_reader.dtos.requests.ChangePasswordRequest;
@@ -22,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
+    // This method handles the GET request to fetch all users
     @GetMapping("/getAllUsers")
     public ResponseEntity<ApiResponse> getAllUsers() throws AppException {
         List<UserResponse> users = userService.getAllUsers();
@@ -37,6 +36,7 @@ public class UserController {
                         .build());
     }
 
+    // This method handles the GET request to fetch user information by ID
     @GetMapping("/getUserInformationById/{id}")
     public ResponseEntity<ApiResponse> getUserInformationById(@PathVariable Long id) {
         UserEntity userInformation = userService.getUserInformationById(id);
@@ -47,6 +47,7 @@ public class UserController {
                         .build());
     }
 
+    // This method handles the GET request to fetch the information of the currently logged in user
     @GetMapping("/getMyInformation")
     public ResponseEntity<ApiResponse> getMyInformation() {
         UserResponse userInformation = userService.getMyInformation();
@@ -57,6 +58,7 @@ public class UserController {
                         .build());
     }
 
+    // This method handles the PUT request to change the password of the currently logged in user
     @PutMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         userService.changePassword(changePasswordRequest);
@@ -67,6 +69,7 @@ public class UserController {
                         .build());
     }
 
+    // This method handles the PUT request to change the information of the currently logged in user
     @PutMapping("/changeInformation")
     public ResponseEntity<ApiResponse> changeInformation(
             @RequestBody ChangeInformationRequest changeInformationRequest) {

@@ -38,6 +38,9 @@ public class CommentService {
     @Autowired
     private UserRepository userRepository;
 
+    // This method returns all comments in the database.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if no comments are found.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public List<CommentResponse> getAllComments() throws AppException {
         List<CommentEntity> comments = commentRepository.findAll();
@@ -62,6 +65,9 @@ public class CommentService {
         return commentsResponse;
     }
 
+    // This method deletes a comment with the given ID.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the comment is not found.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteComment(Long commentId) throws AppException {
         Optional<CommentEntity> commentOptional = commentRepository.findById(commentId);
@@ -71,6 +77,10 @@ public class CommentService {
         commentRepository.delete(commentOptional.get());
     }
 
+    // This method allows a user to leave a comment on a chapter.
+    // It requires the user to have either USER or ADMIN authority.
+    // It throws an exception if the comment content is less than 8 characters, if the chapter is not found, or if the
+    // user is not found.
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void leaveComment(CommentRequest newComment) throws AppException {
         if (newComment.getContent().length() < 8L) {
@@ -97,6 +107,9 @@ public class CommentService {
                 .build());
     }
 
+    // This method returns all comments of a chapter with the given ID.
+    // It requires the user to have either USER or ADMIN authority.
+    // It throws an exception if the chapter is not found or if no comments are found.
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public List<CommentResponse> getCommentsOfChapter(Long chapterId) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);

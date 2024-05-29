@@ -46,6 +46,10 @@ public class BookmarkService {
     @Value("${app.base-url}")
     private String BASE_URL;
 
+    // This method allows a user to bookmark a comic.
+    // It checks if the user and comic exist.
+    // If the user has not bookmarked the comic, it saves the bookmark to the database and returns true.
+    // If the user has bookmarked the comic, it deletes the bookmark from the database and returns false.
     @Transactional
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public boolean bookmarkComic(Long comicId) throws AppException {
@@ -84,6 +88,10 @@ public class BookmarkService {
         }
     }
 
+    // This method returns all bookmarks of the current user.
+    // It checks if the user exists.
+    // It filters out the deleted comics.
+    // It maps each bookmark to a BookmarkResponse object and returns them in a list.
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public List<BookmarkResponse> getMyBookmarks() {
         var context = SecurityContextHolder.getContext();

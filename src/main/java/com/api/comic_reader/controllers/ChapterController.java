@@ -26,6 +26,7 @@ public class ChapterController {
     @Autowired
     private final ChapterImageService chapterImageService;
 
+    // This method handles the POST request to insert a new chapter.
     @PostMapping("/insertChapter")
     public ResponseEntity<ApiResponse> insertChapter(@RequestBody ChapterRequest newChapter) {
         chapterService.insertChapter(newChapter);
@@ -36,6 +37,7 @@ public class ChapterController {
                         .build());
     }
 
+    // This method handles the GET request to get all images of a chapter.
     @GetMapping("/getChapter/{chapterId}")
     public ResponseEntity<ApiResponse> getChapterImages(@PathVariable Long chapterId) {
         ChapterResponse chapter = chapterImageService.getChapterImageUrls(chapterId);
@@ -47,6 +49,7 @@ public class ChapterController {
                         .build());
     }
 
+    // This method handles the GET request to get all chapters of a comic.
     @GetMapping("/getComicChapters/{id}")
     public ResponseEntity<ApiResponse> getComicChapters(@PathVariable Long id) {
         List<ChapterResponse> chapters = chapterService.getComicChapters(id);
@@ -58,6 +61,7 @@ public class ChapterController {
                         .build());
     }
 
+    // This method handles the GET request to get the last chapter of a comic.
     @GetMapping("/getLastChapter/{comicId}")
     public ResponseEntity<ApiResponse> getLastChapter(@PathVariable Long comicId) {
         ChapterResponse chapters = chapterService.getLastChapter(comicId);
@@ -69,6 +73,7 @@ public class ChapterController {
                         .build());
     }
 
+    // This method handles the DELETE request to delete a chapter.
     @DeleteMapping("/deleteChapter/{chapterId}")
     public ResponseEntity<ApiResponse> deleteChapter(@PathVariable Long chapterId) {
         chapterService.deleteChapter(chapterId);
@@ -80,6 +85,7 @@ public class ChapterController {
                         .build());
     }
 
+    // This method handles the PUT request to edit a chapter.
     @PutMapping("/editChapter/{chapterId}")
     public ResponseEntity<ApiResponse> editChapter(
             @PathVariable Long chapterId, @RequestBody ChapterRequest editChapterRequest) {

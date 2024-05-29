@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChatGptResponse {
+    // The list of choices in the response
     private List<Choice> choices;
 }

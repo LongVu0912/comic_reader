@@ -39,6 +39,9 @@ public class ChapterImageService {
     @Value("${app.base-url}")
     private String BASE_URL;
 
+    // This method allows an admin to insert images into a chapter.
+    // It checks if the chapter exists.
+    // It saves the new images to the database.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertChapterImages(ChapterImageRequest newChapterImage) throws AppException {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(newChapterImage.getChapterId());
@@ -64,6 +67,10 @@ public class ChapterImageService {
         }
     }
 
+    // This method returns the URLs of all images of a chapter with the given ID.
+    // It checks if the chapter exists.
+    // It increases the view count of the comic.
+    // It maps each image to a URL and returns them in a ChapterResponse object.
     @Transactional
     public ChapterResponse getChapterImageUrls(Long chapterId) {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
@@ -91,6 +98,8 @@ public class ChapterImageService {
                 .build();
     }
 
+    // This method returns the image data of an image with the given ID.
+    // It checks if the image exists.
     public byte[] getImageFromImageId(Long imageId) {
         Optional<ChapterImageEntity> chapterImageOptional = chapterImageRepository.findById(imageId);
         if (chapterImageOptional.isEmpty()) {
@@ -100,6 +109,9 @@ public class ChapterImageService {
         return chapterImage.getImageData();
     }
 
+    // This method allows an admin to delete all images of a chapter with the given ID.
+    // It checks if the chapter exists.
+    // It deletes all images from the database.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteChapterImages(Long imageId) {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(imageId);

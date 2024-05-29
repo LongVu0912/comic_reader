@@ -31,6 +31,8 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+    // This method is used to get all users. It requires admin authority.
+    // It throws an exception if no users are found.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public List<UserResponse> getAllUsers() throws AppException {
         List<UserEntity> users = userRepository.findAll();
@@ -52,6 +54,9 @@ public class UserService {
                 .toList();
     }
 
+    // This method is used to get user information by ID. It requires either admin authority or the requesting user to
+    // be the same as the requested user.
+    // It throws an exception if the user is not found.
     @PostAuthorize("hasAuthority('SCOPE_ADMIN') or returnObject.username == authentication.name")
     public UserEntity getUserInformationById(Long id) throws AppException {
         Optional<UserEntity> userOptional = userRepository.findById(id);
@@ -61,6 +66,8 @@ public class UserService {
         return userOptional.get();
     }
 
+    // This method is used to get the information of the currently authenticated user.
+    // It throws an exception if the user is not found.
     public UserResponse getMyInformation() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -79,6 +86,8 @@ public class UserService {
                 .build();
     }
 
+    // This method is used to change the password of the currently authenticated user.
+    // It throws an exception if the user is not found or if the old password does not match the current password.
     public void changePassword(ChangePasswordRequest changePasswordRequest) throws AppException {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -94,6 +103,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // This method is used to change the information of the currently authenticated user.
+    // It throws an exception if the user is not found.
     public void changeInformation(ChangeInformationRequest changeInformationRequest) throws AppException {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -108,6 +119,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // This method is used to change the password of a user by their email.
+    // It throws an exception if the user is not found.
     public void changePasswordByEmail(String email, String newPassword) {
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {

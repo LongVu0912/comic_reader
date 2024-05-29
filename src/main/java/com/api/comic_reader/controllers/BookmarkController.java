@@ -19,6 +19,8 @@ public class BookmarkController {
     @Autowired
     private final BookmarkService bookmarkService;
 
+    // This method handles the POST request to bookmark a comic.
+    // If the comic is already bookmarked, it will be unbookmarked.
     @PostMapping("/bookmarkComic")
     public ResponseEntity<ApiResponse> bookmarkChapter(@RequestBody BookmarkRequest bookmarkRequest)
             throws AppException {
@@ -30,6 +32,7 @@ public class BookmarkController {
                 .body(ApiResponse.builder().message(message).result(null).build());
     }
 
+    // This method handles the GET request to get all the bookmarks of the current user.
     @GetMapping("/getMyBookmarks")
     public ResponseEntity<ApiResponse> getMyBookmarks() {
         return ResponseEntity.ok()

@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Choice {
+    // The index of the choice
     private int index;
+    // The message of the choice
     private Message message;
 }

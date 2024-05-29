@@ -60,6 +60,9 @@ public class ComicService {
     @Value("${app.base-url}")
     private String BASE_URL;
 
+    // This method returns all comics in the database.
+    // It filters out the deleted comics.
+    // It maps each comic to a ComicResponse object.
     public List<ComicResponse> getAllComics() {
         List<ComicEntity> comics = comicRepository.findAll();
 
@@ -90,6 +93,9 @@ public class ComicService {
                 .collect(Collectors.toList());
     }
 
+    // This method inserts a new comic into the database.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the thumbnail is invalid or if the comic name is already taken.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertComic(ComicRequest newComic) throws AppException {
 
@@ -126,6 +132,8 @@ public class ComicService {
         }
     }
 
+    // This method returns the thumbnail image of a comic with the given ID.
+    // It throws an exception if the comic is not found or if it is deleted.
     public byte[] getThumbnailImage(Long comicId) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
         if (comicOptional.isEmpty() || comicOptional.get().getIsDeleted()) {
@@ -135,6 +143,10 @@ public class ComicService {
         return comic.getThumbnailImage();
     }
 
+    // This method returns all comics that contain the given keyword in their name.
+    // It filters out the deleted comics.
+    // It maps each comic to a ComicResponse object.
+    // It throws an exception if the keyword is invalid or if no comics are found.
     public List<ComicResponse> searchComics(String keyword) throws AppException {
         if (keyword == null || keyword.length() < 4L) {
             throw new AppException(ErrorCode.INVALID_KEYWORD);
@@ -166,6 +178,8 @@ public class ComicService {
                 .collect(Collectors.toList());
     }
 
+    // This method returns the information of a comic with the given ID.
+    // It throws an exception if the comic is not found or if it is deleted.
     public ComicInformationResponse getComicInformation(Long comicId) {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
@@ -208,6 +222,9 @@ public class ComicService {
                 .build();
     }
 
+    // This method edits a comic with the given ID.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the comic is not found, if it is deleted, or if the thumbnail is invalid.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void editComic(Long comicId, ComicRequest editComicRequest) throws AppException {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
@@ -246,6 +263,9 @@ public class ComicService {
         comicRepository.save(comic);
     }
 
+    // This method deletes a comic with the given ID.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the comic is not found or if it is deleted.
     @Transactional
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteComic(Long comicId) throws AppException {
@@ -261,6 +281,9 @@ public class ComicService {
         comicRepository.save(comic);
     }
 
+    // This method sets the finished status of a comic with the given ID.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the comic is not found or if it is deleted.
     @Transactional
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public Boolean setIsFinished(Long comicId) throws AppException {

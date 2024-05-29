@@ -48,6 +48,7 @@ public class GenreService {
     @Value("${app.base-url}")
     private String BASE_URL;
 
+    // This method returns all genres in the database.
     public List<GenreResponse> getAllGenres() {
         List<GenreEntity> genres = genreRepository.findAll();
 
@@ -60,6 +61,8 @@ public class GenreService {
                 .collect(Collectors.toList());
     }
 
+    // This method returns all genres of a comic with the given ID.
+    // It throws an exception if the comic is not found or if it is deleted.
     public List<ComicGenreResponse> getComicGenres(Long comicId) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
 
@@ -82,6 +85,7 @@ public class GenreService {
                 .collect(Collectors.toList());
     }
 
+    // This method returns all comics that have all of the genres specified in the request.
     public List<ComicResponse> getComicsByGenres(FilterGenresRequest genresRequest) {
         List<Long> genreIds = genresRequest.getGenreIds();
         List<ComicEntity> comics = comicRepository.findByGenresIdIn(genreIds, genreIds.size());
@@ -107,6 +111,9 @@ public class GenreService {
                 .collect(Collectors.toList());
     }
 
+    // This method adds a new genre to the database.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if a genre with the same name already exists.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void addNewGenre(AddNewGenreRequest newGenre) {
         try {
@@ -119,6 +126,9 @@ public class GenreService {
         }
     }
 
+    // This method adds genres to a comic.
+    // It requires the user to have ADMIN authority.
+    // It throws an exception if the comic is not found or if it is deleted.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void addGenresToComic(AddGenresToComicRequest addGenresRequest) {
         Long comicId = addGenresRequest.getComicId();

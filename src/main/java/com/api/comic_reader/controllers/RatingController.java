@@ -19,6 +19,7 @@ public class RatingController {
     @Autowired
     private final RatingService ratingService;
 
+    // This method handles the POST request to rate a comic
     @PostMapping("/rateComic")
     public ResponseEntity<ApiResponse> rateComic(@RequestBody RatingRequest newRating) throws AppException {
         ratingService.rateComic(newRating);
@@ -30,6 +31,7 @@ public class RatingController {
                         .build());
     }
 
+    // This method handles the GET request to fetch the average rating of a comic
     @GetMapping("/getComicAverageRating/{comicId}")
     public ResponseEntity<ApiResponse> getComicAverageRating(@PathVariable Long comicId) {
         Double averageRating = ratingService.getComicAverageRating(comicId);

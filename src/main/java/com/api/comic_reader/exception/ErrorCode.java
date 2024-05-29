@@ -5,8 +5,11 @@ import org.springframework.http.HttpStatusCode;
 
 import lombok.Getter;
 
-@Getter
+@Getter // This annotation is used to generate getters for all fields.
 public enum ErrorCode {
+    // Each enum value represents a specific error that can occur in the application.
+    // Each error has a code, a message, and an HTTP status code associated with it.
+
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     ACCESS_DENIED(8888, "Access denied, you don't have permission", HttpStatus.OK),
@@ -41,16 +44,21 @@ public enum ErrorCode {
     NO_AI_FUNCTION(4005, "AI function is turned off", HttpStatus.OK),
 
     ALREADY_SENT_OTP(4006, "OTP has already been sent", HttpStatus.OK),
-    COMIC_ALREADY_FINISHED(4006, "Comic has already been finished", HttpStatus.OK),
-    ;
+    COMIC_ALREADY_FINISHED(4006, "Comic has already been finished", HttpStatus.OK);
 
+    // This constructor initializes the error with a specific code, message, and HTTP status code.
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
         this.statusCode = statusCode;
     }
 
+    // This field stores the error code associated with the error.
     private int code;
+
+    // This field stores the error message associated with the error.
     private String message;
+
+    // This field stores the HTTP status code associated with the error.
     private HttpStatusCode statusCode;
 }

@@ -30,6 +30,9 @@ public class ChapterService {
     @Autowired
     private ChapterRepository chapterRepository;
 
+    // This method allows an admin to insert a new chapter into a comic.
+    // It checks if the comic exists and is not finished.
+    // It saves the new chapter to the database.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void insertChapter(ChapterRequest newChapter) {
         Optional<ComicEntity> comicOptional = comicRepository.findById(newChapter.getComicId());
@@ -53,6 +56,9 @@ public class ChapterService {
         }
     }
 
+    // This method returns all chapters of a comic with the given ID.
+    // It checks if the comic exists and is not deleted.
+    // It maps each chapter to a ChapterResponse object.
     public List<ChapterResponse> getComicChapters(Long comicId) throws AppException {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
@@ -83,6 +89,9 @@ public class ChapterService {
                 .collect(Collectors.toList());
     }
 
+    // This method returns the last chapter of a comic with the given ID.
+    // It checks if the comic exists and is not deleted.
+    // It maps the chapter to a ChapterResponse object.
     public ChapterResponse getLastChapter(Long comicId) {
         // Find comic by id
         Optional<ComicEntity> comicOptional = comicRepository.findById(comicId);
@@ -109,6 +118,9 @@ public class ChapterService {
                 .build();
     }
 
+    // This method allows an admin to delete a chapter with the given ID.
+    // It checks if the chapter exists and if the comic is not finished.
+    // It deletes the chapter from the database.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteChapter(Long chapterId) {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);
@@ -122,6 +134,9 @@ public class ChapterService {
         chapterRepository.delete(chapter);
     }
 
+    // This method allows an admin to edit a chapter with the given ID.
+    // It checks if the chapter exists.
+    // It updates the chapter in the database.
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void editChapter(Long chapterId, ChapterRequest editChapter) {
         Optional<ChapterEntity> chapterOptional = chapterRepository.findById(chapterId);

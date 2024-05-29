@@ -30,6 +30,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
+    // This method allows a new user to register.
+    // It checks if the username or email is already taken.
+    // It encodes the password before saving the user to the database.
     public void register(RegisterRequest newUser) throws AppException {
         Optional<UserEntity> userOptional =
                 userRepository.findByUsernameOrEmail(newUser.getUsername(), newUser.getEmail());
@@ -51,6 +54,9 @@ public class AuthenticationService {
         }
     }
 
+    // This method allows a user to log in.
+    // It checks if the username and password are correct.
+    // It generates a JWT token for the user and returns it in an AuthResponse object.
     public AuthResponse login(LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = null;
         try {
@@ -76,6 +82,8 @@ public class AuthenticationService {
         return loginResponse;
     }
 
+    // This method allows a user to log out.
+    // It invalidates the user's JWT token.
     public void logout(String token) throws AppException {
         try {
             var signedToken = jwtService.verifyToken(token);
@@ -94,6 +102,9 @@ public class AuthenticationService {
         }
     }
 
+    // This method allows a user to refresh their JWT token.
+    // It invalidates the old token and generates a new one.
+    // It returns the new token in an AuthResponse object.
     public AuthResponse refreshToken(String token) throws AppException {
         try {
             var signedToken = jwtService.verifyToken(token);
@@ -131,6 +142,9 @@ public class AuthenticationService {
         }
     }
 
+    // This method introspects a JWT token.
+    // It checks if the token is valid and not expired.
+    // It returns the introspection result in an IntrospectResponse object.
     public IntrospectResponse introspect(TokenRequest request) throws AppException {
         var token = request.getToken();
 

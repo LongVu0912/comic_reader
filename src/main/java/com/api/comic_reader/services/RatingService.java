@@ -35,6 +35,10 @@ public class RatingService {
     @Autowired
     private ComicRepository comicRepository;
 
+    // This method allows a user to rate a comic. It first checks if the user and the comic exist.
+    // If the user has not rated this comic before, it saves a new rating.
+    // If the user has already rated this comic, it updates the existing rating.
+    // This method requires the user to have either USER or ADMIN authority.
     @Transactional
     @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     public void rateComic(RatingRequest ratingRequest) throws AppException {
@@ -67,6 +71,8 @@ public class RatingService {
         }
     }
 
+    // This method returns the average rating of a comic. It first checks if the comic exists.
+    // If the comic has no ratings, it returns 0.
     public Double getComicAverageRating(Long comicId) throws AppException {
         Optional<ComicEntity> comic = comicRepository.findById(comicId);
 

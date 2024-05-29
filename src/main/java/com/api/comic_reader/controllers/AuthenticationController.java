@@ -31,6 +31,7 @@ public class AuthenticationController {
     @Autowired
     private ResetPasswordService resetPasswordService;
 
+    // This method handles the POST request to register a new user.
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest newUser) throws AppException {
         authenticationService.register(newUser);
@@ -42,6 +43,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to login a user.
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) throws AppException {
         AuthResponse loginResponse = authenticationService.login(loginRequest);
@@ -53,6 +55,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to logout a user.
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@RequestBody TokenRequest logoutRequest) throws AppException {
         authenticationService.logout(logoutRequest.getToken());
@@ -64,6 +67,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to refresh a user's token.
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse> refreshToken(@RequestBody TokenRequest refreshRequest) throws AppException {
         AuthResponse authenticationResponse = authenticationService.refreshToken(refreshRequest.getToken());
@@ -75,6 +79,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to introspect a user's token.
     @PostMapping("/introspect")
     public ResponseEntity<ApiResponse> introspect(@RequestBody TokenRequest introspectRequest) throws AppException {
         IntrospectResponse introspectResponse = authenticationService.introspect(introspectRequest);
@@ -86,6 +91,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to reset a user's password.
     @PostMapping("/resetPassword")
     public ResponseEntity<ApiResponse> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
             throws AppException {
@@ -99,6 +105,7 @@ public class AuthenticationController {
                         .build());
     }
 
+    // This method handles the POST request to verify a user's OTP.
     @PostMapping("/verifyOtp")
     public ResponseEntity<ApiResponse> verifyOtp(@RequestBody OtpRequest otpRequest) throws AppException {
         resetPasswordService.verifyOtp(otpRequest);

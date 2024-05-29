@@ -36,6 +36,9 @@ public class JwtService {
 
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
+    // This method generates a JWT token for a given user.
+    // The token includes the user's username and role, and is signed with the SIGNER_KEY.
+    // The token's expiration time is set to the current time plus JWT_EXPIRATION.
     public String generateToken(UserEntity user) {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
@@ -60,6 +63,8 @@ public class JwtService {
         }
     }
 
+    // This method checks if a given token is valid.
+    // It returns an IntrospectResponse object that contains a boolean indicating whether the token is valid.
     public IntrospectResponse introspect(String token) throws AppException {
         boolean isValid = true;
 
@@ -72,6 +77,10 @@ public class JwtService {
         return IntrospectResponse.builder().valid(isValid).build();
     }
 
+    // This method verifies a given token.
+    // It checks if the token is correctly signed, if it has not expired, and if it has not been invalidated.
+    // If the token is valid, it returns the token as a SignedJWT object.
+    // If the token is not valid, it throws an AppException with the error code INVALID_TOKEN.
     public SignedJWT verifyToken(String token) throws AppException {
         try {
             JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());

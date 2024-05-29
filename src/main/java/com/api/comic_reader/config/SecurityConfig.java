@@ -23,6 +23,7 @@ public class SecurityConfig {
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
+    // List of public endpoints that do not require authentication
     private static final String[] PUBLIC_ENDPOINTS = {
         "/api/auth/**",
         "/api/comic/**",
@@ -35,21 +36,24 @@ public class SecurityConfig {
         "/api/role/**",
     };
 
+    // This method configures the security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Restrict access based on roles
+        // Allow all requests to the public endpoints
         http.authorizeHttpRequests(
                 request -> request.requestMatchers(PUBLIC_ENDPOINTS).permitAll());
 
+        // Require authentication for all other requests
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
+        // Configure the OAuth2 resource server to use the custom JWT decoder and authentication entry point
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
         // Disable CSRF protection
         http.csrf(AbstractHttpConfigurer::disable);
 
-        // Allow CORS for all origins
+        // Configure CORS to allow all origins and certain methods and headers
         http.cors(httpSecurityCorsConfigurer -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(List.of("*"));
@@ -61,6 +65,7 @@ public class SecurityConfig {
             httpSecurityCorsConfigurer.configurationSource(source);
         });
 
+        // Build and return the security filter chain
         return http.build();
     }
 }
