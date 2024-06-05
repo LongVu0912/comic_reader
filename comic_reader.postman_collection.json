@@ -1,0 +1,2513 @@
+{
+	"info": {
+		"_postman_id": "3b0aeddc-2641-4b89-a045-531a323bbe6b",
+		"name": "comic_reader",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) in \"Tests\" to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29807925"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"tester\",\n    \"email\": \"tester@gmail.com\",\n    \"password\": \"123456\",\n    \"fullName\": \"Tester\",\n    \"dateOfBirth\": \"01-01-2003\",   \n    \"isMale\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hoanglongvu912@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/resetPassword",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resetPassword"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "verifyOtp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hoanglongvu912@gmail.com\",\n    \"otp\": 203690\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verifyOtp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verifyOtp"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb25ndnUiLCJleHAiOjE3MTY1NjE5NjMsImlhdCI6MTcxNjQ3NTU2MywianRpIjoiZjcwOGY5Y2QtZWM1Ny00OTRiLTgwN2EtZjczZWJjMzE1NWU2Iiwic2NvcGUiOiJVU0VSIn0.fbuOuSAVJ0lrZU87enT4ZxhtsZWknl3QNsL8IydrnFI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE0Mjk1OTk2LCJpYXQiOjE3MTQyOTIzOTYsImp0aSI6ImFjODY0N2MwLTk5MzQtNDQ5NS04ZWMxLTc1YjQ1YTRmYmI2MiIsInNjb3BlIjoiVVNFUiJ9.GOHafMxDv0Lcy7pMam6mRMT0j20sBd1ng-mM2LoTf8o\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) introspect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE0Mjk1OTk2LCJpYXQiOjE3MTQyOTIzOTYsImp0aSI6ImFjODY0N2MwLTk5MzQtNDQ5NS04ZWMxLTc1YjQ1YTRmYmI2MiIsInNjb3BlIjoiVVNFUiJ9.GOHafMxDv0Lcy7pMam6mRMT0j20sBd1ng-mM2LoTf8o\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/introspect",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"introspect"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comic",
+			"item": [
+				{
+					"name": "getAllComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/getAllComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"getAllComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getComicInformation/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/getComicInformation/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"getComicInformation",
+								"3"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getNotFinishedComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/getNotFinishedComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"getNotFinishedComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getFinishedComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/getFinishedComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"getFinishedComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "searchComics/{keyword}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/searchComics/dora",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"searchComics",
+								"dora"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "get6LastComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/get6LastComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"get6LastComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "get3MostViewComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/get3MostViewComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"get3MostViewComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) editComic/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjI5NDc4OSwiaWF0IjoxNzE2MjA4Mzg5LCJqdGkiOiIxZjM0Yzc5YS02MTk0LTQzMjQtYTUwYi05ZGRjMjhhYTFlZTAiLCJzY29wZSI6IkFETUlOIn0.TDm8uMOhbno8hZQ1K7GMC3HcPFXSXGZwGJAZsHkl0HM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imageData",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Conan 2",
+									"type": "text"
+								},
+								{
+									"key": "author",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "description\n",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/editComic/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"editComic",
+								"2"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) setIsFinished/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjczMDM5MywiaWF0IjoxNzE2NjQzOTkzLCJqdGkiOiIwNWMyYmNmMi01NDRlLTRmMmUtYjZhZC1lZDkwMzFjYzlmNjUiLCJzY29wZSI6IkFETUlOIn0.tAZLwhcTxs7DMYmXVD-ZHFN_rUWeYDokeY45MtB4LLo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/comic/setIsFinished/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"setIsFinished",
+								"1"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) deleteComic/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjI5NDc4OSwiaWF0IjoxNzE2MjA4Mzg5LCJqdGkiOiIxZjM0Yzc5YS02MTk0LTQzMjQtYTUwYi05ZGRjMjhhYTFlZTAiLCJzY29wZSI6IkFETUlOIn0.TDm8uMOhbno8hZQ1K7GMC3HcPFXSXGZwGJAZsHkl0HM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/comic/deleteComic/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"deleteComic",
+								"2"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) insertComic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDMyMzkwMSwiaWF0IjoxNzE0MzIwMzAxLCJqdGkiOiIzNDJkMDJkYi1hYzllLTRlMmMtODc5MC04NDUyZGVhYTQ2YWUiLCJzY29wZSI6IkFETUlOIn0.gAh_zgD5nPwA0YqTnnZE5OAjl5XsAaLEjp7HhTVMBK0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imageData",
+									"type": "file",
+									"src": "/C:/Users/LongVu/Desktop/ImageDownloader/comics/alice_in_border_land/thumb.jpg"
+								},
+								{
+									"key": "name",
+									"value": "Alice in borderland",
+									"type": "text"
+								},
+								{
+									"key": "author",
+									"value": "Aso Haro",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "\"Alice\" Ryouhei sắp tốt nghiệp cấp 3, nhưng cậu ta lại cố trốn tránh tương lai. Một đêm khi đang đi chơi cùng 2 người bạn là Kurabe mạnh mẽ và Chota hám gái thì họ nhìn thấy pháo hoa và bị cuốn vào một thế giới khác. Ở borderland, bạn phải tham gia vào những trò chơi sinh tử để được sống hoặc nếu không thì sẽ phải chết. Liệu 3 người bạn có thể sống sót ở thế giới nguy hiểm đó và tìm được đường về nhà hay không?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comic/insertComic",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comic",
+								"insertComic"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chapter",
+			"item": [
+				{
+					"name": "getComicChapters/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chapter/getComicChapters/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"getComicChapters",
+								"3"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getLastChapter/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chapter/getLastChapter/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"getLastChapter",
+								"2"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getChapter/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chapter/getChapter/6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"getChapter",
+								"6"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) insertChapter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjczMDM5MywiaWF0IjoxNzE2NjQzOTkzLCJqdGkiOiIwNWMyYmNmMi01NDRlLTRmMmUtYjZhZC1lZDkwMzFjYzlmNjUiLCJzY29wZSI6IkFETUlOIn0.tAZLwhcTxs7DMYmXVD-ZHFN_rUWeYDokeY45MtB4LLo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Đêm trước ngày giải tán\",\n    \"chapterNumber\": 3,\n    \"comicId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chapter/insertChapter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"insertChapter"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) editChapter/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjE5MDQxOSwiaWF0IjoxNzE2MTA0MDE5LCJqdGkiOiJlZDYxNDE1Ny0zNDQzLTQ3NjMtYjg2MS1kMWJmYTFlZTgwYWEiLCJzY29wZSI6IkFETUlOIn0.ipdNYnWKL23EDC65-nvs-9geoYq3TppICBZSoD-8QRo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Conan\",\n    \"chapterNumber\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chapter/editChapter/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"editChapter",
+								"2"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) deleteChapter/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjczMDM5MywiaWF0IjoxNzE2NjQzOTkzLCJqdGkiOiIwNWMyYmNmMi01NDRlLTRmMmUtYjZhZC1lZDkwMzFjYzlmNjUiLCJzY29wZSI6IkFETUlOIn0.tAZLwhcTxs7DMYmXVD-ZHFN_rUWeYDokeY45MtB4LLo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chapter/deleteChapter/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chapter",
+								"deleteChapter",
+								"1"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Image",
+			"item": [
+				{
+					"name": "(admin) insertChapterImages/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjE5MDY0OCwiaWF0IjoxNzE2MTA0MjQ4LCJqdGkiOiI2MWMzMmM5ZC1lMTgxLTRjMDUtOWU1MC0yMWIzZWRlMzVmM2MiLCJzY29wZSI6IkFETUlOIn0.yFya_q_A16radP6DmmnzwDSMjBAR-rGgEsCjtc-yEEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imageData",
+									"type": "file",
+									"src": [
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/1.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/2.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/3.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/4.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/5.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/6.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/7.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/8.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/9.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/10.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/11.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/12.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/13.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/14.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/15.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/16.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/17.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/18.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/19.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/20.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/21.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/22.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/23.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/24.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/25.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/26.jpg",
+										"/C:/Users/LongVu/Desktop/ImageDownloader/comics/conan/chapter2/27.jpg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/image/insertChapterImages/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"image",
+								"insertChapterImages",
+								"3"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) deleteChapterImages/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjE5MDY0OCwiaWF0IjoxNzE2MTA0MjQ4LCJqdGkiOiI2MWMzMmM5ZC1lMTgxLTRjMDUtOWU1MC0yMWIzZWRlMzVmM2MiLCJzY29wZSI6IkFETUlOIn0.yFya_q_A16radP6DmmnzwDSMjBAR-rGgEsCjtc-yEEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/image/deleteChapterImages/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"image",
+								"deleteChapterImages",
+								"3"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "(admin) getAllUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNTc4NTc2MSwiaWF0IjoxNzE1Njk5MzYxLCJqdGkiOiJhNzhlY2VhYy02NmZiLTRiOWMtYmQyNi0zZWY3ZTYxY2Y4MTgiLCJzY29wZSI6IkFETUlOIn0.fO4fOLrp0rfXcaXsoRH943oTtED6BaEmICswIE8XQ-Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/getAllUsers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"getAllUsers"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) getUserInformationById Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTcxNDIzNjE4NywiaWF0IjoxNzE0MjMyNTg3LCJqdGkiOiI1ZGQyY2JmMy1iZmZkLTQ4ODAtODIzNy1kNWNlZmQ1YTAzNWYifQ.CXxLoA86n7dGsl8nnrnOdYbrngUN5WW98sSynxxnTbk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/getUserInformationById/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"getUserInformationById",
+								"2"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) getMyInformation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNzI2MTYzNiwiaWF0IjoxNzE3MTc1MjM2LCJqdGkiOiJmNGEzOWI0OC1hZDdiLTQ4ZTgtODg3Zi01Mzk5YWU1N2Y3NTUiLCJzY29wZSI6IkFETUlOIn0.jBDFaEOLWwj1mvOpcVh_FT14rdWWAPZqrVEuclXd66A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/getMyInformation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"getMyInformation"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) changePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE0MjkyODEyLCJpYXQiOjE3MTQyODkyMTIsImp0aSI6ImI5ZjFkZWNiLTU2MGMtNGZiMy1hMDAwLTdkZGFjOTFkNGI4MSIsInNjb3BlIjoiVVNFUiJ9.Z0ZxxCBYxaHpcTMbi1hPYbULhkwSOBhs50IgreBjIdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"123\",\r\n    \"newPassword\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/changePassword",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"changePassword"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) changeInformation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE0Mjk2MTgxLCJpYXQiOjE3MTQyOTI1ODEsImp0aSI6ImUyNzliOGVlLWQyMmYtNDQyZi1hYzgxLThiMmYxYTQ5MDRkZSIsInNjb3BlIjoiVVNFUiJ9.4toSV1iWd4HKFYRwxVBp17rWGPOjE0HxLknYdIwHRq8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Nguyễn Văn B\",\r\n    \"dateOfBirth\": \"09-12-2003\",\r\n    \"isMale\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/changeInformation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"changeInformation"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "(admin) getAllComments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDkyNzI0MCwiaWF0IjoxNzE0ODQwODQwLCJqdGkiOiIzYmQ5MWI1Zi00MGNlLTQyYTMtYjkzOS0wMmRmNTI3OTUyZDciLCJzY29wZSI6IkFETUlOIn0.jnULf4NASbVnrp4-WEfesvM0y8GAdrfr3DpCXC-LvyU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comment/getAllComments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comment",
+								"getAllComments"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) leaveComment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb25ndnUiLCJleHAiOjE3MTY1MzQzMDksImlhdCI6MTcxNjQ0NzkwOSwianRpIjoiMzViZDVkYzYtNmU3OC00NDIyLThhMTMtMWU2ZTNiODZmZjcxIiwic2NvcGUiOiJVU0VSIn0.3LihZAv00dPYe0aTmLoU0N4GloBN3n2M6Tp-G8xmmJw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"chapterId\": 1,\n    \"content\": \"Siêu phẩm\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comment/leaveComment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comment",
+								"leaveComment"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) deleteComment/{commentId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjMwNDQzMiwiaWF0IjoxNzE2MjE4MDMyLCJqdGkiOiIyN2NjNDY3NS0zY2Y1LTQ3YzctODcxYi0xZTRlNTM4ZWJmYjIiLCJzY29wZSI6IkFETUlOIn0.UMHWJeszXEAhPjXbG3NMxxTNLjNzDb_3rx9XZAyaCKo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comment/deleteComment/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comment",
+								"deleteComment",
+								"4"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) getCommentsOfChapter/{chapterId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDk5ODQ5MywiaWF0IjoxNzE0OTEyMDkzLCJqdGkiOiI2YmNjMTcyYS0wNGFjLTQxNGYtOWQxYy1kMjU2YzE3NzJhMTUiLCJzY29wZSI6IkFETUlOIn0.K1jTcF-R3hTIPI6akWncaND1t1QImWetgDvXo8Hc2-M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comment/getCommentsOfChapter/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comment",
+								"getCommentsOfChapter",
+								"1"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rating",
+			"item": [
+				{
+					"name": "(user) rateComic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob2FpYW4iLCJleHAiOjE3MTY1MzQxNzYsImlhdCI6MTcxNjQ0Nzc3NiwianRpIjoiZmZiNDU2Y2QtZWMxYy00MmNlLWJlNjAtNmM1ZDViMWY4MzJkIiwic2NvcGUiOiJVU0VSIn0.thSXExdZcT2LDiowC_MD0cgSMIwctaoURNC99QOkPSg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comicId\": 10,\n    \"score\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rating/rateComic",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rating",
+								"rateComic"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getComicAverageRating/{comicId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rating/getComicAverageRating/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rating",
+								"getComicAverageRating",
+								"4"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bookmark",
+			"item": [
+				{
+					"name": "(user) bookmarkComic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE1NjA5NDYwLCJpYXQiOjE3MTU1MjMwNjAsImp0aSI6IjI3NTIxOTAwLTE1MDMtNDA4My04YzI3LTY5OWE1ZDZmZjg5ZCIsInNjb3BlIjoiVVNFUiJ9.f2XJzBpE1ky4-2q7_ydDpPio0lVAEQc7cOXQ2qMP9a4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comicId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bookmark/bookmarkComic",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookmark",
+								"bookmarkComic"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(user) getMyBookmarks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE1NjA5NDYwLCJpYXQiOjE3MTU1MjMwNjAsImp0aSI6IjI3NTIxOTAwLTE1MDMtNDA4My04YzI3LTY5OWE1ZDZmZjg5ZCIsInNjb3BlIjoiVVNFUiJ9.f2XJzBpE1ky4-2q7_ydDpPio0lVAEQc7cOXQ2qMP9a4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"chapterId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bookmark/getMyBookmarks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookmark",
+								"getMyBookmarks"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genre",
+			"item": [
+				{
+					"name": "getAllGenres",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/genre/getAllGenres",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"genre",
+								"getAllGenres"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "getComicsByGenres",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"genreIds\": [5, 8]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/genre/getComicsByGenres",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"genre",
+								"getComicsByGenres"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) addGenresToComic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjUzMzYxMSwiaWF0IjoxNzE2NDQ3MjExLCJqdGkiOiI2NjM5YTI5Ny00NzM3LTRiMTEtYjMyOC1mNWQzZjFlNTM0ZjIiLCJzY29wZSI6IkFETUlOIn0.SuBaryst0Izq3ptng6_b1EHJC1yfZ0nCqX_IQSAM7NI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comicId\": 10,\r\n    \"genreIds\": [1, 2, 4, 6, 8, 10]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/genre/addGenresToComic",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"genre",
+								"addGenresToComic"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "(admin) addNewGenre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNTY3MzEwNywiaWF0IjoxNzE1NTg2NzA3LCJqdGkiOiI2MTgyZmMzNS00YmUxLTRkNWQtODQzOC0xNTkyNTMwMGE2MWEiLCJzY29wZSI6IkFETUlOIn0.vr2kiYZ7Barw7jBAsTDQ8uR3RA5bLFckrRoKoIOgtgA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hero\",\r\n    \"genreDescription\": \"hehehe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/genre/addNewGenre",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"genre",
+								"addNewGenre"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ChatGPT",
+			"item": [
+				{
+					"name": "findComics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjU2OTY2OCwiaWF0IjoxNzE2NDgzMjY4LCJqdGkiOiI4MzkzYjc3Zi0wZmY0LTQxOTMtYTNlOS1kMDAxYzczNTU5MjYiLCJzY29wZSI6IkFETUlOIn0.jOiIU_Q6skzNKTAuvbYOyzZWFCCQmSSJsblj0-gylDU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"Xin chào\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gpt/findComics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gpt",
+								"findComics"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "askLMStudio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzE2MDQ2NDY2LCJpYXQiOjE3MTU5NjAwNjYsImp0aSI6ImVkZjE0OWFlLTRiM2QtNDQyMC05ZDU2LTNkNDYxMjFmZmQ2OCIsInNjb3BlIjoiVVNFUiJ9.W6DFGP7bA2UCksHU6EVLK85OQmzJn6w5y0WjDmYGy8I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"Cách đọc sách không mỏi mắt\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gpt/askLMStudio",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gpt",
+								"askLMStudio"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "askGpt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjQ3NzI0MywiaWF0IjoxNzE2MzkwODQzLCJqdGkiOiI0MWZiMGFjNy05M2MxLTRmYmEtYjBjMy1hZDlmODdmODg0ZTMiLCJzY29wZSI6IkFETUlOIn0.g_a46_MGujosK4zKxAiokS1FQB4IXgDRIMDegIAsgaU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"Hồ Hữu Nhân là ai\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gpt/askGpt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gpt",
+								"askGpt"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
